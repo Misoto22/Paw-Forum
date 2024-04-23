@@ -8,10 +8,10 @@
 
 | Student ID | Name         | Github Username |
 | ---------- | ------------ | --------------- |
-| 23843181   | Bella Bao    |                 |
+| 23843181   | Bella Bao    | bellabaohaha    |
 | 23929804   | Xinwei Chen  | Misoto22        |
-| 21938264   | Xudong Ying  |                 |
-| 23737625   | Siting Xiang |                 |
+| 21938264   | Xudong Ying  | sheldonyxd      |
+| 23737625   | Siting Xiang | elefantat       |
 
 ## Architecture
 
