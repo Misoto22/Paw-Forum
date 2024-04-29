@@ -82,3 +82,9 @@ else
     echo "OS not supported" >>$LOG_FILE
     exit 1
 fi
+
+# Use trap to capture INT (Ctrl-C) signals and shut down Flask gracefully
+trap "echo 'Stopping Flask app...'; kill $FLASK_PID" INT
+wait $FLASK_PID
+
+echo "---- Script Ended ----" >>$LOG_FILE
