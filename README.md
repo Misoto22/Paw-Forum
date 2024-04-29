@@ -20,6 +20,7 @@
 ```bash
 app
 ├── app.py                  # Main Python file for the Flask application.
+├── requirements.txt        # File containing all the dependencies.
 ├── database                # Directory for database-related files.
 │   └── app.db              # SQLite database file.
 ├── static                  # Directory for static files.
@@ -29,7 +30,7 @@ app
 │       └── script.js       # Main JavaScript file.
 └── templates               # Directory for HTML templates which are rendered by Flask.
     ├── components          # UI components.
-    │   └── nav-unlog.html  # Navigation bar for unloggedin users.
+    │   └── nav-unlog.html  # Navigation bar for users who are not logged in.
     └── index.html          
 ```
 

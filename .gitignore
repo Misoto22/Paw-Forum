@@ -1,0 +1,8 @@
+# Environments
+venv
+
+# Log File for run.sh
+run.log
+
+# Output Files
+__pycache__/
