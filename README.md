@@ -2,8 +2,6 @@
 
 ## Description
 
-
-
 ## Group Members
 
 | Student ID | Name         | Github Username |
@@ -34,12 +32,20 @@ app
     └── index.html          
 ```
 
+### Database Design
+
 ## Instructions for Running the Application
 
 Simply run the following command in the terminal:
 
 ```bash
 ./run.sh
+```
+
+### Shutdown the Application
+
+```bash
+Ctrl + C
 ```
 
 ## Instructions for Running the Tests
