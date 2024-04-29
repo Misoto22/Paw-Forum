@@ -20,6 +20,8 @@
 ```bash
 app
 ├── app.py                  # Main Python file for the Flask application.
+├── database                # Directory for database-related files.
+│   └── app.db              # SQLite database file.
 ├── static                  # Directory for static files.
 │   ├── css                 # Subdirectory for CSS files.
 │   │   └── style.css       # Main CSS file.
