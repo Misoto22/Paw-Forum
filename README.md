@@ -36,7 +36,10 @@ app
 
 ## Instructions for Running the Application
 
+Simply run the following command in the terminal:
 
+```bash
+./run.sh
+```
 
 ## Instructions for Running the Tests
-
