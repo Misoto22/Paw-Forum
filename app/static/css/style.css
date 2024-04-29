@@ -97,3 +97,60 @@ nav {
     padding: 10px 20px;
     cursor: pointer;
 }
+
+/* FOOTER*/
+footer {
+    background-color: #FFEDE4;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .footer-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  
+  .footer-power {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .footer-logo {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+  }
+  
+  .footer-text {
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .icon-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  .social-icons {
+    margin-left: 20px;
+    flex-direction: column;
+  }
+  
+  .social-icons a {
+    display: inline-flex;
+    align-items: center;
+    margin: 0 8px;
+  }
+  
+  .social-icons img {
+    width: 30px;
+    height: 30px;
+  }
+  
+.social-icons span{
+    font-size: x-large;
+    font-weight: bolder;
+  }
