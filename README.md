@@ -1,15 +1,28 @@
-# CITS5505-Group-Project
+<div align="center">
 
-## Description
+<h1 align="center">Paw Forum (Your Neighborhood Pet Community)</h1>
+
+Welcome to the **Paw Forum**, the premier online destination for pet lovers in your neighborhood! This web application is designed to foster a vibrant community where users can share their beloved pets, discuss various pet-related topics, and access a wealth of information on pet adoption. Whether you're looking to show off your furry friend, seek advice, or find a new family member through adoption, Paw Forum is your go-to hub for all things pets.
+
+## Features
+
+- **Pet Profiles**: Showcase your pets, their stories, and more.
+- **Community Discussions**: Engage in discussions on a wide range of pet-related topics.
+- **Pet Adoption Information**: Post and browse adoption listings, helping pets find loving homes.
+- **Interactive Posts**: Share updates, ask questions, and interact with fellow pet owners.
+
+Paw Forum aims to connect pet enthusiasts, provide valuable information, and help ensure that every pet finds a loving home. Join us today and be a part of our growing community!
 
 ## Group Members
 
+<div align="center">
 | Student ID | Name         | Github Username |
 | ---------- | ------------ | --------------- |
 | 23843181   | Bella Bao    | bellabaohaha    |
 | 23929804   | Xinwei Chen  | Misoto22        |
 | 21938264   | Xudong Ying  | sheldonyxd      |
 | 23737625   | Siting Xiang | elefantat       |
+</div>
 
 ## Architecture
 
@@ -66,3 +79,10 @@ Ctrl + C
 ```
 
 ## Instructions for Running the Tests
+
+## Documentation
+
+Documentation for the project can be found in the [Github Wiki](https://github.com/Misoto22/CITS5505-Group-Project/wiki). The documentation is divided into the following sections:
+
+1. Meeting Logs
+2. Frequently Asked Questions (FAQ)
