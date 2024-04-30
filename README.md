@@ -2,6 +2,8 @@
 
 <h1 align="center">Paw Forum (Your Neighborhood Pet Community)</h1>
 
+</div>
+
 Welcome to the **Paw Forum**, the premier online destination for pet lovers in your neighborhood! This web application is designed to foster a vibrant community where users can share their beloved pets, discuss various pet-related topics, and access a wealth of information on pet adoption. Whether you're looking to show off your furry friend, seek advice, or find a new family member through adoption, Paw Forum is your go-to hub for all things pets.
 
 ## Features
@@ -16,13 +18,16 @@ Paw Forum aims to connect pet enthusiasts, provide valuable information, and hel
 ## Group Members
 
 <div align="center">
+
 | Student ID | Name         | Github Username |
 | ---------- | ------------ | --------------- |
 | 23843181   | Bella Bao    | bellabaohaha    |
 | 23929804   | Xinwei Chen  | Misoto22        |
 | 21938264   | Xudong Ying  | sheldonyxd      |
 | 23737625   | Siting Xiang | elefantat       |
+
 </div>
+
 
 ## Architecture
 
