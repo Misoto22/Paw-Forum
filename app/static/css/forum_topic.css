@@ -1,0 +1,100 @@
+.forum-post {
+  width: 740px; /* Set the width to 740px */
+  margin: 20px auto; /* Centers the forum post horizontally */
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #fff;
+}
+.forum-title {
+  padding-left: 50px;
+  padding-right: 50px;
+}
+
+.forum-description {
+  padding-left: 50px;
+  padding-right: 50px;
+}
+
+.forum-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.username {
+  font-weight: bold;
+}
+
+.post-time {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.forum-title {
+  margin: 10px 0;
+}
+
+.forum-description {
+  color: #666;
+}
+
+.forum-images img {
+  width: 200px;
+  height: 140px;
+  border-radius: 15px;
+  margin-left: 50px;
+  margin-right: -40px;
+  object-fit: cover;
+  object-position: center;
+}
+
+.forum-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.forum-footer span {
+  display: flex;
+  align-items: center;
+}
+
+.fa-heart,
+.fa-comment {
+  margin-right: 5px;
+}
+
+/* Import Font Awesome for icons */
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css");
+
+.forum-detail {
+  width: 740px; /* Set the width to 740px */
+  margin: 20px auto; /* Centers the forum post horizontally */
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.forum-image-detail img {
+  width: 630px;
+  height: 500px;
+  border-radius: 15px;
+  margin-left: 50px;
+  object-fit: cover;
+  object-position: center;
+}
