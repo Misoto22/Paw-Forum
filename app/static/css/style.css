@@ -220,9 +220,9 @@ button {
 .CreatePost {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   background-color: white;
-  padding: 20px;
+  margin-left: 25%;
 }
 
 .CreatePost h1 {
@@ -230,13 +230,26 @@ button {
   color: #fd6c45;
 }
 
-.tags label {
-  display: left;
-  margin-bottom: 8px;
+.CreatePost h2 {
+  font-size: smaller;
 }
 
+.tags label {
+  display: left;
+  margin-bottom: 20px;  
+  margin-top: 10px;
+}
+
+.tags{
+  margin-bottom: 10px;
+}
 .PostTitle {
   margin-bottom: 20px;
+  width: 50%;
+}
+
+.Postbody textarea {
+  width: 200%; 
 }
 
 input[type="text"],
@@ -247,6 +260,7 @@ textarea {
   border-radius: 4px;
   box-sizing: border-box;
   resize: vertical;
+  margin-top: 10px;
 }
 
 .PostSubmit button {
@@ -258,6 +272,7 @@ textarea {
   cursor: pointer;
   width: 120px;
   margin: 0 auto;
+  margin-bottom: 20px;
 }
 
 .tags {
@@ -284,6 +299,14 @@ textarea {
   color: #fff;
 }
 
+.AddImage {
+  margin-bottom: 20px;
+}
+ 
+.Task {
+  margin-bottom: 20px;
+}
+/* LOGIN */
 .login-button {
   width: 0%;
   padding: 10px 20px;
@@ -298,5 +321,5 @@ textarea {
 }
 
 .login-button:hover {
-  background-color: #3e27c1;
+  background-color: #e5533b;
 }

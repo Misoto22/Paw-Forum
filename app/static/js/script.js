@@ -20,5 +20,16 @@ function socialSignUp(platform) {
   }
 
 
+/* Checkbox for Create page */
+const checkbox = document.getElementById('checkbox');
+const submitBtn = document.querySelector('.PostSubmitbtn');
 
-  
+submitBtn.addEventListener('click', () => {
+  if (checkbox.checked) {
+    console.log('Checkbox is checked');
+    // Add additional functionality here
+  } else {
+    console.log('Checkbox is not checked');
+    // Add additional functionality here
+  }
+});
