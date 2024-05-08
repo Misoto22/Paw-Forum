@@ -6,20 +6,26 @@ from flask import url_for, redirect, render_template
 
 from werkzeug.utils import secure_filename
 
-# Step 1: Setting Up the Flask Application
-app = Flask(__name__)
+from flask import Flask
+from users import users
+from posts import posts
 
-# Set up the database configuration
-basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'database', 'app.db')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+def create_app():
+    app = Flask(__name__)
+    basedir = os.path.abspath(os.path.dirname(__file__))
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'database', 'app.db')
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['UPLOAD_FOLDER'] = os.path.join(basedir, 'static', 'post')
+    app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB limit
 
-# Set up the file upload configuration
-app.config['UPLOAD_FOLDER'] = os.path.join(basedir, 'static', 'post')  # Directory where files will be stored
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB limit
+    db = SQLAlchemy(app)
+    
+    app.register_blueprint(users, url_prefix='/users')
+    app.register_blueprint(posts, url_prefix='/posts')
 
-# Initialize the database
-db = SQLAlchemy(app)
+    return app, db
+
+app, db = create_app()
 
 
 # Step 2: Defining Database Models
@@ -78,14 +84,6 @@ if __name__ == '__main__':
     db.create_all()  # Creates the database and tables
     app.run(debug=True)
 
-
-
-
-@app.route('/')
-def home():
-    return 'Hello, World!'
-
-
 # Step 4: Create a Registration Form
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -128,3 +126,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'png', 'jpg', 'jpeg', 'gif'}
 
 
+# Main
+if __name__ == '__main__':
+    db.create_all()
+    app.run(debug=True)
