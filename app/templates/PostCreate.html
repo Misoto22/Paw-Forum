@@ -12,12 +12,12 @@
     <h1>Create Post</h1>
     
     <div class="PostTitle">
-        <lable>Title</lable>
-        <input type="text" paceholder="20 words maximum" required>
+        <h2>Post Title</h2>
+        <textarea id="title" placeholder="20 words maximum" required maxlength="20"></textarea>
     </div>
 
+    <h2>Add Post Category</2>  
         <div class="tags">
-            <label>Add Tag</label>  
             <input type="radio" id="tag1" name="tag" value="Daily">
             <label for="tag1" class="tag">Daily</label>
             <input type="radio" id="tag2" name="tag" value="Foster">
@@ -27,13 +27,26 @@
         </div>
 
     <div class="Postbody">
-        <label>Body</label>
-        <textarea id="body" rows="10" placeholder="Enter your post content here..."></textarea>
+        <label>Post Content</label>
+        <textarea id="body" rows="10" placeholder="Enter your post content here. 1000 words maximum" required maxlength="1000"></textarea>
     </div>
 
+    <h2>Add Image</h2>
+    <div class="AddImage">
+        <input type="file" accept="image/*">
+    </div>
+    
+    <h2>Task - Assign as task to allow for application</h2>
+    <div class="Task">
+        <input type="checkbox" id="checkbox" name="checkbox">
+  <label for="checkbox">Task</label>
+    </div>
+    
     <div class="PostSubmit">
         <button class="PostSubmitbtn">Submit</button>
     </div>
+
+
 </div>
 <iframe src="./components/footer.html" frameborder="0" style="width: 100%; height: auto;"></iframe>
 
