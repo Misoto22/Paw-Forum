@@ -7,4 +7,4 @@ run.log
 # Output Files
 __pycache__/
 
-.DS_Store
+.DS_Store.DS_Store
