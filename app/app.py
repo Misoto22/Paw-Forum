@@ -1,12 +1,14 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 import os
 from datetime import datetime
 from flask import url_for, redirect, render_template
 from werkzeug.utils import secure_filename
 from model import db, User, Post, Reply, Task, Activity
+from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 
 
+# Create the Flask app
 def create_app():
     app = Flask(__name__)
     basedir = os.path.abspath(os.path.dirname(__file__))
@@ -21,25 +23,53 @@ def create_app():
     return app
 
 app = create_app()
+# Setup Flask-Login
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'  # The route name for your login view
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username).first()
+        if user and user.check_password(password):
+            login_user(user)
+            return redirect(url_for('home'))
+        else:
+            return 'Invalid username or password'
+    return render_template('login.html')
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('home'))
+
+
 
 # Create a Registration Form
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        # Extract data from form
         username = request.form['username']
         email = request.form['email']
-        password = request.form['password']
+        password = request.form['password']  # This now gets hashed automatically
         phone = request.form.get('phone', None)
         gender = request.form.get('gender', None)
         postcode = request.form.get('postcode', None)
-        user_image = request.form.get('user_image', 'avatar1.png')  # This would be the filename of the selected image
+        user_image = request.form.get('user_image', 'avatar1.png')
 
-        # Create new User object
+        # Create new User object with hashed password
         new_user = User(
             username=username,
             email=email,
-            password=password,
+            password=password,  # This is automatically hashed by the setter method
             phone=phone,
             gender=gender,
             postcode=postcode,
@@ -47,27 +77,12 @@ def register():
             user_image=f'/static/image/avatar/{user_image}' if user_image else None
         )
 
-        # Add to database session and commit
         db.session.add(new_user)
         db.session.commit()
 
-        # Redirect to a new page, e.g., a profile page or the homepage
         return redirect(url_for('home'))
     else:
-        # Render the registration form
         return render_template('register.html')
-    
-
-
-# Handling File Uploads
-
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'png', 'jpg', 'jpeg', 'gif'}
-
-
-
-
-
 
 
 
