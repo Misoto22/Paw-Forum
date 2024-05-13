@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PawForum</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+<body>
+    {% include 'components/nav-unlog.html' %}
+
+    <div class="CreatePost">
+    <h1>Create Post</h1>
+    
+    <div class="PostTitle">
+        <h2>Post Title</h2>
+        <textarea id="title" placeholder="20 words maximum" required maxlength="20"></textarea>
+    </div>
+
+    <h2>Add Post Category</2>  
+        <div class="tags">
+            <input type="radio" id="tag1" name="tag" value="Daily">
+            <label for="tag1" class="tag">Daily</label>
+            <input type="radio" id="tag2" name="tag" value="Foster">
+            <label for="tag2" class="tag">Petsitting</label>
+            <input type="radio" id="tag3" name="tag" value="Adoption">
+            <label for="tag3" class="tag">Adoption</label>
+        </div>
+
+    <div class="Postbody">
+        <label>Post Content</label>
+        <textarea id="body" rows="10" placeholder="Enter your post content here. 1000 words maximum" required maxlength="1000"></textarea>
+    </div>
+
+    <h2>Add Image</h2>
+    <div class="AddImage">
+        <input type="file" accept="image/*">
+    </div>
+    
+    <h2>Task - Assign as task to allow for application</h2>
+    <div class="Task">
+        <input type="checkbox" id="checkbox" name="checkbox">
+  <label for="checkbox">Task</label>
+    </div>
+    
+    <div class="PostSubmit">
+        <button class="PostSubmitbtn">Submit</button>
+    </div>
+
+
+</div>
+<footer class="mt-5">
+    {% include 'components/footer.html' %}
+</footer>
+
+</body>
+</html>
