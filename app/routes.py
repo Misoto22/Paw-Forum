@@ -1,8 +1,7 @@
 from flask import render_template, request, redirect, url_for
 from datetime import datetime
-from models import db, User
-from flask_login import LoginManager, login_user, logout_user
-from app import app
+from .models import db, User
+from flask_login import LoginManager, login_user, logout_user, login_required
 
 
 def init_app_routes(app):
@@ -10,8 +9,8 @@ def init_app_routes(app):
     def home():
         return render_template('index.html', title='Paw Forum', page_name='Home')
 
-    @app.route('/signup', methods=['GET', 'POST'])
-    def signup():
+    @app.route('/register', methods=['GET', 'POST'])
+    def register():
         if request.method == 'POST':
             username = request.form['username']
             email = request.form['email']
