@@ -1,20 +1,33 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-import os
+from flask_login import LoginManager
+from config import Config
+from models import db
 
-db = SQLAlchemy()
-
+# Create app
 def create_app():
     app = Flask(__name__)
-    basedir = os.path.abspath(os.path.dirname(__file__))
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'database', 'app.db')
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config.from_object(Config)
+    
+    # Initialize database
     db.init_app(app)
 
+    #  Create tables
     with app.app_context():
         db.create_all()
-
-    from .routes import init_routes
-    init_routes(app)
+    
+    # Initialize login manager
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+    login_manager.login_view = 'login'
+    
+    # Load user from database
+    @login_manager.user_loader
+    def load_user(user_id):
+        from models import User # Import here to avoid circular dependencies
+        return User.query.get(int(user_id))
+    
+    from routes import init_app_routes  # Import routes after db to avoid circular import
+    init_app_routes(app) # Initialize routes
 
     return app
