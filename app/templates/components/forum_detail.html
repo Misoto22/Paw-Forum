@@ -1,36 +1,45 @@
 {% block content %}
 <div class="forum-detail">
-    <div class="forum-header">
-        <img src="{{ url_for('static', filename='image/avatar.png') }}" alt="User Avatar" class="avatar">
-        <div class="user-info">
-            <span class="username">Banana Lala</span>
-            <span class="post-time">3 days ago</span>
-        </div>
+  <div class="forum-header">
+    <img
+      src="{{ url_for('static', filename='image/avatar.png') }}"
+      alt="User Avatar"
+      class="avatar"
+    />
+    <div class="user-info">
+      <span class="username">Banana Lala</span>
+      <span class="post-time">3 days ago</span>
     </div>
-    <h2 class="forum-title">Finding the Right Pet Sitter</h2>
-    <p class="forum-description">
-        Discuss and share experiences on finding reliable pet sitters. What are
-    the best practices for vetting a sitter? How do you ensure your pet is
+  </div>
+  <h2 class="forum-title">Finding the Right Pet Sitter</h2>
+  <p class="forum-description">
+    Discuss and share experiences on finding reliable pet sitters. What are the
+    best practices for vetting a sitter? How do you ensure your pet is
     comfortable and safe in someone else's care?
-    </p>
-    <div class="forum-image-detail">
-        <img src="{{ url_for('static', filename='image/cat.png') }}" alt="Cat">
-        <img src="{{ url_for('static', filename='image/dog.png') }}" alt="Dog">
-        <img src="{{ url_for('static', filename='image/pig.png') }}">
-        <div class="forum-footer">
-            <span class="likes">
-                <img
-                    src="{{ url_for('static', filename='image/like.png') }}"
-                    alt="Like"
-                    class="like-icon"
-                    id="likeToggleDetail"
-                >
-                2.3k
-            </span>
-            <span class="comments">
-                <img src="{{ url_for('static', filename='image/comment.png') }}" alt="Comment" class="comment-icon">
-                56
-            </span>
-        </div>
+  </p>
+  <div class="forum-image-detail">
+    <img src="{{ url_for('static', filename='image/cat.png') }}" alt="Cat" />
+    <img src="{{ url_for('static', filename='image/dog.png') }}" alt="Dog" />
+    <img src="{{ url_for('static', filename='image/pig.png') }}" />
+    <div class="forum-footer">
+      <span class="likes">
+        <img
+          src="{{ url_for('static', filename='image/like.png') }}"
+          alt="Like"
+          class="like-icon"
+          id="likeToggleDetail"
+        />
+        2.3k
+      </span>
+      <span class="comments">
+        <img
+          src="{{ url_for('static', filename='image/comment.png') }}"
+          alt="Comment"
+          class="comment-icon"
+        />
+        56
+      </span>
     </div>
-{% endblock %}
+  </div>
+  {% endblock %}
+</div>

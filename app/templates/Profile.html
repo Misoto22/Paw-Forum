@@ -1,61 +1,67 @@
-{% extends 'base.html' %}
-
-{% block title %}My Profile{% endblock %}
-
-{% block content %}
-<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+{% extends 'base.html' %} {% block title %}My Profile{% endblock %} {% block
+content %}
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
+  rel="stylesheet"
+/>
 <body class="profile-page">
-    <div class="profile-container">
-        <div class="profile-content">
-            <h1>My Profile</h1>
-            <form>
-                <div class="form-row">
-                    <label>First Name <input type="text" name="firstName" /></label>
-                    <label>Last Name <input type="text" name="lastName" /></label>
-                </div>
-                <div class="form-row">
-                    <label>Gender
-                        <select name="gender">
-                            <option>Male</option>
-                            <option>Female</option>
-                            <option>Other</option>
-                        </select>
-                    </label>
-                    <label>Post Code <input type="text" name="postcode" /></label>
-                </div>
-                <div class="form-row">
-                    <label>Email Address <input type="email" name="email" /></label>
-                    <label>Phone Number <input type="tel" name="phone" /></label>
-                </div>
-                <div class="form-row">
-                    <label>Pet Type
-                        <select name="petType" multiple="multiple" class="pet-type-select">
-                            <option>Dog</option>
-                            <option>Cat</option>
-                            <option>Bird</option>
-                            <option>Fish</option>
-                            <option>Reptile</option>
-                            <option>Insect</option>
-                            <option>Other</option>
-                        </select>
-                    </label>
-                </div>
-                <button type="submit">Save</button>
-            </form>
+  <div class="profile-container">
+    <div class="profile-content">
+      <h1>My Profile</h1>
+      <form>
+        <div class="form-row">
+          <label>First Name <input type="text" name="firstName" /></label>
+          <label>Last Name <input type="text" name="lastName" /></label>
         </div>
-        <div class="avatar-container">
-            <img src="{{ url_for('static', filename='image/avatar.png') }}" alt="User Avatar" class="avatar" />
+        <div class="form-row">
+          <label
+            >Gender
+            <select name="gender">
+              <option>Male</option>
+              <option>Female</option>
+              <option>Other</option>
+            </select>
+          </label>
+          <label>Post Code <input type="text" name="postcode" /></label>
         </div>
+        <div class="form-row">
+          <label>Email Address <input type="email" name="email" /></label>
+          <label>Phone Number <input type="tel" name="phone" /></label>
+        </div>
+        <div class="form-row">
+          <label
+            >Pet Type
+            <select name="petType" multiple="multiple" class="pet-type-select">
+              <option>Dog</option>
+              <option>Cat</option>
+              <option>Bird</option>
+              <option>Fish</option>
+              <option>Reptile</option>
+              <option>Insect</option>
+              <option>Other</option>
+            </select>
+          </label>
+        </div>
+        <button type="submit">Save</button>
+      </form>
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $(".pet-type-select").select2({
-                placeholder: "Select pet types",
-                allowClear: true
-            });
-        });
-    </script>
+    <div class="avatar-container">
+      <img
+        src="{{ url_for('static', filename='image/avatar.png') }}"
+        alt="User Avatar"
+        class="avatar"
+      />
+    </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $(".pet-type-select").select2({
+        placeholder: "Select pet types",
+        allowClear: true,
+      });
+    });
+  </script>
 </body>
 {% endblock %}

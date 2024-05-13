@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>{% block title %}Home Page{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-    {% block navbar %}{% include 'components/nav_logged_out.html' %}{% endblock %}
-    {% block content %}{% endblock %}
-    {% block footer %}{% include 'components/footer.html' %}{% endblock %}
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    {% block navbar %}{% include 'components/nav_logged_out.html' %}{% endblock
+    %} {% block content %}{% endblock %} {% block footer %}{% include
+    'components/footer.html' %}{% endblock %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
-</body>
+  </body>
 </html>
