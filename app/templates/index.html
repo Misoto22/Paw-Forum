@@ -54,3 +54,54 @@
 
 </body>
 </html>
+=======
+  <head>
+    <meta charset="UTF-8" />
+    <title>Home Page</title>
+    <link rel="stylesheet" href="/app/static/css/style.css" />
+  </head>
+  <body>
+    <!-- Navigation Bar Placeholder -->
+    <div id="navbar-placeholder"></div>
+
+    <!-- Forum Topic Section Placeholder -->
+    <div id="forum-topics-placeholder"></div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Function to load HTML content into a placeholder element
+        function loadComponent(componentId, url) {
+          fetch(url)
+            .then((response) => response.text())
+            .then((html) => {
+              document.getElementById(componentId).innerHTML = html;
+            })
+            .catch((error) =>
+              console.error("Error loading the component:", error)
+            );
+        }
+
+        // Load the navigation bar
+        loadComponent(
+          "navbar-placeholder",
+          "/app/templates/components/nav-unlog.html"
+        );
+
+        // Load the forum topics
+        loadComponent(
+          "forum-topics-placeholder",
+          "/app/templates/components/forum_topic.html"
+        );
+
+        // Load the footer
+        loadComponent(
+          "footer-placeholder",
+          "/app/templates/components/footer.html"
+        );
+      });
+    </script>
+  </body>
+</html>
