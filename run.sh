@@ -25,12 +25,12 @@ else
     echo "$(date): Flask is already installed." >> $LOG_FILE
 fi
 
-# cd to app directory
-cd app || {
-    echo "$(date): Failed to cd to app directory." >> $LOG_FILE
-    exit 1
-}
-echo "$(date): Changed directory to app." >> $LOG_FILE
+# # cd to app directory
+# cd app || {
+#     echo "$(date): Failed to cd to app directory." >> $LOG_FILE
+#     exit 1
+# }
+# echo "$(date): Changed directory to app." >> $LOG_FILE
 
 # Check if venv exists; if not, create it
 if [ ! -d "venv" ]; then
@@ -54,7 +54,7 @@ source venv/bin/activate && echo "$(date): venv activated." >> $LOG_FILE || {
 export FLASK_APP="run:create_app"
 
 # Check if requirements.txt exists
-if [ ! -f "requirements.txt" ]; then
+if [ ! -f "app/requirements.txt" ]; then
     echo "$(date): requirements.txt not found." >> $LOG_FILE
     exit 1
 else
@@ -63,7 +63,7 @@ fi
 
 # Install dependencies
 echo "$(date): Installing dependencies..." >> $LOG_FILE
-python3 -m pip install -r requirements.txt && echo "$(date): Dependencies installed successfully." >> $LOG_FILE || {
+python3 -m pip install -r app/requirements.txt && echo "$(date): Dependencies installed successfully." >> $LOG_FILE || {
     echo "$(date): Failed to install dependencies." >> $LOG_FILE
     exit 1
 }
