@@ -46,7 +46,7 @@ app
 │       └── script.js       # Main JavaScript file.
 └── templates               # Directory for HTML templates which are rendered by Flask.
     ├── components          # UI components.
-    │   └── nav-unlog.html  # Navigation bar for users who are not logged in.
+    │   └── nav_logged_out.html  # Navigation bar for users who are not logged in.
     └── index.html          
 ```
 

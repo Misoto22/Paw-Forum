@@ -47,7 +47,7 @@ def init_routes(app):
 
             return redirect(url_for('home'))
         else:
-            return render_template('Signup.html')
+            return render_template('register.html')
     
     @app.route('/login', methods=['GET', 'POST'])
     def login():
@@ -60,9 +60,15 @@ def init_routes(app):
                 return redirect(url_for('home'))
             else:
                 return 'Invalid username or password'
-        return render_template('SignIn.html')
+        return render_template('login.html')
     
     @app.route('/logout')
     def logout():
         logout_user()
         return redirect(url_for('home'))
+    
+    # Just for demonstration purposes!!
+    @app.route('/post_reply')
+    def post_reply():
+        return render_template('components/post_reply.html')
+
