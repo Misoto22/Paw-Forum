@@ -56,9 +56,7 @@ def init_app_routes(app):
     def logout():
         logout_user()
         return redirect(url_for('home'))
-    
-    # Just for demonstration purposes!!
-    @app.route('/post_reply')
-    def post_reply():
-        return render_template('components/post_reply.html')
 
+    @app.route('/reply')
+    def reply():
+        return render_template('reply.html', title='Paw Forum', page_name='Reply')
