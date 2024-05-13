@@ -7,12 +7,18 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../static/css/profile.css" />
+    <link rel="stylesheet" href="/app/static/css/style.css" />
+    <!-- Assuming you have already merged the CSS -->
   </head>
-  <body>
+  <iframe
+    src="/app/templates/components/nav-unlog.html"
+    frameborder="0"
+    style="width: 100%; height: 350px"
+  ></iframe>
+  <body class="profile-page">
     <div class="profile-container">
       <div class="profile-content">
-        <h1 style="margin-right: 297px">My Profile</h1>
+        <h1>My Profile</h1>
         <form>
           <div class="form-row">
             <label>First Name <input type="text" name="firstName" /></label>
@@ -25,8 +31,8 @@
                 <option>Male</option>
                 <option>Female</option>
                 <option>Other</option>
-              </select></label
-            >
+              </select>
+            </label>
             <label>Post Code <input type="text" name="postcode" /></label>
           </div>
           <div class="form-row">
@@ -55,10 +61,18 @@
         </form>
       </div>
       <div class="avatar-container">
-        <img src="../image/avatar.png" alt="User Avatar" class="avatar" />
+        <img
+          src="/app/static/image/avatar.png"
+          alt="User Avatar"
+          class="avatar"
+        />
       </div>
     </div>
-    <!-- Include jQuery and Select2 JS -->
+    <iframe
+      src="/app/templates/components/footer.html"
+      frameborder="0"
+      style="width: 100%; height: auto"
+    ></iframe>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script>

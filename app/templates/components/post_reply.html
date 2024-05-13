@@ -3,42 +3,56 @@
   <head>
     <meta charset="UTF-8" />
     <title>PawForum</title>
-    <link rel="stylesheet" href="../../static/css/forum_reply.css" />
+    <link rel="stylesheet" href="/app/static/css/forum_reply.css" />
   </head>
   <body>
-    <div class="forum-detail" style="height: 100vh;">
-      <iframe src="./forum_detail.html" frameborder="0" style="width: 100%; height:100%;"></iframe>
+    <iframe
+      src="/app/templates/components/nav-unlog.html"
+      frameborder="0"
+      style="width: 100%; height: 300px"
+    ></iframe>
+    <div class="forum-detail" style="height: 100vh">
+      <iframe
+        src="/app/templates/components/forum_detail.html"
+        frameborder="0"
+        style="width: 100%; height: 100%"
+      ></iframe>
     </div>
 
-      <div class="reply-section">
-        
-        <div class="reply-form">
-          <p>Add a comment</p>
-          <textarea placeholder="Write your reply here "></textarea>
-          <button id="submitReplyBtn">Submit</button>
-        </div>
-       
-        <div class="replies">
-          <div class="reply">
-            <div class="reply-header">
-              <img src="../../image/avatar.png" alt="User Avatar" class="reply-avatar" />
-              <span class="reply-username">Username</span>
-              <span class="reply-time">2023-05-24 10:30</span>
-            </div>
-            <div class="reply-content">
-              This is a sample reply.
-            </div>
-            <div class="reply-footer">
-              <button class="reply-button">Reply</button>
-            </div>
-            <div class="nested-reply-form">
-              <textarea placeholder="Write your reply..."></textarea>
-              <button class="submit-nested-reply">Reply</button>
-            </div>
+    <div class="reply-section">
+      <div class="reply-form">
+        <p>Add a comment</p>
+        <textarea placeholder="Write your reply here "></textarea>
+        <button id="submitReplyBtn">Submit</button>
+      </div>
+
+      <div class="replies">
+        <div class="reply">
+          <div class="reply-header">
+            <img
+              src="/app/static/image/avatar.png"
+              alt="User Avatar"
+              class="reply-avatar"
+            />
+            <span class="reply-username">Username</span>
+            <span class="reply-time">2023-05-24 10:30</span>
           </div>
+          <div class="reply-content">This is a sample reply.</div>
+          <div class="reply-footer">
+            <button class="reply-button">Reply</button>
+          </div>
+          <div class="nested-reply-form">
+            <textarea placeholder="Write your reply..."></textarea>
+            <button class="submit-nested-reply">Reply</button>
+          </div>
+        </div>
       </div>
     </div>
-
-    <script src="../../static/js/topic_reply.js"></script>
+    <iframe
+      src="/app/templates/components/footer.html"
+      frameborder="0"
+      style="width: 100%; height: auto"
+    ></iframe>
+    <script src="/app/static/js/topic_reply.js"></script>
   </body>
 </html>

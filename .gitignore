@@ -9,3 +9,6 @@ __pycache__/
 
 # Mac OS X
 .DS_Store
+
+#db files
+app.db

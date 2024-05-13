@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
+# Defining Database Models
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -48,8 +49,8 @@ class Reply(db.Model):
 
 class Task(db.Model):
     id = db.Column(db.Integer, db.ForeignKey('post.id'), primary_key=True)
-    status = db.Column(db.String(20), default="Pending", nullable=False)
-    assigned_to = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    status = db.Column(db.String(20), nullable=False)
+    assigned_to = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 class Activity(db.Model):
     id = db.Column(db.Integer, primary_key=True)
