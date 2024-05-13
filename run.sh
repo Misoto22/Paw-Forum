@@ -50,8 +50,10 @@ source venv/bin/activate && echo "$(date): venv activated." >> $LOG_FILE || {
     exit 1
 }
 
-# Set FLASK_APP environment variable
+# Set FLASK_APP and FLASK_ENV environment variables
 export FLASK_APP="run:create_app"
+export FLASK_ENV="development"  # Development mode
+export FLASK_DEBUG=1            # Enable debug mode
 
 # Check if requirements.txt exists
 if [ ! -f "app/requirements.txt" ]; then
