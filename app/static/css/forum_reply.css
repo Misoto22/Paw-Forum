@@ -14,9 +14,6 @@
   margin: 0 auto;
   padding: 20px;
   background-color: #fff;
-  border: 1px solid #ccc;
-  border-top: none;
-  border-radius: 0 0 8px 8px;
 }
 
 .reply-form {
@@ -114,7 +111,7 @@
   cursor: pointer;
 }
 
-.nested-reply-form textarea{
+.nested-reply-form textarea {
   width: 60%;
   height: 50px;
   padding: 10px;

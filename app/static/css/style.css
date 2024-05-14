@@ -1,10 +1,16 @@
+a {
+  text-decoration: None;
+  cursor: pointer;
+  color: inherit;
+}
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
 }
 
 nav {
-  background-image: url("navpic.jpg");
+  background-image: url("../image/navpic.jpg");
   background-size: cover;
   background-position: center;
   padding: 40px 0; /* Removed horizontal padding, you may adjust if needed */
@@ -87,7 +93,6 @@ nav {
   display: flex;
   justify-content: center;
   align-items: center; /* Ensures vertical alignment */
-  padding: 0;
   border-radius: 30px;
   width: 580px; /* Fixed width */
   height: 60px; /* Fixed height */
@@ -108,7 +113,7 @@ nav {
 .search-btn {
   position: absolute;
   right: 20px;
-  top: 50%;
+  top: 55%;
   transform: translateY(-50%);
   background-color: #fd6c45;
   color: white;
@@ -261,11 +266,11 @@ button {
 
 .tags label {
   display: left;
-  margin-bottom: 20px;  
+  margin-bottom: 20px;
   margin-top: 10px;
 }
 
-.tags{
+.tags {
   margin-bottom: 10px;
 }
 .PostTitle {
@@ -274,10 +279,9 @@ button {
 }
 
 .Postbody textarea {
-  width: 200%; 
+  width: 200%;
 }
 
-input[type="text"],
 textarea {
   width: 100%;
   padding: 20px;
@@ -327,7 +331,7 @@ textarea {
 .AddImage {
   margin-bottom: 20px;
 }
- 
+
 .Task {
   margin-bottom: 20px;
 }
