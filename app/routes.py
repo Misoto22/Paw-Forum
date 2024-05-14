@@ -60,3 +60,11 @@ def init_app_routes(app):
     @app.route('/reply')
     def reply():
         return render_template('reply.html', page_name='Reply')
+    
+    @app.route('/profile')
+    def profile():
+        return render_template('profile.html',page_name='Profile')
+    
+    @app.route('/postcreate')
+    def postcreate():
+        return render_template('post_create.html',page_name='PostCreate')
