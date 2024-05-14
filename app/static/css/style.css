@@ -8,7 +8,7 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
 }
-
+/* NAVIFATOR STYLES*/
 nav {
   background-image: url("../image/navpic.jpg");
   background-size: cover;
@@ -25,6 +25,13 @@ nav {
   height: 30px;
   margin-right: 10px;
 }
+
+.nav-img img{
+  width: 30px;
+  height: 30px;
+  margin-left: 20px;
+}
+
 .navbar {
   background-color: white;
   padding: 5px 50px;
@@ -35,6 +42,7 @@ nav {
   margin-bottom: 20px; /* Reduced from 100px */
   margin-top: -20px;
 }
+
 .navbar-left {
   display: flex;
   align-items: center;
@@ -55,22 +63,24 @@ nav {
   margin: 0 20px;
 }
 .nav-log {
-  background-color: transparent;
-  color: black;
-  border: 1px solid black;
-  border-radius: 20px;
-  padding: 5px 15px;
-  cursor: pointer;
-  margin-right: 10px;
-}
-
-.nav-signup {
   background-color: #fd6c45;
   color: white;
   border: none;
   border-radius: 20px;
   padding: 5px 15px;
   cursor: pointer;
+  margin-left: 100px;
+  margin-bottom: 10px;
+}
+
+.nav-create {
+  background-color: #fd6c45;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 5px 15px;
+  cursor: pointer;
+  margin-left: 100px;
 }
 
 .nav-main {
@@ -335,7 +345,13 @@ textarea {
 .Task {
   margin-bottom: 20px;
 }
+
 /* LOGIN */
+.nav-register a{
+  color: #ff6347;  
+  text-decoration: underline; 
+}
+
 .login-button {
   width: 0%;
   padding: 10px 20px;
@@ -360,7 +376,7 @@ textarea {
   display: inline-block; /* Use inline-block for width and centering */
   width: 120px; /* Fixed width */
   text-align: center; /* Center text within the button */
-  padding: 8px 0; /* Vertical padding (horizontal is unnecessary due to width) */
+  padding: 6px 0; /* Vertical padding (horizontal is unnecessary due to width) */
   border-radius: 10px;
   margin: 0 10px; /* Optional: Add space between the buttons */
 }
