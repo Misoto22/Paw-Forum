@@ -70,9 +70,18 @@ def init_app_routes(app):
 
     @app.route('/reply')
     def reply():
-        return render_template('reply.html', title='Paw Forum', page_name='Reply')
-
+        return render_template('reply.html', page_name='Reply')
+      
     @app.route('/users')
     def users():
         users = User.query.all()
-        return render_template('users.html', users=users)
+        return render_template('users.html', page_name='Users' users=users)
+    
+    @app.route('/profile')
+    def profile():
+        return render_template('profile.html',page_name='Profile')
+    
+    @app.route('/postcreate')
+    def postcreate():
+        return render_template('post_create.html',page_name='PostCreate')
+
