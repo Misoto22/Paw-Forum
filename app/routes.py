@@ -75,7 +75,7 @@ def init_app_routes(app):
     @app.route('/users')
     def users():
         users = User.query.all()
-        return render_template('users.html', page_name='Users' users=users)
+        return render_template('users.html', page_name='Users', users=users)
     
     @app.route('/profile')
     def profile():
