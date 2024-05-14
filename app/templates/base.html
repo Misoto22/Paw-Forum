@@ -21,9 +21,23 @@
 
   </head>
   <body>
-    {% block navbar %}{% include 'components/nav_logged_out.html' %}{% endblock
-    %} {% block content %}{% endblock %} {% block footer %}{% include
-    'components/footer.html' %}{% endblock %}
+    {% block navbar %}{% include 'components/nav_logged_out.html' %}{% endblock %}
+
+    <!-- Flash messages block -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flashes">
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+
+    {% block footer %}{% include 'components/footer.html' %}{% endblock %}
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
   </body>
 </html>

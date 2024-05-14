@@ -6,12 +6,11 @@ from .models import db
 import os
 
 
-
 # Create app
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
-    
+
     # Initialize database
     db.init_app(app)
 
@@ -34,14 +33,14 @@ def create_app():
     login_manager = LoginManager()
     login_manager.init_app(app)
     login_manager.login_view = 'login'
-    
+
     # Load user from database
     @login_manager.user_loader
     def load_user(user_id):
-        from .models import User # Import here to avoid circular dependencies
+        from .models import User  # Import here to avoid circular dependencies
         return User.query.get(int(user_id))
-    
+
     from .routes import init_app_routes  # Import routes after db to avoid circular import
-    init_app_routes(app) # Initialize routes
+    init_app_routes(app)  # Initialize routes
 
     return app
