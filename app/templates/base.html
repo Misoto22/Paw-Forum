@@ -2,7 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>{% block title %}Home Page{% endblock %}</title>
+    <title>
+        {% if page_name %}
+            Paw Forum - {{ page_name }}
+        {% else %}
+            Paw Forum
+        {% endif %}
+    </title>
+    
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/style.css') }}"
@@ -11,6 +18,7 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/forum_reply.css') }}"
     />
+
   </head>
   <body>
     {% block navbar %}{% include 'components/nav_logged_out.html' %}{% endblock
