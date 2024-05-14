@@ -7,7 +7,7 @@ from flask_login import LoginManager, login_user, logout_user, login_required
 def init_app_routes(app):
     @app.route('/')
     def home():
-        return render_template('index.html', title='Paw Forum', page_name='Home')
+        return render_template('index.html', page_name='Home')
 
     @app.route('/register', methods=['GET', 'POST'])
     def register():
@@ -37,7 +37,7 @@ def init_app_routes(app):
 
             return redirect(url_for('home'))
         else:
-            return render_template('register.html')
+            return render_template('register.html', page_name='Register')
     
     @app.route('/login', methods=['GET', 'POST'])
     def login():
@@ -50,7 +50,7 @@ def init_app_routes(app):
                 return redirect(url_for('home'))
             else:
                 return 'Invalid username or password'
-        return render_template('login.html')
+        return render_template('login.html', page_name='Login')
     
     @app.route('/logout')
     def logout():
@@ -59,4 +59,4 @@ def init_app_routes(app):
 
     @app.route('/reply')
     def reply():
-        return render_template('reply.html', title='Paw Forum', page_name='Reply')
+        return render_template('reply.html', page_name='Reply')
