@@ -137,6 +137,7 @@ nav {
 .search-btn:hover {
   background-color: #e03e2f;
 }
+
 /* FOOTER*/
 footer {
   background-color: #ffede4;
@@ -195,11 +196,51 @@ footer {
   font-weight: bolder;
 }
 
+/* LOGIN */
+.nav-register a{
+  color: #ff6347;  
+  text-decoration: underline; 
+}
+
+.login-button {
+  width: 0%;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: white;
+  background-color: #ff6347;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.3s;
+}
+
+.login-button:hover {
+  background-color: #e5533b;
+}
+
+.nav-links a {
+  font-weight: bold;
+  color: #4d499e; /* Set the font color */
+  text-decoration: none;
+  display: inline-block; /* Use inline-block for width and centering */
+  width: 120px; /* Fixed width */
+  text-align: center; /* Center text within the button */
+  padding: 6px 0; /* Vertical padding (horizontal is unnecessary due to width) */
+  border-radius: 10px;
+  margin: 0 10px; /* Optional: Add space between the buttons */
+}
+
+.signuplink p{
+  text-decoration: underline;
+  color: #ff6347;
+}
+
 /* SIGNUP PAGE */
 .Signup {
   background-color: white;
   padding: 30px;
-  text-align: center;
+  text-align: left;
   display: flex;
   flex-direction: column; /* Make children stack vertically */
   justify-content: center; /* Vertically center children */
@@ -227,10 +268,10 @@ footer {
   display: inline-flex;
   flex-direction: column;
   align-items: stretch;
-  padding: 30px;
+  padding: 10px;
 }
 .SignupForm span {
-  padding-bottom: 10px;
+  padding-bottom: 30px;
 }
 
 .SignupForm button {
@@ -344,41 +385,6 @@ textarea {
 
 .Task {
   margin-bottom: 20px;
-}
-
-/* LOGIN */
-.nav-register a{
-  color: #ff6347;  
-  text-decoration: underline; 
-}
-
-.login-button {
-  width: 0%;
-  padding: 10px 20px;
-  font-size: 16px;
-  color: white;
-  background-color: #ff6347;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  outline: none;
-  transition: background-color 0.3s;
-}
-
-.login-button:hover {
-  background-color: #e5533b;
-}
-
-.nav-links a {
-  font-weight: bold;
-  color: #4d499e; /* Set the font color */
-  text-decoration: none;
-  display: inline-block; /* Use inline-block for width and centering */
-  width: 120px; /* Fixed width */
-  text-align: center; /* Center text within the button */
-  padding: 6px 0; /* Vertical padding (horizontal is unnecessary due to width) */
-  border-radius: 10px;
-  margin: 0 10px; /* Optional: Add space between the buttons */
 }
 
 /* Specific background colors for each link, with added !important to override any other styling if necessary */
