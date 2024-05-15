@@ -1,16 +1,18 @@
 from flask import render_template, request, redirect, url_for, flash
 from datetime import datetime
 from .models import db, User
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 
 
 def init_app_routes(app):
     @app.route('/')
     def home():
-        return render_template('index.html', title='Paw Forum', page_name='Home')
+        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template('components/nav_logged_out.html')
+        return render_template('index.html', title='Paw Forum', page_name='Home', nav=nav)
 
     @app.route('/signup', methods=['GET', 'POST'])
     def signup():
+        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template('components/nav_logged_out.html')
         if request.method == 'POST':
             username = request.form.get('username')
             email = request.form.get('email')
@@ -45,10 +47,11 @@ def init_app_routes(app):
             flash('Registration successful!', 'success')
             return redirect(url_for('home'))
         else:
-            return render_template('signup.html', title='Paw Forum', page_name='Signup')
+            return render_template('signup.html', title='Paw Forum', page_name='Signup',nav=nav)
 
     @app.route('/login', methods=['GET', 'POST'])
     def login():
+        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template('components/nav_logged_out.html')
         if request.method == 'POST':
             username = request.form['username']
             password = request.form['password']
@@ -60,7 +63,7 @@ def init_app_routes(app):
             else:
                 flash('Invalid username or password', 'error')
                 return redirect(url_for('login'))
-        return render_template('login.html')
+        return render_template('login.html', nav=nav)
 
     @app.route('/logout')
     def logout():
@@ -70,7 +73,8 @@ def init_app_routes(app):
 
     @app.route('/reply')
     def reply():
-        return render_template('reply.html', page_name='Reply')
+        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template('components/nav_logged_out.html')
+        return render_template('reply.html', page_name='Reply',nav=nav)
       
     @app.route('/users')
     def users():
@@ -79,9 +83,12 @@ def init_app_routes(app):
     
     @app.route('/profile')
     def profile():
-        return render_template('profile.html',page_name='Profile')
+        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template('components/nav_logged_out.html')
+        return render_template('profile.html',page_name='Profile',nav=nav)
     
     @app.route('/postcreate')
     def postcreate():
-        return render_template('post_create.html',page_name='PostCreate')
+        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template('components/nav_logged_out.html')
+        return render_template('post_create.html',page_name='PostCreate', nav=nav)
 
+ 
