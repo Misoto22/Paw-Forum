@@ -99,9 +99,9 @@ nav {
   margin-bottom: 20px;
 }
 
+/* Navigator - Searchbar*/
 .searchbar {
   display: flex;
-  justify-content: center;
   align-items: center; /* Ensures vertical alignment */
   border-radius: 30px;
   width: 580px; /* Fixed width */
@@ -110,14 +110,13 @@ nav {
   background-color: #fff;
 }
 
-.search-input {
-  width: 100%; /* Ensures the input uses all available space */
-  height: 100%; /* Matches the height of the container */
-  padding: 10px 20px;
+.search-input[type="text"] {
   border: none;
-  border-radius: 30px;
+  border-radius: 4px;
   outline: none;
-  box-sizing: border-box;
+  flex: 1;
+  margin-left: 50px;
+  width: 350px;
 }
 
 .search-btn {
