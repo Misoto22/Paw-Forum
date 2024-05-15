@@ -74,6 +74,9 @@ def init_app_routes(app):
     @app.route('/reply')
     def reply():
         nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template('components/nav_logged_out.html')
+        if not current_user.is_authenticated:
+            flash('Please log in to view posts or reply.', 'info')
+            return redirect(url_for('login'))
         return render_template('reply.html', page_name='Reply',nav=nav)
       
     @app.route('/users')
