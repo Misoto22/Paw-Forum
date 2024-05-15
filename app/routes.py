@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, flash
 from datetime import datetime
-from .models import db, User
+from .models import db, User, Post
 from flask_login import login_user, logout_user, login_required, current_user
 
 
@@ -91,4 +91,11 @@ def init_app_routes(app):
         nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template('components/nav_logged_out.html')
         return render_template('post_create.html',page_name='PostCreate', nav=nav)
 
- 
+    @app.route('/search')
+    def search():
+        query = request.args.get('query')
+        if query:
+            posts = Post.query.filter(Post.title.contains(query) | Post.content.contains(query)).all()
+        else:
+            posts = []
+        return render_template('search_results.html', query=query, posts=posts)

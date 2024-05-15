@@ -34,12 +34,15 @@
       <div class="nav-main">
         <h1>Welcome to the PawForum</h1>
         <div class="searchbar">
-          <input
+          <form action="{{ url_for('search')}}" method="GET">
+            <input
             type="text"
+            name="query"
             placeholder="Search your forum or topic here"
             class="search-input"
           />
-          <button class="search-btn">SEARCH</button>
+          <button type="submit" class="search-btn">SEARCH</button>
+          </form>
         </div>
       </div>
     </nav>
