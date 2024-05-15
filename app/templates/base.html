@@ -21,7 +21,13 @@
 
   </head>
   <body>
-    {% block navbar %}{% include 'components/nav_logged_out.html' %}{% endblock %}
+    {% block navbar %}
+    {% if nav %}
+        {{ nav|safe }}
+      {% else %}
+        {% include 'components/nav_logged_out.html' %}
+      {% endif %}
+      {% endblock %}
 
     <!-- Flash messages block -->
     {% with messages = get_flashed_messages(with_categories=true) %}
