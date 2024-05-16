@@ -6,10 +6,6 @@ import re
 
 db = SQLAlchemy()
 
-def validate_email(email):
-    """Validate email format."""
-    if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-        raise ValueError("Invalid email format")
 
 # Defining Database Models
 class User(db.Model, UserMixin):
@@ -53,7 +49,6 @@ class User(db.Model, UserMixin):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        validate_email(self.email)
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -64,6 +59,8 @@ class Post(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     content = db.Column(db.Text, nullable=False)
     like_count = db.Column(db.Integer, default=0)
+    image_path = db.Column(db.String(255), nullable=True)
+
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

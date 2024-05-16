@@ -1,10 +1,66 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Registered Users</h1>
+  <h1>Database Contents</h1>
+
+  <!-- Users Section -->
+  <h2>Registered Users</h2>
   <ul>
     {% for user in users %}
-      <li>{{ user.username }} - {{ user.email }} </li>
+      <li>
+        Username: {{ user.username }} <br>
+        Email: {{ user.email }} <br>
+        Phone: {{ user.phone }} <br>
+        Gender: {{ user.gender }} <br>
+        Postcode: {{ user.postcode }} <br>
+        Joined At: {{ user.join_at }} <br>
+        Pet Type: {{ user.pet_type }} <br>
+        User Image: <img src="{{ user.user_image }}" alt="User Image" width="50"><br>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <!-- Posts Section -->
+  <h2>Posts</h2>
+  <ul>
+    {% for post in posts %}
+      <li>
+        Title: {{ post.title }} <br>
+        Category: {{ post.category }} <br>
+        Is Task: {{ post.is_task }} <br>
+        Created By: {{ post.user.username }} <br>
+        Created At: {{ post.created_at }} <br>
+        Content: {{ post.content }} <br>
+        Like Count: {{ post.like_count }} <br>
+        Image Path: {{ post.image_path }} <br>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <!-- Tasks Section -->
+  <h2>Tasks</h2>
+  <ul>
+    {% for task in tasks %}
+      <li>
+        Post ID: {{ task.id }} <br>
+        Status: {{ task.status }} <br>
+        Assigned To: {% if task.assigned_to %} {{ task.assigned_user.username }} {% else %} None {% endif %} <br>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <!-- Replies Section -->
+  <h2>Replies</h2>
+  <ul>
+    {% for reply in replies %}
+      <li>
+        Post ID: {{ reply.post.id }} <br>
+        Reply By: {{ reply.user.username }} <br>
+        Parent Reply ID: {{ reply.parent_reply_id }} <br>
+        Content: {{ reply.content }} <br>
+        Posted At: {{ reply.post_at }} <br>
+        Like Count: {{ reply.like_count }} <br>
+      </li>
     {% endfor %}
   </ul>
 {% endblock %}
