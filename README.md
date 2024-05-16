@@ -35,19 +35,49 @@ Paw Forum aims to connect pet enthusiasts, provide valuable information, and hel
 
 ```bash
 app
-├── app.py                  # Main Python file for the Flask application.
-├── requirements.txt        # File containing all the dependencies.
-├── database                # Directory for database-related files.
-│   └── app.db              # SQLite database file.
-├── static                  # Directory for static files.
-│   ├── css                 # Subdirectory for CSS files.
-│   │   └── style.css       # Main CSS file.
-│   └── js                  # Subdirectory for JavaScript files.
-│       └── script.js       # Main JavaScript file.
-└── templates               # Directory for HTML templates which are rendered by Flask.
-    ├── components          # UI components.
-    │   └── nav_logged_out.html  # Navigation bar for users who are not logged in.
-    └── index.html          
+├── README.md                       # Project description and instructions.
+├── app
+│   ├── __init__.py                 # Initialize the Flask app.
+│   ├── config.py                   # Configuration settings.
+│   ├── database
+│   │   └── app.db                  # SQLite database file.
+│   ├── models.py                   # Database models.
+│   ├── requirements.txt            # Dependencies.
+│   ├── routes.py                   # Application routes.
+│   ├── static                      # Static files.
+│   │   ├── css
+│   │   │   ├── profile.css         # Profile-specific styles.
+│   │   │   └── style.css           # Main CSS file.
+│   │   ├── image                   # Image files directory.
+│   │   └── js
+│   │       ├── script.js           # Main JavaScript file.
+│   │       └── topic_reply.js      # Topic reply functionality.
+│   └── templates                   # HTML templates.
+│       ├── Profile.html            # User profile page.
+│       ├── base.html               # Base template.
+│       ├── components              # UI components.
+│       │   ├── footer.html         # Footer component.
+│       │   ├── forum_detail.html   # Forum detail view.
+│       │   ├── forum_topic.html    # Forum topic view.
+│       │   ├── nav_logged_in.html  # Navigation bar for logged-in users.
+│       │   ├── nav_logged_out.html # Navigation bar for logged-out users.
+│       │   └── post_reply.html     # Post reply form.
+│       ├── index.html              # Homepage.
+│       ├── login.html              # Login page.
+│       ├── post_create.html        # Create post page.
+│       ├── reply.html              # Reply page.
+│       ├── search_results.html     # Search results page.
+│       ├── signup.html             # Signup page.
+│       └── users.html              # Users list page.
+├── deliverables
+│   └── v1.0.mov                    # Deliverable v1.0.
+├── instance
+│   └── app.db                      # SQLite database file.
+├── run.py                          # Script to run the application.
+├── run.sh                          # Shell script to run the application.
+└── tests                           # Directory for test cases.
+    ├── __init__.py                 # Initialize the Testing.
+    └── test_app.py                 # Unit Test cases.    
 ```
 
 ### Database Design
@@ -60,19 +90,28 @@ Simply run the following command in the terminal:
 ./run.sh
 ```
 
+### Flags
+
+- `-p` or `--port`: Define the port number. Example usage: `./run.sh -p 8080`
+- `-d` or `--development`: Enable development mode. Example usage: `./run.sh -d`
+
+
+
 The `run.sh` script automates the setup and execution of a Flask web application. Here are the detailed steps it performs:
 
-1. **Check Python Installation:** Verifies if Python3 is installed on the system.
-2. **Check Flask Installation:** Checks if Flask is installed globally and, if absent, attempts to install it.
-3. **Navigate to App Directory:** Changes the working directory to the application's root directory (`app`). Exits with an error if the directory change fails.
-4. **Virtual Environment Management:** If a virtual environment (`venv`) does not exist, it creates one using Python3.
-5. **Activate Virtual Environment:** Activates the virtual environment. Logs an error and exits if activation fails.
-6. **Dependency Installation:** Ensures a `requirements.txt` file is present and installs all dependencies listed.
-7. **Check Port Availability:** Checks if port 5000 is available. Logs an error and exits if the port is occupied.
-8. **Run Flask Application:** Starts the Flask application in the background and captures the process ID.
-9. **Open Web Application in Browser:** Automatically opens the web application in the default web browser based on the operating system.
-10. **Graceful Shutdown:** Implements a trap to capture `INT` (Ctrl-C) signals, allowing for the graceful shutdown of the Flask application.
-11. **Logging:** Logs all operations to `run.log`, with critical errors causing the script to terminate and log an error message.
+1. **Initialize Log File:** Starts by initializing the `run.log` file to log the script operations.
+2. **Argument Parsing:** Parses command-line arguments to set the port number (`-p` or `--port`) and enable development mode (`-d` or `--development`). If no port is specified, it defaults to `5000`.
+3. **Check Python Installation:** Verifies if Python3 is installed on the system.
+4. **Check Flask Installation:** Checks if Flask is installed globally and, if absent, attempts to install it.
+5. **Virtual Environment Management:** If a virtual environment (`venv`) does not exist, it creates one using Python3.
+6. **Activate Virtual Environment:** Activates the virtual environment. Logs an error and exits if activation fails.
+7. **Set Flask Environment Variables:** Sets the `FLASK_APP` variable. If development mode is enabled, it also sets `FLASK_ENV` to `development` and `FLASK_DEBUG` to `1`.
+8. **Dependency Installation:** Ensures a `requirements.txt` file is present and installs all dependencies listed.
+9. **Check Port Availability:** Checks if the specified port is available. Logs an error and exits if the port is occupied.
+10. **Run Flask Application:** Starts the Flask application in the background with the specified port and captures the process ID.
+11. **Open Web Application in Browser:** Automatically opens the web application in the default web browser based on the operating system.
+12. **Graceful Shutdown:** Implements a trap to capture `INT` (Ctrl-C) signals, allowing for the graceful shutdown of the Flask application.
+13. **Logging:** Logs all operations to `run.log`, with critical errors causing the script to terminate and log an error message.
 
 This script is designed to ensure a seamless setup and launch process for the Flask application, managing dependencies, environment setup, and server operation in a streamlined manner.
 
@@ -84,6 +123,11 @@ Ctrl + C
 ```
 
 ## Instructions for Running the Tests
+
+Simply run:
+```bash
+python -m unittest discover tests
+```
 
 ## Documentation
 

@@ -1,18 +1,21 @@
 from flask import render_template, request, redirect, url_for, flash
 from datetime import datetime
-from .models import db, User, Post
+from .models import db, User, Post, Task
 from flask_login import login_user, logout_user, login_required, current_user
-
+import os
+from werkzeug.utils import secure_filename
 
 def init_app_routes(app):
     @app.route('/')
     def home():
-        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template('components/nav_logged_out.html')
+        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
+            'components/nav_logged_out.html')
         return render_template('index.html', title='Paw Forum', page_name='Home', nav=nav)
 
     @app.route('/signup', methods=['GET', 'POST'])
     def signup():
-        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template('components/nav_logged_out.html')
+        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
+            'components/nav_logged_out.html')
         if request.method == 'POST':
             username = request.form.get('username')
             email = request.form.get('email')
@@ -21,6 +24,16 @@ def init_app_routes(app):
             gender = request.form.get('gender', None)
             postcode = request.form.get('postcode', None)
             user_image = request.form.get('user_image', 'avatar1.png')
+
+            # Validate required fields
+            if not username or not email or not password:
+                flash('All fields are required', 'error')
+                return redirect(url_for('signup'))
+                
+            # Validate email format
+            if '@' not in email or '.' not in email:
+                flash('Invalid email format', 'error')
+                return redirect(url_for('signup'))
 
             # Check if the username or email already exists
             if User.query.filter_by(username=username).first() or User.query.filter_by(email=email).first():
@@ -47,11 +60,12 @@ def init_app_routes(app):
             flash('Registration successful!', 'success')
             return redirect(url_for('home'))
         else:
-            return render_template('signup.html', title='Paw Forum', page_name='Signup',nav=nav)
+            return render_template('signup.html', title='Paw Forum', page_name='Signup', nav=nav)
 
     @app.route('/login', methods=['GET', 'POST'])
     def login():
-        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template('components/nav_logged_out.html')
+        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
+            'components/nav_logged_out.html')
         if request.method == 'POST':
             username = request.form['username']
             password = request.form['password']
@@ -72,27 +86,64 @@ def init_app_routes(app):
         return redirect(url_for('home'))
 
     @app.route('/reply')
+    @login_required
     def reply():
-        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template('components/nav_logged_out.html')
+        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
+            'components/nav_logged_out.html')
         if not current_user.is_authenticated:
             flash('Please log in to view posts or reply.', 'info')
             return redirect(url_for('login'))
-        return render_template('reply.html', page_name='Reply',nav=nav)
-      
+        return render_template('reply.html', page_name='Reply', nav=nav)
+
     @app.route('/users')
     def users():
         users = User.query.all()
         return render_template('users.html', page_name='Users', users=users)
-    
+
     @app.route('/profile')
+    @login_required
     def profile():
-        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template('components/nav_logged_out.html')
-        return render_template('profile.html',page_name='Profile',nav=nav)
-    
-    @app.route('/postcreate')
-    def postcreate():
-        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template('components/nav_logged_out.html')
-        return render_template('post_create.html',page_name='PostCreate', nav=nav)
+        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
+            'components/nav_logged_out.html')
+        return render_template('profile.html', page_name='Profile', nav=nav)
+
+    @app.route('/post_create', methods=['GET', 'POST'])
+    @login_required
+    def post_create():
+        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
+            'components/nav_logged_out.html')
+
+        if request.method == 'POST':
+            title = request.form['title']
+            content = request.form['content']
+            category = request.form.get('category')
+            is_task = 'is_task' in request.form
+
+            new_post = Post(
+                title=title,
+                content=content,
+                category=category,
+                is_task=is_task,
+                created_by=current_user.id,
+                created_at=datetime.utcnow()
+            )
+
+            db.session.add(new_post)
+            db.session.flush()  # Flush to assign an ID to new_post
+
+            if is_task:
+                new_task = Task(
+                    id=new_post.id,  # Same ID as the post
+                    status='open',
+                    assigned_to=None
+                )
+                db.session.add(new_task)
+
+            db.session.commit()
+            flash('Post created successfully!', 'success')
+            return redirect(url_for('home'))
+
+        return render_template('post_create.html', page_name='PostCreate', nav=nav)
 
     @app.route('/search')
     def search():
@@ -102,3 +153,15 @@ def init_app_routes(app):
         else:
             posts = []
         return render_template('search_results.html', query=query, posts=posts)
+
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template('error_pages/404.html'), 404
+
+    @app.errorhandler(500)
+    def internal_server_error(e):
+        return render_template('error_pages/500.html'), 500
+
+    @app.route('/cause_500')
+    def cause_500():
+        raise Exception("Intentional Error")

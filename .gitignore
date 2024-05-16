@@ -1,8 +1,9 @@
 # Environments
 venv
 
-# Pycharm Temp Files
-.idea
+# ignore
+.idea/
+
 
 # Log File for run.sh
 run.log
