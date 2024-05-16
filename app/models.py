@@ -49,6 +49,9 @@ class User(db.Model, UserMixin):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        # Basic email validation
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", self.email):
+            raise ValueError("Invalid email address")
 
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -60,7 +63,8 @@ class Post(db.Model):
     content = db.Column(db.Text, nullable=False)
     like_count = db.Column(db.Integer, default=0)
     image_path = db.Column(db.String(255), nullable=True)
-    user = db.relationship('User', backref=db.backref('posts', lazy=True))
+
+    author = db.relationship('User', backref=db.backref('posts', lazy=True))
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -68,6 +72,7 @@ class Post(db.Model):
             raise ValueError("Title must be between 1 and 200 characters")
         if not self.content:
             raise ValueError("Content cannot be null")
+
 
 class Reply(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -78,10 +83,19 @@ class Reply(db.Model):
     post_at = db.Column(db.DateTime, default=datetime.utcnow)
     like_count = db.Column(db.Integer, default=0)
 
+    post = db.relationship('Post', backref=db.backref('replies', lazy=True))
+    author = db.relationship('User', backref=db.backref('replies', lazy=True))
+    parent_reply = db.relationship('Reply', remote_side=[id], backref=db.backref('child_replies', lazy=True))
+
+
 class Task(db.Model):
     id = db.Column(db.Integer, db.ForeignKey('post.id'), primary_key=True)
     status = db.Column(db.String(20), nullable=False)
     assigned_to = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    post = db.relationship('Post', backref=db.backref('task', uselist=False))
+    assigned_user = db.relationship('User', backref=db.backref('tasks', lazy=True))
+
 
 class Activity(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -90,9 +104,14 @@ class Activity(db.Model):
     ip_address = db.Column(db.String(100), nullable=True)
     update_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+    user = db.relationship('User', backref=db.backref('activities', lazy=True))
+
+
 class WaitingList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     task_id = db.Column(db.Integer, db.ForeignKey('task.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    content = db.Column(db.Text, nullable=True)
     applied_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    task = db.relationship('Task', backref=db.backref('waiting_list', lazy=True))
+    user = db.relationship('User', backref=db.backref('waiting_list_entries', lazy=True))
