@@ -21,27 +21,26 @@
 
   </head>
   <body>
+    <!-- Navbar -->
     {% block navbar %}
     {% if nav %}
         {{ nav|safe }}
       {% else %}
         {% include 'components/nav_logged_out.html' %}
-      {% endif %}
-      {% endblock %}
+    {% endif %}
+    {% endblock %}
 
-    <!-- Flash messages block -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <ul class="flashes">
-          {% for category, message in messages %}
-            <li class="{{ category }}">{{ message }}</li>
-          {% endfor %}
-        </ul>
-      {% endif %}
-    {% endwith %}
+
+    <!-- Error message -->
+    {% if error_message %}
+    <script type="text/javascript">
+        alert("{{ error_message }}");
+    </script>
+    {% endif %}  
 
     {% block content %}{% endblock %}
 
+    <!-- Footer -->
     {% block footer %}{% include 'components/footer.html' %}{% endblock %}
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>

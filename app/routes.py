@@ -5,6 +5,15 @@ from flask_login import login_user, logout_user, login_required, current_user
 import os
 from werkzeug.utils import secure_filename
 
+def validate_email(email):
+    import re
+    email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+    if not re.match(email_regex, email):
+        raise ValueError("Invalid email format")
+
+def validate_postcode(postcode):
+    if not postcode.isdigit() or len(postcode) != 4:
+        raise ValueError("Invalid postcode")
 
 def init_app_routes(app):
     @app.route('/')
@@ -15,8 +24,8 @@ def init_app_routes(app):
 
     @app.route('/signup', methods=['GET', 'POST'])
     def signup():
-        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
-            'components/nav_logged_out.html')
+        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template('components/nav_logged_out.html')
+        error_message = None
         if request.method == 'POST':
             username = request.form.get('username')
             email = request.form.get('email')
@@ -26,10 +35,23 @@ def init_app_routes(app):
             postcode = request.form.get('postcode', None)
             user_image = request.form.get('user_image', 'avatar1.png')
 
-            # Check if the username or email already exists
-            if User.query.filter_by(username=username).first() or User.query.filter_by(email=email).first():
-                flash('Username or Email already exists', 'error')
-                return redirect(url_for('signup'))
+            # Validate required fields
+            if not username or not email or not password:
+                error_message = 'All fields are required'
+            else:
+                # Validate email format
+                try:
+                    validate_email(email)
+                except ValueError as e:
+                    error_message = str(e)
+
+                if not error_message:
+                    # Check if the username or email already exists
+                    if User.query.filter_by(username=username).first() or User.query.filter_by(email=email).first():
+                        error_message = 'Username or Email already exists'
+
+            if error_message:
+                return render_template('signup.html', page_name='Signup', nav=nav, error_message=error_message)
 
             # Create new User object with hashed password
             new_user = User(
