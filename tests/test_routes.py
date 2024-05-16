@@ -147,13 +147,13 @@ class RoutesTestCase(unittest.TestCase):
         self.assertIn(b'Profile', response.data)
 
     def test_post_create_page_requires_login(self):
-        """Test that the post create page requires login."""
+        """Test that the uploads create page requires login."""
         response = self.client.get('/postcreate', follow_redirects=True)
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Please log in to access this page.', response.data)
 
     def test_post_create_page_authenticated(self):
-        """Test accessing the post create page when authenticated."""
+        """Test accessing the uploads create page when authenticated."""
         self.client.post('/login', data=dict(
             username='testuser',
             password='password123'
@@ -168,7 +168,7 @@ class RoutesTestCase(unittest.TestCase):
             username='testuser',
             password='password123'
         ), follow_redirects=True)
-        post = Post(title='Test Post', content='This is a test post', created_by=self.test_user.id)
+        post = Post(title='Test Post', content='This is a test uploads', created_by=self.test_user.id)
         db.session.add(post)
         db.session.commit()
         response = self.client.get('/search?query=Test')

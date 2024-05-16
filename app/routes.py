@@ -1,9 +1,12 @@
-from flask import render_template, request, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash, current_app
 from datetime import datetime
 from .models import db, User, Post, Task
 from flask_login import login_user, logout_user, login_required, current_user
 import os
 from werkzeug.utils import secure_filename
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
 
 def validate_email(email):
     import re
@@ -24,8 +27,10 @@ def init_app_routes(app):
 
     @app.route('/signup', methods=['GET', 'POST'])
     def signup():
+
         nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template('components/nav_logged_out.html')
         error_message = None
+
         if request.method == 'POST':
             username = request.form.get('username')
             email = request.form.get('email')
@@ -107,10 +112,6 @@ def init_app_routes(app):
             return redirect(url_for('login'))
         return render_template('reply.html', page_name='Reply', nav=nav)
 
-    @app.route('/users')
-    def users():
-        users = User.query.all()
-        return render_template('users.html', page_name='Users', users=users)
 
     @app.route('/profile')
     def profile():
@@ -125,34 +126,53 @@ def init_app_routes(app):
             'components/nav_logged_out.html')
 
         if request.method == 'POST':
-            title = request.form['title']
-            content = request.form['content']
-            category = request.form.get('category')
-            is_task = 'is_task' in request.form
+            try:
+                title = request.form['title']
+                content = request.form['content']
+                category = request.form.get('category')
+                is_task = 'is_task' in request.form
+                images = request.files.getlist('images')
 
-            new_post = Post(
-                title=title,
-                content=content,
-                category=category,
-                is_task=is_task,
-                created_by=current_user.id,
-                created_at=datetime.utcnow()
-            )
-
-            db.session.add(new_post)
-            db.session.flush()  # Flush to assign an ID to new_post
-
-            if is_task:
-                new_task = Task(
-                    id=new_post.id,  # Same ID as the post
-                    status='open',
-                    assigned_to=None
+                new_post = Post(
+                    title=title,
+                    content=content,
+                    category=category,
+                    is_task=is_task,
+                    created_by=current_user.id,
+                    created_at=datetime.utcnow()
                 )
-                db.session.add(new_task)
 
-            db.session.commit()
-            flash('Post created successfully!', 'success')
-            return redirect(url_for('home'))
+                db.session.add(new_post)
+                db.session.flush()  # Flush to assign an ID to new_post
+
+                # Check if any images were uploaded
+                if images and any(image_file.filename for image_file in images):
+                    post_images_dir = os.path.join(current_app.config['UPLOAD_FOLDER'], str(new_post.id))
+                    os.makedirs(post_images_dir, exist_ok=True)
+
+                    for image_file in images:
+                        if image_file and allowed_file(image_file.filename):
+                            filename = secure_filename(image_file.filename)
+                            image_path = os.path.join(post_images_dir, filename)
+                            image_file.save(image_path)
+
+                    new_post.image_path = post_images_dir
+
+                if is_task:
+                    new_task = Task(
+                        id=new_post.id,  # Same ID as the post
+                        status='open',
+                        assigned_to=None
+                    )
+                    db.session.add(new_task)
+
+                db.session.commit()
+                flash('Post created successfully!', 'success')
+                return redirect(url_for('home'))
+
+            except Exception as e:
+                flash(f'An error occurred: {str(e)}', 'error')
+                return redirect(url_for('post_create'))
 
         return render_template('post_create.html', page_name='PostCreate', nav=nav)
 
@@ -175,7 +195,12 @@ def init_app_routes(app):
                     post.content = '...' + content[start_index:end_index] + '...'
         else:
             posts = []
-        return render_template('search_results.html', query=query, posts=posts)
+
+        if current_user.is_authenticated:
+            nav = render_template('components/nav_logged_in.html')
+        else:
+            nav = render_template('components/nav_logged_out.html')
+        return render_template('search_results.html', query=query, posts=posts, nav=nav)
 
     @app.errorhandler(404)
     def page_not_found(e):
@@ -188,3 +213,8 @@ def init_app_routes(app):
     @app.route('/cause_500')
     def cause_500():
         raise Exception("Intentional Error")
+
+    @app.route('/post/<int:post_id>')
+    def post_detail(post_id):
+        post = Post.query.get_or_404(post_id)
+        return render_template('post_detail.html', post=post)
