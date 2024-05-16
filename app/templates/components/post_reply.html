@@ -1,36 +1,154 @@
 {% block content %}
-<div>
-  {% include 'components/forum_detail.html' %}
-  <!-- <iframe src="/app/templates/components/forum_detail.html" frameborder="0" style="width: 100%; height: 100%"></iframe> -->
-</div>
-<div class="reply-section">
-  <div class="reply-form">
-    <p>Add a comment</p>
-    <textarea placeholder="Write your reply here "></textarea>
-    <button id="submitReplyBtn">Submit</button>
+<div class="forum-container">
+  <!-- Forum header -->
+  <div class="forum-header">
+    <!-- Header content -->
   </div>
-  <div class="replies">
-    <div class="reply">
-      <div class="reply-header">
+
+  <!-- Forum detail container -->
+  <div class="forum-detail-container">
+    {% include 'components/forum_detail.html' %}
+  </div>
+
+  <!-- User list container inside forum detail -->
+  <div class="user-list-container">
+    <div class="user-list">
+      <div
+        class="user"
+        data-username="john_doe"
+        data-name="John Doe"
+        data-gender="Male"
+        data-postcode="12345"
+        data-email="john@example.com"
+        data-phone="123-456-7890"
+        data-pettype="Dog"
+      >
         <img
-          src="{{ url_for('static', filename='image/avatar.png') }}"
+          src="{{ url_for('static', filename='image/avatarLibrary/avatar1.png') }}"
           alt="User Avatar"
-          class="reply-avatar"
+          class="user-avatar"
         />
-        <span class="reply-username">Username</span>
-        <span class="reply-time">2023-05-24 10:30</span>
+        <span class="user-username">john_doe</span>
       </div>
-      <div class="reply-content">This is a sample reply.</div>
-      <div class="reply-footer">
-        <button class="reply-button">Reply</button>
+
+      <div
+        class="user"
+        data-username="jane_smith"
+        data-name="Jane Smith"
+        data-gender="Female"
+        data-postcode="67890"
+        data-email="jane@example.com"
+        data-phone="987-654-3210"
+        data-pettype="Cat"
+      >
+        <img
+          src="{{ url_for('static', filename='image/avatarLibrary/avatar21.png') }}"
+          alt="User Avatar"
+          class="user-avatar"
+        />
+        <span class="user-username">jane_smith</span>
       </div>
-      <div class="nested-reply-form">
-        <textarea placeholder="Write your reply..."></textarea>
-        <button class="submit-nested-reply">Reply</button>
+
+      <div
+        class="user"
+        data-username="mike_jones"
+        data-name="Mike Jones"
+        data-gender="Male"
+        data-postcode="11223"
+        data-email="mike@example.com"
+        data-phone="555-666-7777"
+        data-pettype="Bird"
+      >
+        <img
+          src="{{ url_for('static', filename='image/avatarLibrary/avatar3.png') }}"
+          alt="User Avatar"
+          class="user-avatar"
+        />
+        <span class="user-username">mike_jones</span>
+      </div>
+
+      <div
+        class="user"
+        data-username="sarah_lee"
+        data-name="Sarah Lee"
+        data-gender="Female"
+        data-postcode="44556"
+        data-email="sarah@example.com"
+        data-phone="444-555-6666"
+        data-pettype="Fish"
+      >
+        <img
+          src="{{ url_for('static', filename='image/avatarLibrary/avatar24.png') }}"
+          alt="User Avatar"
+          class="user-avatar"
+        />
+        <span class="user-username">sarah_lee</span>
+      </div>
+
+      <div
+        class="user"
+        data-username="david_wang"
+        data-name="David Wang"
+        data-gender="Male"
+        data-postcode="77889"
+        data-email="david@example.com"
+        data-phone="333-222-1111"
+        data-pettype="Rabbit"
+      >
+        <img
+          src="{{ url_for('static', filename='image/avatarLibrary/avatar5.png') }}"
+          alt="User Avatar"
+          class="user-avatar"
+        />
+        <span class="user-username">david_wang</span>
+      </div>
+      <!-- Add more users as needed -->
+    </div>
+  </div>
+
+  <!-- User info popup -->
+  <div id="user-info-popup" class="user-info-popup">
+    <div class="popup-content">
+      <span class="close-popup">&times;</span>
+      <p><strong>Name:</strong> <span id="popup-name"></span></p>
+      <p><strong>Gender:</strong> <span id="popup-gender"></span></p>
+      <p><strong>Post Code:</strong> <span id="popup-postcode"></span></p>
+      <p><strong>Email:</strong> <span id="popup-email"></span></p>
+      <p><strong>Phone:</strong> <span id="popup-phone"></span></p>
+      <p><strong>Pet Type:</strong> <span id="popup-pettype"></span></p>
+    </div>
+  </div>
+
+  <div class="reply-section">
+    <div class="reply-form">
+      <p>Add a comment</p>
+      <textarea placeholder="Write your reply here "></textarea>
+      <button id="submitReplyBtn">Submit</button>
+    </div>
+    <div class="replies">
+      <div class="reply">
+        <div class="reply-header">
+          <img
+            src="{{ url_for('static', filename='image/avatar.png') }}"
+            alt="User Avatar"
+            class="reply-avatar"
+          />
+          <span class="reply-username">Username</span>
+          <span class="reply-time">2023-05-24 10:30</span>
+        </div>
+        <div class="reply-content">This is a sample reply.</div>
+        <div class="reply-footer">
+          <button class="reply-button">Reply</button>
+        </div>
+        <div class="nested-reply-form">
+          <textarea placeholder="Write your reply..."></textarea>
+          <button class="submit-nested-reply">Reply</button>
+        </div>
       </div>
     </div>
   </div>
 </div>
 {% endblock %} {% block scripts %}
 <script src="{{ url_for('static', filename='js/topic_reply.js') }}"></script>
+<script src="{{ url_for('static', filename='js/user_info_popup.js') }}"></script>
 {% endblock %}

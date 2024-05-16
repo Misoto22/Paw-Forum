@@ -26,7 +26,7 @@ nav {
   margin-right: 10px;
 }
 
-.nav-img img{
+.nav-img img {
   width: 30px;
   height: 30px;
   margin-left: 20px;
@@ -196,9 +196,9 @@ footer {
 }
 
 /* LOGIN */
-.nav-register a{
-  color: #ff6347;  
-  text-decoration: underline; 
+.nav-register a {
+  color: #ff6347;
+  text-decoration: underline;
 }
 
 .login-button {
@@ -230,7 +230,7 @@ footer {
   margin: 0 10px; /* Optional: Add space between the buttons */
 }
 
-.signuplink p{
+.signuplink p {
   text-decoration: underline;
   color: #ff6347;
 }
@@ -601,7 +601,6 @@ textarea {
   background-color: #e5533b;
 }
 
-
 /* POST REPLY page*/
 .reply-button {
   padding: 5px 10px;
@@ -724,4 +723,64 @@ textarea {
   border: 1px solid #ccc;
   border-radius: 4px;
   resize: vertical;
+}
+
+.forum-container {
+  position: relative;
+  padding-top: 50px;
+}
+
+.forum-detail-container {
+  position: relative;
+}
+
+.user-list-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+.user-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  margin: 5px;
+  cursor: pointer;
+  position: relative;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.user-info-popup {
+  display: none;
+  position: absolute;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  z-index: 1000;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+
+.popup-content {
+  text-align: left;
+}
+
+.close-popup {
+  position: absolute;
+  top: 10px;
 }
