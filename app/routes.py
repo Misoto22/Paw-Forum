@@ -68,7 +68,7 @@ def init_app_routes(app):
                 gender=gender,
                 postcode=postcode,
                 join_at=datetime.utcnow(),
-                user_image=f'static/image/avatars/{user_image}' if user_image else None
+                user_image=f'/static/image/avatar/{user_image}' if user_image else None
             )
 
             db.session.add(new_user)
@@ -167,7 +167,7 @@ def init_app_routes(app):
 
                 # Check if any images were uploaded
                 if images and any(image_file.filename for image_file in images):
-                    post_images_dir = os.path.join(current_app.config['UPLOAD_FOLDER'], str(new_post.id))
+                    post_images_dir = os.path.join("static/image/uploads", str(new_post.id))
                     os.makedirs(post_images_dir, exist_ok=True)
 
                     for image_file in images:
@@ -195,6 +195,38 @@ def init_app_routes(app):
                 return redirect(url_for('post_create'))
 
         return render_template('post_create.html', page_name='PostCreate', nav=nav)
+
+    @app.route('/delete_post/<int:post_id>', methods=['POST'])
+    @login_required
+    def delete_post(post_id):
+        post = Post.query.get_or_404(post_id)
+        if current_user.id != post.created_by:
+            flash('You are not authorized to delete this post.', 'error')
+            return redirect(url_for('post_detail', post_id=post_id))
+        try:
+            db.session.delete(post)  # Deleting the post should cascade and delete all associated replies
+            db.session.commit()
+            flash('Post and all associated replies deleted successfully!', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash('Error deleting post: ' + str(e), 'error')
+        return redirect(url_for('home'))
+
+    @app.route('/delete_reply/<int:reply_id>', methods=['POST'])
+    @login_required
+    def delete_reply(reply_id):
+        reply = Reply.query.get_or_404(reply_id)
+        if current_user.id != reply.reply_by:
+            flash('You are not authorized to delete this reply.', 'error')
+            return redirect(url_for('post_detail', post_id=reply.post_id))
+        try:
+            db.session.delete(reply)  # Deleting the reply should cascade and delete all child replies
+            db.session.commit()
+            flash('Reply and all child replies deleted successfully!', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash('Error deleting reply: ' + str(e), 'error')
+        return redirect(url_for('post_detail', post_id=reply.post_id))
 
     @app.route('/search')
     def search():
