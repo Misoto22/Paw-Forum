@@ -199,7 +199,12 @@ def init_app_routes(app):
                     post.content = '...' + content[start_index:end_index] + '...'
         else:
             posts = []
-        return render_template('search_results.html', query=query, posts=posts)
+
+        if current_user.is_authenticated:
+            nav = render_template('components/nav_logged_in.html')
+        else:
+            nav = render_template('components/nav_logged_out.html')
+        return render_template('search_results.html', query=query, posts=posts, nav=nav)
 
     @app.errorhandler(404)
     def page_not_found(e):
