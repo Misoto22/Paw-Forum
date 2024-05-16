@@ -5,6 +5,16 @@ from flask_login import login_user, logout_user, login_required, current_user
 import os
 from werkzeug.utils import secure_filename
 
+def validate_email(email):
+    import re
+    email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+    if not re.match(email_regex, email):
+        raise ValueError("Invalid email format")
+
+def validate_postcode(postcode):
+    if not postcode.isdigit() or len(postcode) != 4:
+        raise ValueError("Invalid postcode")
+
 def init_app_routes(app):
     @app.route('/')
     def home():
@@ -14,8 +24,8 @@ def init_app_routes(app):
 
     @app.route('/signup', methods=['GET', 'POST'])
     def signup():
-        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
-            'components/nav_logged_out.html')
+        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template('components/nav_logged_out.html')
+        error_message = None
         if request.method == 'POST':
             username = request.form.get('username')
             email = request.form.get('email')
@@ -27,18 +37,21 @@ def init_app_routes(app):
 
             # Validate required fields
             if not username or not email or not password:
-                flash('All fields are required', 'error')
-                return redirect(url_for('signup'))
-                
-            # Validate email format
-            if '@' not in email or '.' not in email:
-                flash('Invalid email format', 'error')
-                return redirect(url_for('signup'))
+                error_message = 'All fields are required'
+            else:
+                # Validate email format
+                try:
+                    validate_email(email)
+                except ValueError as e:
+                    error_message = str(e)
 
-            # Check if the username or email already exists
-            if User.query.filter_by(username=username).first() or User.query.filter_by(email=email).first():
-                flash('Username or Email already exists', 'error')
-                return redirect(url_for('signup'))
+                if not error_message:
+                    # Check if the username or email already exists
+                    if User.query.filter_by(username=username).first() or User.query.filter_by(email=email).first():
+                        error_message = 'Username or Email already exists'
+
+            if error_message:
+                return render_template('signup.html', page_name='Signup', nav=nav, error_message=error_message)
 
             # Create new User object with hashed password
             new_user = User(
@@ -64,6 +77,7 @@ def init_app_routes(app):
 
     @app.route('/login', methods=['GET', 'POST'])
     def login():
+        error_message = None
         nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
             'components/nav_logged_out.html')
         if request.method == 'POST':
@@ -75,9 +89,8 @@ def init_app_routes(app):
                 flash('Login successful!', 'success')
                 return redirect(url_for('home'))
             else:
-                flash('Invalid username or password', 'error')
-                return redirect(url_for('login'))
-        return render_template('login.html', nav=nav)
+                error_message = 'Invalid username or password'
+        return render_template('login.html', page_name='Login', nav=nav, error_message=error_message)
 
     @app.route('/logout')
     def logout():
@@ -86,7 +99,6 @@ def init_app_routes(app):
         return redirect(url_for('home'))
 
     @app.route('/reply')
-    @login_required
     def reply():
         nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
             'components/nav_logged_out.html')
@@ -101,7 +113,6 @@ def init_app_routes(app):
         return render_template('users.html', page_name='Users', users=users)
 
     @app.route('/profile')
-    @login_required
     def profile():
         nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
             'components/nav_logged_out.html')
