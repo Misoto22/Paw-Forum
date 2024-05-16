@@ -616,7 +616,6 @@ textarea {
   margin: 0 auto;
   padding: 20px;
   background-color: #fff;
-  border: 1px solid #ccc;
   border-top: none;
   border-radius: 0 0 8px 8px;
 }
@@ -736,25 +735,26 @@ textarea {
 
 .user-list-container {
   position: absolute;
-  top: 0;
-  right: 0;
-  background-color: #f9f9f9;
+  top: 70px;
+  right: 250px;
   border: 1px solid #ccc;
+  border-radius: 10px;
   padding: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
+  width: 200px;
 }
 
 .user-list {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
 }
 
 .user {
   display: flex;
   align-items: center;
-  margin: 5px;
+  margin-bottom: 10px;
+  text-align: left;
   cursor: pointer;
   position: relative;
 }
@@ -770,12 +770,20 @@ textarea {
   position: absolute;
   border: 1px solid #ccc;
   background-color: #fff;
+  border-radius: 10px;
   z-index: 1000;
   padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   white-space: nowrap;
 }
-
+.action-button {
+  background-color: #fd6c45;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 5px 15px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
 .popup-content {
   text-align: left;
 }
