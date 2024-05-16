@@ -212,3 +212,8 @@ def init_app_routes(app):
     @app.route('/cause_500')
     def cause_500():
         raise Exception("Intentional Error")
+
+    @app.route('/post/<int:post_id>')
+    def post_detail(post_id):
+        post = Post.query.get_or_404(post_id)
+        return render_template('post_detail.html', post=post)
