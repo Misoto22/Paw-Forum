@@ -609,15 +609,6 @@ textarea {
   background-color: #e5533b;
 }
 
-.change-avatar button {
-  padding: 10px;
-  border: none;
-  background-color: #ff6347;
-  color: white;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
 /* POST REPLY page*/
 .reply-button {
   padding: 5px 10px;
