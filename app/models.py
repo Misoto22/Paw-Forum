@@ -60,6 +60,7 @@ class Post(db.Model):
     content = db.Column(db.Text, nullable=False)
     like_count = db.Column(db.Integer, default=0)
     image_path = db.Column(db.String(255), nullable=True)
+    user = db.relationship('User', backref=db.backref('posts', lazy=True))
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
