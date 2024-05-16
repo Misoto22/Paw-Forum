@@ -70,13 +70,13 @@ class ModelsTestCase(unittest.TestCase):
         db.session.add(user)
         db.session.commit()
         
-        post = Post(title='Test Post', content='This is a test post', created_by=user.id)
+        post = Post(title='Test Post', content='This is a test uploads', created_by=user.id)
         db.session.add(post)
         db.session.commit()
         
         self.assertEqual(Post.query.count(), 1)
         self.assertEqual(post.title, 'Test Post')
-        self.assertEqual(post.content, 'This is a test post')
+        self.assertEqual(post.content, 'This is a test uploads')
         self.assertEqual(post.created_by, user.id)
 
     def test_post_model_empty_title(self):
@@ -87,7 +87,7 @@ class ModelsTestCase(unittest.TestCase):
         db.session.commit()
         
         with self.assertRaises(ValueError):
-            Post(title='', content='This is a test post', created_by=user.id)
+            Post(title='', content='This is a test uploads', created_by=user.id)
 
     def test_post_model_long_title(self):
         """Test that creating a Post with a very long title raises an error."""
@@ -98,7 +98,7 @@ class ModelsTestCase(unittest.TestCase):
         
         long_title = 'a' * 201  # Title exceeds 200 characters
         with self.assertRaises(ValueError):
-            Post(title=long_title, content='This is a test post', created_by=user.id)
+            Post(title=long_title, content='This is a test uploads', created_by=user.id)
 
     def test_post_model_null_content(self):
         """Test that creating a Post with null content raises an error."""
@@ -113,7 +113,7 @@ class ModelsTestCase(unittest.TestCase):
     def test_post_model_no_user(self):
         """Test that creating a Post without a user raises an error."""
         with self.assertRaises(IntegrityError):
-            post = Post(title='Test Post', content='This is a test post', created_by=None)
+            post = Post(title='Test Post', content='This is a test uploads', created_by=None)
             db.session.add(post)
             db.session.commit()
 

@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_migrate import Migrate
 from .config import Config
 from .models import db
 import os
@@ -13,6 +14,9 @@ def create_app():
 
     # Initialize database
     db.init_app(app)
+
+    # Initialize Flask-Migrate
+    migrate = Migrate(app, db)
 
     # Ensure the database file path exists
     database_path = os.path.join(app.root_path, 'app.db')

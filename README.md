@@ -64,7 +64,7 @@ app
 │       │   └── post_reply.html     # Post reply form.
 │       ├── index.html              # Homepage.
 │       ├── login.html              # Login page.
-│       ├── post_create.html        # Create post page.
+│       ├── post_create.html        # Create uploads page.
 │       ├── reply.html              # Reply page.
 │       ├── search_results.html     # Search results page.
 │       ├── signup.html             # Signup page.
