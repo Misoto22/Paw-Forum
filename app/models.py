@@ -2,9 +2,14 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+import re
 
 db = SQLAlchemy()
 
+def validate_email(email):
+    """Validate email format."""
+    if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+        raise ValueError("Invalid email format")
 
 # Defining Database Models
 class User(db.Model, UserMixin):
@@ -46,6 +51,10 @@ class User(db.Model, UserMixin):
     def is_anonymous(self):
         return False
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        validate_email(self.email)
+
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
@@ -55,6 +64,13 @@ class Post(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     content = db.Column(db.Text, nullable=False)
     like_count = db.Column(db.Integer, default=0)
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        if not self.title or len(self.title) > 200:
+            raise ValueError("Title must be between 1 and 200 characters")
+        if not self.content:
+            raise ValueError("Content cannot be null")
 
 class Reply(db.Model):
     id = db.Column(db.Integer, primary_key=True)
