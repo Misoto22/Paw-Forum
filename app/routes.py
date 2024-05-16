@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, flash, current_app
 from datetime import datetime
-from .models import db, User, Post, Task
+from .models import db, User, Post, Task, Reply
 from flask_login import login_user, logout_user, login_required, current_user
 import os
 from werkzeug.utils import secure_filename
@@ -104,15 +104,34 @@ def init_app_routes(app):
         flash('You have been logged out.', 'info')
         return redirect(url_for('home'))
 
-    @app.route('/reply')
-    def reply():
-        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
-            'components/nav_logged_out.html')
-        if not current_user.is_authenticated:
-            flash('Please log in to view posts or reply.', 'info')
-            return redirect(url_for('login'))
-        return render_template('reply.html', page_name='Reply', nav=nav)
+    @app.route('/reply/<int:post_id>', methods=['POST'])
+    @login_required
+    def post_reply(post_id):
+        content = request.form.get('content')
+        parent_reply_id = request.form.get('parent_reply_id')  # Optional, for nested replies
+        if content:
+            try:
+                new_reply = Reply(
+                    post_id=post_id,
+                    reply_by=current_user.id,
+                    parent_reply_id=parent_reply_id if parent_reply_id else None,
+                    content=content,
+                    post_at=datetime.utcnow()
+                )
+                db.session.add(new_reply)
+                db.session.commit()
+                flash('Replied successfully!', 'success')
+                saved_reply = Reply.query.filter_by(id=new_reply.id).first()
+                if saved_reply:
+                    print("Reply saved:", saved_reply.content)
 
+            except Exception as e:
+                db.session.rollback()
+                flash('Failed to post reply: ' + str(e), 'error')
+        else:
+            flash('Reply content cannot be empty!', 'error')
+
+        return redirect(url_for('post_detail', post_id=post_id))
 
     @app.route('/profile')
     def profile():
