@@ -8,6 +8,16 @@ from werkzeug.utils import secure_filename
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
 
+def validate_email(email):
+    import re
+    email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+    if not re.match(email_regex, email):
+        raise ValueError("Invalid email format")
+
+def validate_postcode(postcode):
+    if not postcode.isdigit() or len(postcode) != 4:
+        raise ValueError("Invalid postcode")
+
 def init_app_routes(app):
     @app.route('/')
     def home():
@@ -17,8 +27,9 @@ def init_app_routes(app):
 
     @app.route('/signup', methods=['GET', 'POST'])
     def signup():
-        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
-            'components/nav_logged_out.html')
+
+        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template('components/nav_logged_out.html')
+        error_message = None
 
         if request.method == 'POST':
             username = request.form.get('username')
@@ -29,10 +40,23 @@ def init_app_routes(app):
             postcode = request.form.get('postcode', None)
             user_image = request.form.get('user_image', 'avatar1.png')
 
-            # Check if the username or email already exists
-            if User.query.filter_by(username=username).first() or User.query.filter_by(email=email).first():
-                flash('Username or Email already exists', 'error')
-                return redirect(url_for('signup'))
+            # Validate required fields
+            if not username or not email or not password:
+                error_message = 'All fields are required'
+            else:
+                # Validate email format
+                try:
+                    validate_email(email)
+                except ValueError as e:
+                    error_message = str(e)
+
+                if not error_message:
+                    # Check if the username or email already exists
+                    if User.query.filter_by(username=username).first() or User.query.filter_by(email=email).first():
+                        error_message = 'Username or Email already exists'
+
+            if error_message:
+                return render_template('signup.html', page_name='Signup', nav=nav, error_message=error_message)
 
             # Create new User object with hashed password
             new_user = User(
@@ -58,6 +82,7 @@ def init_app_routes(app):
 
     @app.route('/login', methods=['GET', 'POST'])
     def login():
+        error_message = None
         nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
             'components/nav_logged_out.html')
         if request.method == 'POST':
@@ -69,9 +94,8 @@ def init_app_routes(app):
                 flash('Login successful!', 'success')
                 return redirect(url_for('home'))
             else:
-                flash('Invalid username or password', 'error')
-                return redirect(url_for('login'))
-        return render_template('login.html', nav=nav)
+                error_message = 'Invalid username or password'
+        return render_template('login.html', page_name='Login', nav=nav, error_message=error_message)
 
     @app.route('/logout')
     def logout():
@@ -160,7 +184,19 @@ def init_app_routes(app):
     def search():
         query = request.args.get('query')
         if query:
-            posts = Post.query.filter(Post.title.contains(query) | Post.content.contains(query)).all()
+            posts = Post.query.join(User).filter(
+            Post.title.contains(query) | 
+            Post.content.contains(query) |
+            User.username.contains(query)
+        ).all()
+            #Only demonstrate part of the matching content
+            for post in posts:
+                content = post.content
+                start_index = content.find(query)
+                if start_index != -1:
+                    start_index = max(0, start_index - 50)
+                    end_index = min(len(content), start_index + len(query) + 50)
+                    post.content = '...' + content[start_index:end_index] + '...'
         else:
             posts = []
         return render_template('search_results.html', query=query, posts=posts)

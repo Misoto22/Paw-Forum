@@ -61,7 +61,6 @@ class Post(db.Model):
     like_count = db.Column(db.Integer, default=0)
     image_path = db.Column(db.String(255), nullable=True)
 
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         if not self.title or len(self.title) > 200:
