@@ -13,6 +13,9 @@
   <!-- User list container inside forum detail -->
   <div class="user-list-container">
     <div class="user-list">
+      <button id="action-button" class="action-button">Apply</button>
+      <!-- Add the action button here -->
+
       <div
         class="user"
         data-username="john_doe"
@@ -151,4 +154,17 @@
 {% endblock %} {% block scripts %}
 <script src="{{ url_for('static', filename='js/topic_reply.js') }}"></script>
 <script src="{{ url_for('static', filename='js/user_info_popup.js') }}"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Example of handling the apply button
+    const actionButton = document.getElementById("action-button");
+    actionButton.addEventListener("click", function () {
+      actionButton.disabled = true;
+      actionButton.style.backgroundColor = "grey";
+      actionButton.innerText = "Applied";
+      // Here you can add the logic for applying or closing the task
+    });
+  });
+</script>
 {% endblock %}
