@@ -55,6 +55,14 @@ class Post(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     content = db.Column(db.Text, nullable=False)
     like_count = db.Column(db.Integer, default=0)
+    user = db.relationship('User', backref=db.backref('posts', lazy=True))
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        if not self.title or len(self.title) > 200:
+            raise ValueError("Title must be between 1 and 200 characters")
+        if not self.content:
+            raise ValueError("Content cannot be null")
 
 class Reply(db.Model):
     id = db.Column(db.Integer, primary_key=True)
