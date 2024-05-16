@@ -1,6 +1,4 @@
-{% extends "base.html" %}
-
-{% block content %}
+{% extends "base.html" %} {% block content %}
 
 <link
   href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
@@ -17,7 +15,8 @@
           <label>Last Name <input type="text" name="lastName" /></label>
         </div>
         <div class="form-row">
-          <label>Gender
+          <label
+            >Gender
             <select name="gender">
               <option>Male</option>
               <option>Female</option>
@@ -31,7 +30,8 @@
           <label>Phone Number <input type="tel" name="phone" /></label>
         </div>
         <div class="form-row">
-          <label>Pet Type
+          <label
+            >Pet Type
             <select name="petType" multiple="multiple" class="pet-type-select">
               <option>Dog</option>
               <option>Cat</option>
@@ -43,23 +43,40 @@
             </select>
           </label>
         </div>
-        <button type="submit"  class="save-btn">Save</button>
+        <button type="submit" class="save-btn">Save</button>
       </form>
       <a href="{{ url_for('logout') }}" class="logout">Logout</a>
     </div>
     <div class="avatar-container">
       <img
-      src="{{ url_for('static', filename='image/avatar.png') }}"
-        src="{{ url_for('static', filename=current_user.user_image) }}"
+        src="{{ url_for('static', filename='image/avatars_library/avatar1.png') }}"
         alt="User Avatar"
         class="avatar"
+        id="current-avatar"
       />
-      <form>
-        <input type="file" name="avatar" accept="image/*">
-       </form>  
+      <div id="avatar-modal" class="modal">
+        <div class="modal-content">
+          <span class="close-btn">&times;</span>
+          <table class="avatar-table">
+            {% for i in range(1, 25) %} {% if loop.index0 % 4 == 0 %}
+            <tr>
+              {% endif %}
+              <td>
+                <img
+                  src="{{ url_for('static', filename='image/avatars_library/avatar' ~ i ~ '.png') }}"
+                  alt="Avatar {{ i }}"
+                  class="selectable-avatar"
+                />
+              </td>
+              {% if loop.index0 % 4 == 3 %}
+            </tr>
+            {% endif %} {% endfor %}
+          </table>
+        </div>
+      </div>
     </div>
   </div>
- 
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
   <script>
@@ -67,6 +84,31 @@
       $(".pet-type-select").select2({
         placeholder: "Select pet types",
         allowClear: true,
+      });
+
+      // Modal functionality
+      var modal = document.getElementById("avatar-modal");
+      var avatar = document.getElementById("current-avatar");
+      var span = document.getElementsByClassName("close-btn")[0];
+
+      avatar.onclick = function () {
+        modal.style.display = "block";
+      };
+
+      span.onclick = function () {
+        modal.style.display = "none";
+      };
+
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      };
+
+      $(".selectable-avatar").click(function () {
+        var selectedAvatarSrc = $(this).attr("src");
+        $("#current-avatar").attr("src", selectedAvatarSrc);
+        modal.style.display = "none";
       });
     });
   </script>
