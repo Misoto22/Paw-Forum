@@ -112,10 +112,6 @@ def init_app_routes(app):
             return redirect(url_for('login'))
         return render_template('reply.html', page_name='Reply', nav=nav)
 
-    @app.route('/users')
-    def users():
-        users = User.query.all()
-        return render_template('users.html', page_name='Users', users=users)
 
     @app.route('/profile')
     def profile():
