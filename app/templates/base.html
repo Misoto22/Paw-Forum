@@ -2,7 +2,14 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>{% block title %}Home Page{% endblock %}</title>
+    <title>
+        {% if page_name %}
+            Paw Forum - {{ page_name }}
+        {% else %}
+            Paw Forum
+        {% endif %}
+    </title>
+    
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/style.css') }}"
@@ -11,11 +18,32 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/forum_reply.css') }}"
     />
+
   </head>
   <body>
-    {% block navbar %}{% include 'components/nav_logged_out.html' %}{% endblock
-    %} {% block content %}{% endblock %} {% block footer %}{% include
-    'components/footer.html' %}{% endblock %}
+    {% block navbar %}
+    {% if nav %}
+        {{ nav|safe }}
+      {% else %}
+        {% include 'components/nav_logged_out.html' %}
+      {% endif %}
+      {% endblock %}
+
+    <!-- Flash messages block -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flashes">
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+
+    {% block footer %}{% include 'components/footer.html' %}{% endblock %}
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
   </body>
 </html>

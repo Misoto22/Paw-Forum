@@ -28,18 +28,20 @@
         </div>
         <div class="nav-right">
           <a href="{{ url_for('login') }}" class="nav-log">Log In</a>
-          <a href="{{ url_for('register') }}" class="nav-signup">Sign Up</a>
         </div>
       </div>
       <div class="nav-main">
         <h1>Welcome to the PawForum</h1>
         <div class="searchbar">
-          <input
+          <form action="{{ url_for('search')}}" method="GET">
+            <input
             type="text"
+            name="query"
             placeholder="Search your forum or topic here"
             class="search-input"
           />
-          <button class="search-btn">SEARCH</button>
+          <button type="submit" class="search-btn">SEARCH</button>
+          </form>
         </div>
       </div>
     </nav>

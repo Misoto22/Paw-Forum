@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>PawForum</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <nav>
+      <div class="navbar">
+        <div class="navbar-left">
+          <a href="{{ url_for('home') }}">
+            <img
+              src="{{ url_for('static', filename='image/paw.png') }}"
+              alt="Paw Logo"
+              class="logo"
+            />
+          </a>
+          <span>PawForum</span>
+        </div>
+        <div class="nav-links">
+          <a href="#" class="link-daily">Daily</a>
+          <a href="#" class="link-petsitting">Petsitting</a>
+          <a href="#" class="link-adoption">Adoption</a>
+        </div>
+        <div class="nav-right">
+          <a href="{{ url_for('postcreate') }}"><button class="nav-create">+Create</button></a> 
+          <a href="{{ url_for('profile') }}" class="nav-img"><img src="{{ url_for('static', filename='image/user_icon.png') }}"></a>
+        </div>
+      </div>
+      <div class="nav-main">
+        <h1>Welcome to the PawForum</h1>
+        <div class="searchbar">
+          <form action="{{ url_for('search')}}" method="GET">
+            <input
+            type="text"
+            name="query"
+            placeholder="Search your forum or topic here"
+            class="search-input"
+          />
+          <button type="submit" class="search-btn">SEARCH</button>
+          </form>
+        </div>
+      </div>
+    </nav>
+  </body>
+</html>

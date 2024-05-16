@@ -8,7 +8,7 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
 }
-
+/* NAVIFATOR STYLES*/
 nav {
   background-image: url("../image/navpic.jpg");
   background-size: cover;
@@ -25,6 +25,13 @@ nav {
   height: 30px;
   margin-right: 10px;
 }
+
+.nav-img img{
+  width: 30px;
+  height: 30px;
+  margin-left: 20px;
+}
+
 .navbar {
   background-color: white;
   padding: 5px 50px;
@@ -35,6 +42,7 @@ nav {
   margin-bottom: 20px; /* Reduced from 100px */
   margin-top: -20px;
 }
+
 .navbar-left {
   display: flex;
   align-items: center;
@@ -55,22 +63,24 @@ nav {
   margin: 0 20px;
 }
 .nav-log {
-  background-color: transparent;
-  color: black;
-  border: 1px solid black;
-  border-radius: 20px;
-  padding: 5px 15px;
-  cursor: pointer;
-  margin-right: 10px;
-}
-
-.nav-signup {
   background-color: #fd6c45;
   color: white;
   border: none;
   border-radius: 20px;
   padding: 5px 15px;
   cursor: pointer;
+  margin-left: 100px;
+  margin-bottom: 10px;
+}
+
+.nav-create {
+  background-color: #fd6c45;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 5px 15px;
+  cursor: pointer;
+  margin-left: 100px;
 }
 
 .nav-main {
@@ -89,9 +99,9 @@ nav {
   margin-bottom: 20px;
 }
 
+/* Navigator - Searchbar*/
 .searchbar {
   display: flex;
-  justify-content: center;
   align-items: center; /* Ensures vertical alignment */
   border-radius: 30px;
   width: 580px; /* Fixed width */
@@ -100,14 +110,13 @@ nav {
   background-color: #fff;
 }
 
-.search-input {
-  width: 100%; /* Ensures the input uses all available space */
-  height: 100%; /* Matches the height of the container */
-  padding: 10px 20px;
+.search-input[type="text"] {
   border: none;
-  border-radius: 30px;
+  border-radius: 4px;
   outline: none;
-  box-sizing: border-box;
+  flex: 1;
+  margin-left: 50px;
+  width: 350px;
 }
 
 .search-btn {
@@ -127,6 +136,7 @@ nav {
 .search-btn:hover {
   background-color: #e03e2f;
 }
+
 /* FOOTER*/
 footer {
   background-color: #ffede4;
@@ -185,11 +195,51 @@ footer {
   font-weight: bolder;
 }
 
+/* LOGIN */
+.nav-register a{
+  color: #ff6347;  
+  text-decoration: underline; 
+}
+
+.login-button {
+  width: 0%;
+  padding: 10px 20px;
+  font-size: 16px;
+  color: white;
+  background-color: #ff6347;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.3s;
+}
+
+.login-button:hover {
+  background-color: #e5533b;
+}
+
+.nav-links a {
+  font-weight: bold;
+  color: #4d499e; /* Set the font color */
+  text-decoration: none;
+  display: inline-block; /* Use inline-block for width and centering */
+  width: 120px; /* Fixed width */
+  text-align: center; /* Center text within the button */
+  padding: 6px 0; /* Vertical padding (horizontal is unnecessary due to width) */
+  border-radius: 10px;
+  margin: 0 10px; /* Optional: Add space between the buttons */
+}
+
+.signuplink p{
+  text-decoration: underline;
+  color: #ff6347;
+}
+
 /* SIGNUP PAGE */
 .Signup {
   background-color: white;
   padding: 30px;
-  text-align: center;
+  text-align: left;
   display: flex;
   flex-direction: column; /* Make children stack vertically */
   justify-content: center; /* Vertically center children */
@@ -217,10 +267,10 @@ footer {
   display: inline-flex;
   flex-direction: column;
   align-items: stretch;
-  padding: 30px;
+  padding: 10px;
 }
 .SignupForm span {
-  padding-bottom: 10px;
+  padding-bottom: 30px;
 }
 
 .SignupForm button {
@@ -334,35 +384,6 @@ textarea {
 
 .Task {
   margin-bottom: 20px;
-}
-/* LOGIN */
-.login-button {
-  width: 0%;
-  padding: 10px 20px;
-  font-size: 16px;
-  color: white;
-  background-color: #ff6347;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  outline: none;
-  transition: background-color 0.3s;
-}
-
-.login-button:hover {
-  background-color: #e5533b;
-}
-
-.nav-links a {
-  font-weight: bold;
-  color: #4d499e; /* Set the font color */
-  text-decoration: none;
-  display: inline-block; /* Use inline-block for width and centering */
-  width: 120px; /* Fixed width */
-  text-align: center; /* Center text within the button */
-  padding: 8px 0; /* Vertical padding (horizontal is unnecessary due to width) */
-  border-radius: 10px;
-  margin: 0 10px; /* Optional: Add space between the buttons */
 }
 
 /* Specific background colors for each link, with added !important to override any other styling if necessary */
