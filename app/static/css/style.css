@@ -511,6 +511,7 @@ textarea {
   object-fit: cover;
   object-position: center;
 }
+
 /* Profile Page Styles */
 .profile-page body {
   font-family: Arial, sans-serif;
@@ -540,9 +541,11 @@ textarea {
 }
 
 .profile-page .avatar-container {
+  padding: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   width: 200px;
 }
 
@@ -571,7 +574,7 @@ textarea {
   margin-right: 0;
 }
 
-.profile-page input[type="text"],
+.form-row input[type="text"],
 .profile-page input[type="email"],
 .profile-page input[type="tel"],
 .profile-page select {
@@ -587,7 +590,11 @@ textarea {
   padding: 5px;
 }
 
-.profile-page button {
+.logout {
+  color: #ff6347;
+  text-decoration: underline;
+}
+.save-btn {
   width: 100%;
   padding: 10px;
   border: none;
@@ -595,10 +602,20 @@ textarea {
   color: white;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.profile-page button:hover {
+.save-btn:hover {
   background-color: #e5533b;
+}
+
+.change-avatar button {
+  padding: 10px;
+  border: none;
+  background-color: #ff6347;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 /* POST REPLY page*/
