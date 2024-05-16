@@ -6,7 +6,6 @@ from .models import db
 import os
 
 
-
 # Create app
 def create_app():
     app = Flask(__name__)
@@ -15,16 +14,10 @@ def create_app():
     # Initialize database
     db.init_app(app)
 
-    # Ensure the instance folder exists
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
-
-    # Ensure the database directory exists
-    database_dir = os.path.join(app.instance_path, 'database')
-    if not os.path.exists(database_dir):
-        os.makedirs(database_dir)
+    # Ensure the database file path exists
+    database_path = os.path.join(app.root_path, 'app.db')
+    if not os.path.exists(database_path):
+        open(database_path, 'w').close()
 
     # Create database tables
     with app.app_context():
