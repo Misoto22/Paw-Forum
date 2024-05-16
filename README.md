@@ -76,8 +76,8 @@ app
 ├── run.py                          # Script to run the application.
 ├── run.sh                          # Shell script to run the application.
 └── tests                           # Directory for test cases.
-│   ├── __init__.py                 # Initialize the Testing.
-│   └── test_app.py                 # Unit Test cases.    
+    ├── __init__.py                 # Initialize the Testing.
+    └── test_app.py                 # Unit Test cases.    
 ```
 
 ### Database Design
