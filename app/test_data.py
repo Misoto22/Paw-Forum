@@ -10,16 +10,16 @@ app.app_context().push()
 # Initialize Faker
 faker = Faker()
 
-def generate_users(n=10):
+def generate_users():
     users = []
-    for _ in range(n):
+    for _ in range(3):
         username = faker.unique.user_name()
         email = faker.unique.email()
-        password = faker.password()
+        password = username  # Password same as username
         phone = faker.phone_number()
         gender = faker.random_element(elements=('Male', 'Female', 'Other'))
         postcode = faker.postcode()
-        pet_type = faker.word()
+        pet_type = faker.random_element(elements=('Cat', 'Dog', 'Fish', 'Bird', 'Rabbit', 'Other'))
         user_image = f'/static/image/avatar/avatar{faker.random_int(min=1, max=32)}.png'
 
         user = User(
@@ -39,18 +39,16 @@ def generate_users(n=10):
     db.session.commit()
     return users
 
-def generate_posts(users, n=20):
+def generate_posts(users):
     posts = []
-    for _ in range(n):
+    for i in range(1, 11):
         title = faker.sentence(nb_words=6)
         content = faker.paragraph(nb_sentences=5)
         category = faker.random_element(elements=('Daily', 'Petsitting', 'Adoption'))
         is_task = faker.boolean(chance_of_getting_true=25)
         created_by = faker.random_element(elements=users).id
         created_at = datetime.utcnow()
-        image_path = None
-        if faker.boolean(chance_of_getting_true=50):
-            image_path = f'/static/uploads/{faker.random_int(min=1, max=100)}'
+        image_path = f'/static/uploads/{i}'
 
         post = Post(
             title=title,
@@ -100,8 +98,8 @@ def generate_replies(users, posts, n=50):
 
 if __name__ == '__main__':
     # Generate data
-    users = generate_users(n=10)
-    posts = generate_posts(users, n=20)
+    users = generate_users()
+    posts = generate_posts(users)
     generate_tasks(posts)
     generate_replies(users, posts, n=50)
     print('Test data generated successfully!')
