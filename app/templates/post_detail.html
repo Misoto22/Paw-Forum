@@ -1,9 +1,99 @@
+post_detail.html
+
 {% extends "base.html" %}
 
 {% block content %}
-<h1>{{ post.title }}</h1>
-<p>Posted by: {{ post.user.username }} at {{ post.created_at }}</p>
-<div>
-  {{ post.content }}
+<div class="forum-detail">
+  <div class="forum-header">
+    <img src="{{ post.user.user_image }}" alt="User Avatar" class="avatar" />
+    <div class="user-info">
+      <span class="username">{{ post.user.username }}</span>
+      <span class="post-time">
+        {% if post.created_at %}
+          {{ post.created_at.strftime('%Y-%m-%d %H:%M:%S') }}
+        {% else %}
+          N/A
+        {% endif %}
+      </span>
+    </div>
+  </div>
+  <h2 class="forum-title">{{ post.title }}</h2>
+  <p class="forum-description">{{ post.content }}</p>
+  <div class="forum-image-detail">
+    {% if post.image_path %}
+      {% for image in post.image_path %}
+        <img src="{{ url_for('static', filename=image) }}" alt="Post Image" />
+      {% endfor %}
+    {% endif %}
+    <div class="forum-footer">
+      <span class="likes">
+        <img
+          src="{{ url_for('static', filename='image/like.png') }}"
+          alt="Like"
+          class="like-icon"
+          id="likeToggleDetail"
+        />
+        {{ post.like_count }}
+      </span>
+      <span class="comments">
+        <img
+          src="{{ url_for('static', filename='image/comment.png') }}"
+          alt="Comment"
+          class="comment-icon"
+        />
+        56
+      </span>
+    </div>
+  </div>
+
+  <div class="reply-section">
+    <div class="reply-form">
+      <p>Add a comment</p>
+      <textarea placeholder="Write your reply here"></textarea>
+      <button id="submitReplyBtn">Submit</button>
+    </div>
+    <div class="replies">
+      <!-- Existing replies will be dynamically added here -->
+    </div>
+  </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/topic_reply.js') }}"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Handle submit reply button click event
+    const submitReplyBtn = document.getElementById("submitReplyBtn");
+    submitReplyBtn.addEventListener("click", function () {
+      // Get the reply content from the textarea
+      const replyContent = document.querySelector(".reply-form textarea").value;
+
+      // Create a new reply element
+      const newReply = document.createElement("div");
+      newReply.classList.add("reply");
+      newReply.innerHTML = `
+        <div class="reply-header">
+          <img src="{{ url_for('static', filename='image/avatar.png') }}" alt="User Avatar" class="reply-avatar" />
+          <span class="reply-username">{{ current_user.username }}</span>
+          <span class="reply-time">${new Date().toISOString().slice(0, 19).replace('T', ' ')}</span>
+        </div>
+        <div class="reply-content">${replyContent}</div>
+        <div class="reply-footer">
+          <button class="reply-button">Reply</button>
+        </div>
+        <div class="nested-reply-form">
+          <textarea placeholder="Write your reply..."></textarea>
+          <button class="submit-nested-reply">Reply</button>
+        </div>
+      `;
+
+      // Append the new reply to the replies section
+      document.querySelector(".replies").appendChild(newReply);
+
+      // Clear the reply form textarea
+      document.querySelector(".reply-form textarea").value = "";
+    });
+  });
+</script>
 {% endblock %}

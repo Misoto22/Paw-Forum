@@ -23,7 +23,8 @@ def init_app_routes(app):
     def home():
         nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
             'components/nav_logged_out.html')
-        return render_template('index.html', title='Paw Forum', page_name='Home', nav=nav)
+        posts = Post.query.order_by(Post.created_at.desc()).all()  
+        return render_template('index.html', title='Paw Forum', page_name='Home', nav=nav, posts=posts)
 
     @app.route('/signup', methods=['GET', 'POST'])
     def signup():
@@ -216,5 +217,9 @@ def init_app_routes(app):
 
     @app.route('/post/<int:post_id>')
     def post_detail(post_id):
+        if not current_user.is_authenticated:
+            return redirect(url_for('login'))
         post = Post.query.get_or_404(post_id)
-        return render_template('post_detail.html', post=post)
+        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
+        'components/nav_logged_out.html')
+        return render_template('post_detail.html', post=post, nav=nav)
