@@ -1,22 +1,23 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
+
 <link
   href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
   rel="stylesheet"
 />
+
 <body class="profile-page">
   <div class="profile-container">
     <div class="profile-content">
-      <h1>My Profile</h1>
+      <h1>My Profile - <span>{{ current_user.username }}</span></h1>
       <form>
         <div class="form-row">
           <label>First Name <input type="text" name="firstName" /></label>
           <label>Last Name <input type="text" name="lastName" /></label>
         </div>
         <div class="form-row">
-          <label
-            >Gender
+          <label>Gender
             <select name="gender">
               <option>Male</option>
               <option>Female</option>
@@ -30,8 +31,7 @@
           <label>Phone Number <input type="tel" name="phone" /></label>
         </div>
         <div class="form-row">
-          <label
-            >Pet Type
+          <label>Pet Type
             <select name="petType" multiple="multiple" class="pet-type-select">
               <option>Dog</option>
               <option>Cat</option>
@@ -43,17 +43,23 @@
             </select>
           </label>
         </div>
-        <button type="submit">Save</button>
+        <button type="submit"  class="save-btn">Save</button>
       </form>
+      <a href="{{ url_for('logout') }}" class="logout">Logout</a>
     </div>
     <div class="avatar-container">
       <img
-        src="{{ url_for('static', filename='image/avatar.png') }}"
+      src="{{ url_for('static', filename='image/avatar.png') }}"
+        src="{{ url_for('static', filename=current_user.user_image) }}"
         alt="User Avatar"
         class="avatar"
       />
+      <form>
+        <input type="file" name="avatar" accept="image/*">
+       </form>  
     </div>
   </div>
+ 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
   <script>

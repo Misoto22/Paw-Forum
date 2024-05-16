@@ -160,7 +160,19 @@ def init_app_routes(app):
     def search():
         query = request.args.get('query')
         if query:
-            posts = Post.query.filter(Post.title.contains(query) | Post.content.contains(query)).all()
+            posts = Post.query.join(User).filter(
+            Post.title.contains(query) | 
+            Post.content.contains(query) |
+            User.username.contains(query)
+        ).all()
+            #Only demonstrate part of the matching content
+            for post in posts:
+                content = post.content
+                start_index = content.find(query)
+                if start_index != -1:
+                    start_index = max(0, start_index - 50)
+                    end_index = min(len(content), start_index + len(query) + 50)
+                    post.content = '...' + content[start_index:end_index] + '...'
         else:
             posts = []
         return render_template('search_results.html', query=query, posts=posts)
