@@ -1,5 +1,6 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
 
+{% block content %}
 <link
   href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
   rel="stylesheet"
@@ -9,37 +10,34 @@
   <div class="profile-container">
     <div class="profile-content">
       <h1>My Profile - <span>{{ current_user.username }}</span></h1>
-      <form>
+      <form method="POST" action="{{ url_for('profile') }}">
         <div class="form-row">
-          <label>First Name <input type="text" name="firstName" /></label>
-          <label>Last Name <input type="text" name="lastName" /></label>
+          <label>Username <input type="text" name="username" value="{{ current_user.username }}" /></label>
         </div>
         <div class="form-row">
-          <label
-            >Gender
+          <label>Gender
             <select name="gender">
-              <option>Male</option>
-              <option>Female</option>
-              <option>Other</option>
+              <option value="Male" {% if current_user.gender == 'Male' %}selected{% endif %}>Male</option>
+              <option value="Female" {% if current_user.gender == 'Female' %}selected{% endif %}>Female</option>
+              <option value="Other" {% if current_user.gender == 'Other' %}selected{% endif %}>Other</option>
             </select>
           </label>
-          <label>Post Code <input type="text" name="postcode" /></label>
+          <label>Post Code <input type="text" name="postcode" value="{{ current_user.postcode }}" /></label>
         </div>
         <div class="form-row">
-          <label>Email Address <input type="email" name="email" /></label>
-          <label>Phone Number <input type="tel" name="phone" /></label>
+          <label>Email Address <input type="email" name="email" value="{{ current_user.email }}" /></label>
+          <label>Phone Number <input type="tel" name="phone" value="{{ current_user.phone }}" /></label>
         </div>
         <div class="form-row">
-          <label
-            >Pet Type
+          <label>Pet Type
             <select name="petType" multiple="multiple" class="pet-type-select">
-              <option>Dog</option>
-              <option>Cat</option>
-              <option>Bird</option>
-              <option>Fish</option>
-              <option>Reptile</option>
-              <option>Insect</option>
-              <option>Other</option>
+              <option value="Dog" {% if current_user.pet_type and 'Dog' in current_user.pet_type %}selected{% endif %}>Dog</option>
+              <option value="Cat" {% if current_user.pet_type and 'Cat' in current_user.pet_type %}selected{% endif %}>Cat</option>
+              <option value="Bird" {% if current_user.pet_type and 'Bird' in current_user.pet_type %}selected{% endif %}>Bird</option>
+              <option value="Fish" {% if current_user.pet_type and 'Fish' in current_user.pet_type %}selected{% endif %}>Fish</option>
+              <option value="Reptile" {% if current_user.pet_type and 'Reptile' in current_user.pet_type %}selected{% endif %}>Reptile</option>
+              <option value="Insect" {% if current_user.pet_type and 'Insect' in current_user.pet_type %}selected{% endif %}>Insect</option>
+              <option value="Other" {% if current_user.pet_type and 'Other' in current_user.pet_type %}selected{% endif %}>Other</option>
             </select>
           </label>
         </div>
@@ -49,7 +47,7 @@
     </div>
     <div class="avatar-container">
       <img
-        src="{{ url_for('static', filename='image/avatars_library/avatar1.png') }}"
+        src="{{ url_for('static', filename=current_user.user_image) }}"
         alt="User Avatar"
         class="avatar"
         id="current-avatar"
@@ -58,8 +56,9 @@
         <div class="modal-content">
           <span class="close-btn">&times;</span>
           <table class="avatar-table">
-            {% for i in range(1, 25) %} {% if loop.index0 % 4 == 0 %}
-            <tr>
+            {% for i in range(1, 25) %}
+              {% if loop.index0 % 4 == 0 %}
+                <tr>
               {% endif %}
               <td>
                 <img
@@ -69,8 +68,9 @@
                 />
               </td>
               {% if loop.index0 % 4 == 3 %}
-            </tr>
-            {% endif %} {% endfor %}
+                </tr>
+              {% endif %}
+            {% endfor %}
           </table>
         </div>
       </div>

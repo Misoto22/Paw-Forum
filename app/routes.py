@@ -133,10 +133,24 @@ def init_app_routes(app):
 
         return redirect(url_for('post_detail', post_id=post_id))
 
-    @app.route('/profile')
+    @app.route('/profile', methods=['GET', 'POST'])
+    @login_required
     def profile():
         nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
             'components/nav_logged_out.html')
+        if request.method == 'POST':
+            current_user.username = request.form.get('username', current_user.username)
+            current_user.email = request.form.get('email', current_user.email)
+            current_user.phone = request.form.get('phone', current_user.phone)
+            current_user.gender = request.form.get('gender', current_user.gender)
+            current_user.postcode = request.form.get('postcode', current_user.postcode)
+            current_user.pet_type = request.form.get('petType', current_user.pet_type)
+            new_image = request.form.get('user_image')
+            if new_image:
+                current_user.user_image = new_image
+            db.session.commit()
+            flash('Profile updated successfully!', 'success')
+            return redirect(url_for('profile'))
         return render_template('profile.html', page_name='Profile', nav=nav)
 
     @app.route('/post_create', methods=['GET', 'POST'])
