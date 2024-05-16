@@ -5,6 +5,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 import os
 from werkzeug.utils import secure_filename
 
+
 def init_app_routes(app):
     @app.route('/')
     def home():
@@ -24,16 +25,6 @@ def init_app_routes(app):
             gender = request.form.get('gender', None)
             postcode = request.form.get('postcode', None)
             user_image = request.form.get('user_image', 'avatar1.png')
-
-            # Validate required fields
-            if not username or not email or not password:
-                flash('All fields are required', 'error')
-                return redirect(url_for('signup'))
-                
-            # Validate email format
-            if '@' not in email or '.' not in email:
-                flash('Invalid email format', 'error')
-                return redirect(url_for('signup'))
 
             # Check if the username or email already exists
             if User.query.filter_by(username=username).first() or User.query.filter_by(email=email).first():
@@ -86,7 +77,6 @@ def init_app_routes(app):
         return redirect(url_for('home'))
 
     @app.route('/reply')
-    @login_required
     def reply():
         nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
             'components/nav_logged_out.html')
@@ -101,7 +91,6 @@ def init_app_routes(app):
         return render_template('users.html', page_name='Users', users=users)
 
     @app.route('/profile')
-    @login_required
     def profile():
         nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
             'components/nav_logged_out.html')
