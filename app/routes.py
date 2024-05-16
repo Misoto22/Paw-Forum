@@ -77,6 +77,7 @@ def init_app_routes(app):
 
     @app.route('/login', methods=['GET', 'POST'])
     def login():
+        error_message = None
         nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
             'components/nav_logged_out.html')
         if request.method == 'POST':
@@ -88,9 +89,8 @@ def init_app_routes(app):
                 flash('Login successful!', 'success')
                 return redirect(url_for('home'))
             else:
-                flash('Invalid username or password', 'error')
-                return redirect(url_for('login'))
-        return render_template('login.html', nav=nav)
+                error_message = 'Invalid username or password'
+        return render_template('login.html', page_name='Login', nav=nav, error_message=error_message)
 
     @app.route('/logout')
     def logout():
