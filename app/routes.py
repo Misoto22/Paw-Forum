@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, flash, current_app
 from datetime import datetime
-from .models import db, User, Post, Task, Reply
+from .models import db, User, Post, Task, Reply, WaitingList
 from flask_login import login_user, logout_user, login_required, current_user
 import os
 from werkzeug.utils import secure_filename
@@ -206,11 +206,20 @@ def init_app_routes(app):
                     )
                     db.session.add(new_task)
 
+                    # Add entry to the WaitingList
+                    waiting_list_entry = WaitingList(
+                        task_id=new_post.id,
+                        user_id=current_user.id,
+                        applied_at=datetime.utcnow()
+                    )
+                    db.session.add(waiting_list_entry)
+
                 db.session.commit()
                 flash('Post created successfully!', 'success')
                 return redirect(url_for('home'))
 
             except Exception as e:
+                db.session.rollback()  # Rollback the session in case of error
                 flash(f'An error occurred: {str(e)}', 'error')
                 return redirect(url_for('post_create'))
 
