@@ -117,26 +117,26 @@
     </div>
   </div>
 
+   <!-- Reply Section-->
   <div class="reply-section">
     <div class="reply-form">
       <p>Add a comment</p>
       <textarea placeholder="Write your reply here "></textarea>
       <button id="submitReplyBtn">Submit</button>
     </div>
+
     <div class="replies">
+      {% for reply in post.replies %}
       <div class="reply">
         <div class="reply-header">
-          <img
-            src="{{ url_for('static', filename='image/avatar.png') }}"
-            alt="User Avatar"
-            class="reply-avatar"
-          />
-          <span class="reply-username">Username</span>
-          <span class="reply-time">2023-05-24 10:30</span>
+          <img src="{{ reply.author.user_image }}" alt="User Avatar" class="reply-avatar" />
+          <span class="reply-username">{{ reply.author.username }}</span>
+          <span class="reply-time">{{ reply.post_at.strftime('%Y-%m-%d %H:%M') }}</span>
         </div>
-        <div class="reply-content">This is a sample reply.</div>
+        <div class="reply-content">{{ reply.content }}</div>
         <div class="reply-footer">
           <button class="reply-button">Reply</button>
+          
           <!-- Add delete icon for reply -->
           <span class="delete">
             <img
@@ -151,6 +151,7 @@
           <button class="submit-nested-reply">Reply</button>
         </div>
       </div>
+      {% endfor %}
     </div>
   </div>
 </div>
@@ -164,7 +165,9 @@
     <button id="cancelDelete" class="btn-cancel">No</button>
   </div>
 </div>
-{% endblock %} {% block scripts %}
+{% endblock %}
+
+{% block scripts %}
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     // Example of handling the apply button
