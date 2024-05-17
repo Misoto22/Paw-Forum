@@ -511,6 +511,7 @@ button {
 .forum-detail .forum-footer .delete {
   margin-left: 380px;
 }
+
 .forum-image-detail img {
   width: 630px;
   height: 500px;
@@ -760,8 +761,8 @@ button {
 
 .user-list-container {
   position: absolute;
-  top: 70px;
-  right: 250px;
+  top: -250px;
+  right: -245px;
   border: 1px solid #ccc;
   border-radius: 10px;
   padding: 10px;
@@ -800,7 +801,12 @@ button {
   z-index: 1000;
   padding: 20px;
   white-space: nowrap;
+
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%);
 }
+
 .action-button {
   background-color: #fd6c45;
   color: white;
