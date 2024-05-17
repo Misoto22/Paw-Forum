@@ -47,7 +47,7 @@
     </div>
     <div class="avatar-container">
       <img
-        src="{{ url_for('static', filename=current_user.user_image) }}"
+        src="{{ url_for('static', filename='image/avatars/avatar1.png') }}"
         alt="User Avatar"
         class="avatar"
         id="current-avatar"
@@ -62,7 +62,7 @@
               {% endif %}
               <td>
                 <img
-                  src="{{ url_for('static', filename='image/avatars_library/avatar' ~ i ~ '.png') }}"
+                  src="{{ url_for('static', filename='image/avatars/avatar' ~ i ~ '.png') }}"
                   alt="Avatar {{ i }}"
                   class="selectable-avatar"
                 />
