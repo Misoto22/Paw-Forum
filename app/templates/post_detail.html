@@ -31,7 +31,7 @@
         class="like-icon"
         id="likeToggleDetail"
       />
-      {{ post.like_count }}
+      <span id="likeCount">{{ post.like_count }}</span>
     </span>
     <span class="comments">
       <img
@@ -41,6 +41,7 @@
       />
     </span>
 
+      <!-- Add delete icon for reply -->
     <span class="delete" style="position: absolute; left: 820px">
       <img
         src="{{ url_for('static', filename='image/bin.png') }}"
@@ -50,7 +51,7 @@
     </span>
   </div>
 
-  <!-- Add delete icon for reply -->
+
 
   <!-- Delete confirmation modal -->
   <div id="deleteModal" class="modal">
@@ -64,6 +65,18 @@
 
   {% include "components/post_reply.html" %}
 
+  {% if current_user.id == post.created_by %}
+  <span class="delete">
+    <img
+      src="{{ url_for('static', filename='image/bin.png') }}"
+      alt="Delete"
+      class="delete-icon delete-reply"
+    />
+  </span>
+
+  {% endif %}
+
+
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       // Get modal elements
@@ -72,6 +85,24 @@
       var closeBtn = document.getElementsByClassName("close-btn")[0];
       var confirmDelete = document.getElementById("confirmDelete");
       var cancelDelete = document.getElementById("cancelDelete");
+      var likeIcon = document.getElementById("likeToggleDetail");
+      var likeCount = document.getElementById("likeCount");
+
+      likeIcon.addEventListener("click", function () {
+        fetch("{{ url_for('like_post', post_id=post.id) }}", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          likeCount.textContent = data.like_count;
+          // Update the like icon to "liked.png"
+          likeIcon.src = "{{ url_for('static', filename='image/liked.png') }}";
+        })
+        .catch(error => console.error('Error:', error));
+      });
 
       // Show modal on delete icon click
       deleteIcon.onclick = function () {
@@ -106,4 +137,5 @@
     });
   </script>
 </div>
+
 {% endblock %}
