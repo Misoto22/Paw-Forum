@@ -26,7 +26,7 @@ def generate_users():
         gender = faker.random_element(elements=('Male', 'Female', 'Other'))
         postcode = faker.bothify(text='####')  # Four digit postcode
         pet_type = faker.random_element(elements=('Dog', 'Cat', 'Fish'))
-        user_image = f'Avatar{faker.random_int(min=1, max=24)}.png'
+        user_image = f'avatar{faker.random_int(min=1, max=24)}.png'
 
         user = User(
             username=username,
@@ -131,8 +131,8 @@ def generate_replies(users, posts, n=50):
 
 if __name__ == '__main__':
     # Generate data
-    users = generate_users()
-    posts = generate_posts(users)
-    generate_tasks(posts)
-    generate_replies(users, posts, n=50)
+    # users = generate_users()
+    # posts = generate_posts(users)
+    # generate_tasks(posts)
+    # generate_replies(users, posts, n=50)
     print('Test data generated successfully!')
