@@ -23,8 +23,14 @@ def init_app_routes(app):
     def home():
         nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
             'components/nav_logged_out.html')
-        posts = Post.query.order_by(Post.created_at.desc()).all()  
-        return render_template('index.html', page_name='Home', nav=nav, posts=posts)
+        category = request.args.get('category')
+        if category:
+            posts = Post.query.filter_by(category=category).order_by(Post.created_at.desc()).all()
+        else:
+            posts = Post.query.order_by(Post.created_at.desc()).all()
+        category = ['Daily', 'Petsitting', 'Adoption']
+        #posts = Post.query.order_by(Post.created_at.desc()).all()  
+        return render_template('index.html', page_name='Home', nav=nav, posts=posts, category=category)
 
     @app.route('/signup', methods=['GET', 'POST'])
     def signup():
