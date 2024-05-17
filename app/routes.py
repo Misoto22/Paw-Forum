@@ -24,7 +24,7 @@ def init_app_routes(app):
         nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
             'components/nav_logged_out.html')
         posts = Post.query.order_by(Post.created_at.desc()).all()  
-        return render_template('index.html', title='Paw Forum', page_name='Home', nav=nav, posts=posts)
+        return render_template('index.html', page_name='Home', nav=nav, posts=posts)
 
     @app.route('/signup', methods=['GET', 'POST'])
     def signup():
@@ -68,7 +68,7 @@ def init_app_routes(app):
                 gender=gender,
                 postcode=postcode,
                 join_at=datetime.utcnow(),
-                user_image=f'/static/image/avatar/{user_image}' if user_image else None
+                user_image=f'static/image/avatars/{user_image}' if user_image else None
             )
 
             db.session.add(new_user)
@@ -79,7 +79,7 @@ def init_app_routes(app):
             flash('Registration successful!', 'success')
             return redirect(url_for('home'))
         else:
-            return render_template('signup.html', title='Paw Forum', page_name='Signup', nav=nav)
+            return render_template('signup.html', page_name='Signup', nav=nav)
 
     @app.route('/login', methods=['GET', 'POST'])
     def login():

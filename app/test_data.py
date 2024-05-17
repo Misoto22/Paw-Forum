@@ -1,3 +1,9 @@
+import sys
+import os
+
+# Add the project root directory to the Python path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from faker import Faker
 from datetime import datetime
 from app.models import db, User, Post, Task, Reply
@@ -20,7 +26,7 @@ def generate_users():
         gender = faker.random_element(elements=('Male', 'Female', 'Other'))
         postcode = faker.postcode()
         pet_type = faker.random_element(elements=('Cat', 'Dog', 'Fish', 'Bird', 'Rabbit', 'Other'))
-        user_image = f'/static/image/avatar/avatar{faker.random_int(min=1, max=32)}.png'
+        user_image = f'static/image/avatars/avatar{faker.random_int(min=1, max=23)}.png'
 
         user = User(
             username=username,
@@ -48,7 +54,7 @@ def generate_posts(users):
         is_task = faker.boolean(chance_of_getting_true=25)
         created_by = faker.random_element(elements=users).id
         created_at = datetime.utcnow()
-        image_path = f'/static/uploads/{i}'
+        image_path = f'static/uploads/{i}'
 
         post = Post(
             title=title,
