@@ -22,9 +22,14 @@
           <span>PawForum</span>
         </div>
         <div class="nav-links">
-          <a href="#" class="link-daily">Daily</a>
-          <a href="#" class="link-petsitting">Petsitting</a>
-          <a href="#" class="link-adoption">Adoption</a>
+          <a href="{{ url_for('home', category='Daily') }}" class="link-daily">Daily</a>
+          <a href="{{ url_for('home', category='Petsitting') }}" class="link-petsitting">Petsitting</a>
+          <a href="{{ url_for('home', category='Adoption') }}" class="link-adoption">Adoption</a>
+          {% if category %}
+          {% for category in category %}
+            <a href="{{ url_for('home', category=category) }}" class="link-{{ category.lower() }}">{{ category }}</a>
+          {% endfor %}
+        {% endif %}
         </div>
         <div class="nav-right">
           <a href="{{ url_for('post_create') }}"><button class="nav-create">+Create</button></a>

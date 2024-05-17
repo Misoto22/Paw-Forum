@@ -23,8 +23,14 @@ def init_app_routes(app):
     def home():
         nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
             'components/nav_logged_out.html')
-        posts = Post.query.order_by(Post.created_at.desc()).all()  
-        return render_template('index.html', page_name='Home', nav=nav, posts=posts)
+        category = request.args.get('category')
+        if category:
+            posts = Post.query.filter_by(category=category).order_by(Post.created_at.desc()).all()
+        else:
+            posts = Post.query.order_by(Post.created_at.desc()).all()
+        category = ['Daily', 'Petsitting', 'Adoption']
+        #posts = Post.query.order_by(Post.created_at.desc()).all()  
+        return render_template('index.html', page_name='Home', nav=nav, posts=posts, category=category)
 
     @app.route('/signup', methods=['GET', 'POST'])
     def signup():
@@ -68,7 +74,7 @@ def init_app_routes(app):
                 gender=gender,
                 postcode=postcode,
                 join_at=datetime.utcnow(),
-                user_image=f'static/image/avatars/{user_image}' if user_image else None
+                user_image=f'/static/image/avatars/{user_image}' if user_image else None
             )
 
             db.session.add(new_user)
@@ -181,7 +187,7 @@ def init_app_routes(app):
 
                 # Check if any images were uploaded
                 if images and any(image_file.filename for image_file in images):
-                    post_images_dir = os.path.join("static/image/uploads", str(new_post.id))
+                    post_images_dir = os.path.join("/static/image/uploads", str(new_post.id))
                     os.makedirs(post_images_dir, exist_ok=True)
 
                     for image_file in images:
