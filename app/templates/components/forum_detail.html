@@ -20,7 +20,7 @@
   <div class="forum-image-detail">
     <img src="{{ url_for('static', filename='image/cat.png') }}" alt="Cat" />
     <img src="{{ url_for('static', filename='image/dog.png') }}" alt="Dog" />
-    <img src="{{ url_for('static', filename='image/pig.png') }}" />
+    <img src="{{ url_for('static', filename='image/pig.png') }}" alt="Pig" />
     <div class="forum-footer">
       <span class="likes">
         <img
@@ -39,7 +39,68 @@
         />
         56
       </span>
+      <!-- Add delete icon -->
+      <span class="delete">
+        <img
+          src="{{ url_for('static', filename='image/bin.png') }}"
+          alt="Delete"
+          class="delete-icon"
+          id="deletePost"
+        />
+      </span>
     </div>
   </div>
-  {% endblock %}
 </div>
+
+<!-- Delete confirmation modal -->
+<div id="deleteModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <p>Are you sure you want to delete this post?</p>
+    <button id="confirmDelete" class="btn-confirm">Yes</button>
+    <button id="cancelDelete" class="btn-cancel">No</button>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Get modal elements
+    var modal = document.getElementById("deleteModal");
+    var deleteIcon = document.getElementById("deletePost");
+    var closeBtn = document.getElementsByClassName("close-btn")[0];
+    var confirmDelete = document.getElementById("confirmDelete");
+    var cancelDelete = document.getElementById("cancelDelete");
+
+    // Show modal on delete icon click
+    deleteIcon.onclick = function () {
+      modal.style.display = "block";
+    };
+
+    // Hide modal on close button click
+    closeBtn.onclick = function () {
+      modal.style.display = "none";
+    };
+
+    // Hide modal on cancel button click
+    cancelDelete.onclick = function () {
+      modal.style.display = "none";
+    };
+
+    // Handle confirm delete button click
+    confirmDelete.onclick = function () {
+      // Placeholder for AJAX request to delete post
+      alert("Post deleted successfully."); // Replace with actual AJAX request
+      modal.style.display = "none";
+      // Redirect to home page or remove the post element from DOM
+      window.location.href = "{{ url_for('home') }}";
+    };
+
+    // Hide modal when clicking outside the modal content
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    };
+  });
+</script>
+{% endblock %}
