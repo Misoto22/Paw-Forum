@@ -26,7 +26,7 @@ def generate_users():
         gender = faker.random_element(elements=('Male', 'Female', 'Other'))
         postcode = faker.postcode()
         pet_type = faker.random_element(elements=('Cat', 'Dog', 'Fish', 'Bird', 'Rabbit', 'Other'))
-        user_image = f'static/image/avatars/avatar{faker.random_int(min=1, max=23)}.png'
+        user_image = f'/static/image/avatars/avatar{faker.random_int(min=1, max=23)}.png'
 
         user = User(
             username=username,
@@ -54,7 +54,7 @@ def generate_posts(users):
         is_task = faker.boolean(chance_of_getting_true=25)
         created_by = faker.random_element(elements=users).id
         created_at = datetime.utcnow()
-        image_path = f'static/uploads/{i}'
+        image_dir_path = f'/static/image/uploads/{i}/'
 
         post = Post(
             title=title,
@@ -63,7 +63,7 @@ def generate_posts(users):
             is_task=is_task,
             created_by=created_by,
             created_at=created_at,
-            image_path=image_path
+            image_path=image_dir_path
         )
         posts.append(post)
         db.session.add(post)
