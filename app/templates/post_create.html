@@ -3,7 +3,7 @@
 {% block content %}
 <div class="CreatePost">
     <h1>Create Post</h1>
-    <form method="POST" action="{{ url_for('post_create') }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ url_for('post_create') }}" enctype="multipart/form-data" onsubmit="return validateTagSelection();">
         <div class="PostTitle">
             <h2>Post Title</h2>
             <textarea
@@ -48,4 +48,25 @@
         </div>
     </form>
 </div>
+
+<script>
+function validateTagSelection() {
+    const tags = document.getElementsByName('category');
+    let isTagSelected = false;
+   
+    for (let i = 0; i < tags.length; i++) {
+        if (tags[i].checked) {
+            isTagSelected = true;
+            break;
+        }
+    }
+   
+    if (!isTagSelected) {
+        alert('Please select a tag.');
+        return false;  
+    }
+   
+    return true;  
+  }
+</script>
 {% endblock %}
