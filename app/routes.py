@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, flash, current_app
+from flask import render_template, request, redirect, url_for, flash, current_app, jsonify
 from datetime import datetime
 from .models import db, User, Post, Task, Reply, WaitingList
 from flask_login import login_user, logout_user, login_required, current_user
@@ -303,3 +303,11 @@ def init_app_routes(app):
         nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
         'components/nav_logged_out.html')
         return render_template('post_detail.html', post=post, nav=nav)
+    
+    @app.route('/like_post/<int:post_id>', methods=['POST'])
+    @login_required
+    def like_post(post_id):
+        post = Post.query.get_or_404(post_id)
+        post.like_count += 1
+        db.session.commit()
+        return jsonify({'like_count': post.like_count})

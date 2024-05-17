@@ -37,7 +37,7 @@
         class="like-icon"
         id="likeToggleDetail"
       />
-      {{ post.like_count }}
+      <span id="likeCount">{{ post.like_count }}</span>
     </span>
     <span class="comments">
       <img
@@ -76,6 +76,22 @@
     var closeBtn = document.getElementsByClassName("close-btn")[0];
     var confirmDelete = document.getElementById("confirmDelete");
     var cancelDelete = document.getElementById("cancelDelete");
+    var likeIcon = document.getElementById("likeToggleDetail");
+    var likeCount = document.getElementById("likeCount");
+
+    likeIcon.addEventListener("click", function () {
+      fetch("{{ url_for('like_post', post_id=post.id) }}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        likeCount.textContent = data.like_count;
+      })
+      .catch(error => console.error('Error:', error));
+    });
 
     // Show modal on delete icon click
     deleteIcon.onclick = function () {
