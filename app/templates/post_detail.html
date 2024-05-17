@@ -45,61 +45,68 @@
         alt="Comment"
         class="comment-icon"
       />
-      56
     </span>
   </div>
 
-  <!-- Reply section, need to build connection with reply function!!!-->
-  <div class="reply-section">
-    <div class="reply-form">
-      <p>Add a comment</p>
-      <form action="{{ url_for('post_reply', post_id=post.id) }}" method="post">
-        <textarea name="content" placeholder="Write your reply here" required></textarea>
-        <button type="submit">Submit</button>
-      </form>
-    </div>
-    <div class="replies">
-      <!-- Existing replies will be dynamically added here -->
-    </div>
+  <!-- Add delete icon for reply -->
+  <span class="delete">
+    <img
+      src="{{ url_for('static', filename='image/bin.png') }}"
+      alt="Delete"
+      class="delete-icon delete-reply"
+    />
+  </span>
+<!-- Delete confirmation modal -->
+<div id="deleteModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <p>Are you sure you want to delete this post?</p>
+    <button id="confirmDelete" class="btn-confirm">Yes</button>
+    <button id="cancelDelete" class="btn-cancel">No</button>
   </div>
 </div>
-{% endblock %}
 
-{% block scripts %}
-<script src="{{ url_for('static', filename='js/topic_reply.js') }}"></script>
+{% include "components/post_reply.html" %}
+
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    // Handle submit reply button click event
-    const submitReplyBtn = document.getElementById("submitReplyBtn");
-    submitReplyBtn.addEventListener("click", function () {
-      // Get the reply content from the textarea
-      const replyContent = document.querySelector(".reply-form textarea").value;
+    // Get modal elements
+    var modal = document.getElementById("deleteModal");
+    var deleteIcon = document.getElementById("deletePost");
+    var closeBtn = document.getElementsByClassName("close-btn")[0];
+    var confirmDelete = document.getElementById("confirmDelete");
+    var cancelDelete = document.getElementById("cancelDelete");
 
-      // Create a new reply element
-      const newReply = document.createElement("div");
-      newReply.classList.add("reply");
-      newReply.innerHTML = `
-        <div class="reply-header">
-          <img src="{{ url_for('static', filename='image/avatar.png') }}" alt="User Avatar" class="reply-avatar" />
-          <span class="reply-username">{{ current_user.username }}</span>
-          <span class="reply-time">${new Date().toISOString().slice(0, 19).replace('T', ' ')}</span>
-        </div>
-        <div class="reply-content">${replyContent}</div>
-        <div class="reply-footer">
-          <button class="reply-button">Reply</button>
-        </div>
-        <div class="nested-reply-form">
-          <textarea placeholder="Write your reply..."></textarea>
-          <button class="submit-nested-reply">Reply</button>
-        </div>
-      `;
+    // Show modal on delete icon click
+    deleteIcon.onclick = function () {
+      modal.style.display = "block";
+    };
 
-      // Append the new reply to the replies section
-      document.querySelector(".replies").appendChild(newReply);
+    // Hide modal on close button click
+    closeBtn.onclick = function () {
+      modal.style.display = "none";
+    };
 
-      // Clear the reply form textarea
-      document.querySelector(".reply-form textarea").value = "";
-    });
+    // Hide modal on cancel button click
+    cancelDelete.onclick = function () {
+      modal.style.display = "none";
+    };
+
+    // Handle confirm delete button click
+    confirmDelete.onclick = function () {
+      // Placeholder for AJAX request to delete post
+      alert("Post deleted successfully."); // Replace with actual AJAX request
+      modal.style.display = "none";
+      // Redirect to home page or remove the post element from DOM
+      window.location.href = "{{ url_for('home') }}";
+    };
+
+    // Hide modal when clicking outside the modal content
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    };
   });
 </script>
 {% endblock %}
