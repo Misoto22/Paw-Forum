@@ -19,42 +19,44 @@
   <p class="forum-description">{{ post.content }}</p>
   <div class="forum-image-detail">
     {% if post.image_path %}
-    {% set image_dir = 'static/image/uploads/' ~ post.id %}
-    {% for filename in os.listdir('app/' ~ image_dir) %}
-        <img src="{{ url_for('static', filename='image/uploads/' ~ post.id ~ '/' ~ filename) }}" alt="Post Image" />
-      {% endfor %} 
+      {% set image_dir = 'static/image/uploads/' ~ post.id %}
+      {% if os.path.exists('app/' ~ image_dir) %}
+        {% for filename in os.listdir('app/' ~ image_dir) %}
+          {% if os.path.exists('app/' ~ image_dir ~ '/' ~ filename) %}
+            <img src="{{ url_for('static', filename='image/uploads/' ~ post.id ~ '/' ~ filename) }}" alt="Post Image" />
+          {% endif %}
+        {% endfor %}
       {% endif %}
-    </div>
-    <div class="forum-footer">
-      <span class="likes">
-        <img
-          src="{{ url_for('static', filename='image/like.png') }}"
-          alt="Like"
-          class="like-icon"
-          id="likeToggleDetail"
-        />
-        {{ post.like_count }}
-      </span>
-      <span class="comments">
-        <img
-          src="{{ url_for('static', filename='image/comment.png') }}"
-          alt="Comment"
-          class="comment-icon"
-        />
-        56
-      </span>
-    </div>
+    {% endif %}
+  </div>
+  <div class="forum-footer">
+    <span class="likes">
+      <img
+        src="{{ url_for('static', filename='image/like.png') }}"
+        alt="Like"
+        class="like-icon"
+        id="likeToggleDetail"
+      />
+      {{ post.like_count }}
+    </span>
+    <span class="comments">
+      <img
+        src="{{ url_for('static', filename='image/comment.png') }}"
+        alt="Comment"
+        class="comment-icon"
+      />
+      56
+    </span>
+  </div>
 
-    <!-- Reply section, need to build connection with reply function!!!-->
-    <!-- Reply section, need to build connection with reply function!!!-->
-    <!-- Reply section, need to build connection with reply function!!!-->
+  <!-- Reply section, need to build connection with reply function!!!-->
   <div class="reply-section">
-    <div class="reply-form" >
+    <div class="reply-form">
       <p>Add a comment</p>
-        <form action="{{ url_for('post_reply', post_id=post.id) }}" method="post">
-            <textarea name="content" placeholder="Write your reply here" required></textarea>
-            <button type="submit">Submit</button>
-        </form>
+      <form action="{{ url_for('post_reply', post_id=post.id) }}" method="post">
+        <textarea name="content" placeholder="Write your reply here" required></textarea>
+        <button type="submit">Submit</button>
+      </form>
     </div>
     <div class="replies">
       <!-- Existing replies will be dynamically added here -->
