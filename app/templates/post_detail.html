@@ -49,6 +49,7 @@
   </div>
 
   <!-- Add delete icon for reply -->
+  {% if current_user.id == post.created_by %}
   <span class="delete">
     <img
       src="{{ url_for('static', filename='image/bin.png') }}"
@@ -56,14 +57,15 @@
       class="delete-icon delete-reply"
     />
   </span>
-  <!-- Delete confirmation modal -->
-  <div id="deleteModal" class="modal">
-    <div class="modal-content">
-      <span class="close-btn">&times;</span>
-      <p>Are you sure you want to delete this post?</p>
-      <button id="confirmDelete" class="btn-confirm">Yes</button>
-      <button id="cancelDelete" class="btn-cancel">No</button>
-    </div>
+
+  {% endif %}
+<!-- Delete confirmation modal -->
+<div id="deleteModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <p>Are you sure you want to delete this post?</p>
+    <button id="confirmDelete" class="btn-confirm">Yes</button>
+    <button id="cancelDelete" class="btn-cancel">No</button>
   </div>
 
   {% include "components/post_reply.html" %}
