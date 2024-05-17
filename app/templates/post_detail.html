@@ -1,33 +1,27 @@
-{% extends "base.html" %}
-
-{% block content %}
+{% extends "base.html" %} {% block content %}
 <div class="forum-detail">
   <div class="forum-header">
     <img src="{{ post.user.user_image }}" alt="User Avatar" class="avatar" />
     <div class="user-info">
       <span class="username">{{ post.user.username }}</span>
       <span class="post-time">
-        {% if post.created_at %}
-          {{ post.created_at.strftime('%Y-%m-%d %H:%M:%S') }}
-        {% else %}
-          N/A
-        {% endif %}
+        {% if post.created_at %} {{ post.created_at.strftime('%Y-%m-%d
+        %H:%M:%S') }} {% else %} N/A {% endif %}
       </span>
     </div>
   </div>
   <h2 class="forum-title">{{ post.title }}</h2>
   <p class="forum-description">{{ post.content }}</p>
   <div class="forum-image-detail">
-    {% if post.image_path %}
-      {% set image_dir = 'static/image/uploads/' ~ post.id %}
-      {% if os.path.exists('app/' ~ image_dir) %}
-        {% for filename in os.listdir('app/' ~ image_dir) %}
-          {% if os.path.exists('app/' ~ image_dir ~ '/' ~ filename) %}
-            <img src="{{ url_for('static', filename='image/uploads/' ~ post.id ~ '/' ~ filename) }}" alt="Post Image" />
-          {% endif %}
-        {% endfor %}
-      {% endif %}
-    {% endif %}
+    {% if post.image_path %} {% set image_dir = 'static/image/uploads/' ~
+    post.id %} {% if os.path.exists('app/' ~ image_dir) %} {% for filename in
+    os.listdir('app/' ~ image_dir) %} {% if os.path.exists('app/' ~ image_dir ~
+    '/' ~ filename) %}
+    <img
+      src="{{ url_for('static', filename='image/uploads/' ~ post.id ~ '/' ~ filename) }}"
+      alt="Post Image"
+    />
+    {% endif %} {% endfor %} {% endif %} {% endif %}
   </div>
   <div class="forum-footer">
     <span class="likes">
@@ -46,67 +40,70 @@
         class="comment-icon"
       />
     </span>
+
+    <span class="delete" style="position: absolute; left: 820px">
+      <img
+        src="{{ url_for('static', filename='image/bin.png') }}"
+        alt="Delete"
+        class="delete-icon delete-reply"
+      />
+    </span>
   </div>
 
   <!-- Add delete icon for reply -->
-  <span class="delete">
-    <img
-      src="{{ url_for('static', filename='image/bin.png') }}"
-      alt="Delete"
-      class="delete-icon delete-reply"
-    />
-  </span>
-<!-- Delete confirmation modal -->
-<div id="deleteModal" class="modal">
-  <div class="modal-content">
-    <span class="close-btn">&times;</span>
-    <p>Are you sure you want to delete this post?</p>
-    <button id="confirmDelete" class="btn-confirm">Yes</button>
-    <button id="cancelDelete" class="btn-cancel">No</button>
+
+  <!-- Delete confirmation modal -->
+  <div id="deleteModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <p>Are you sure you want to delete this post?</p>
+      <button id="confirmDelete" class="btn-confirm">Yes</button>
+      <button id="cancelDelete" class="btn-cancel">No</button>
+    </div>
   </div>
-</div>
 
-{% include "components/post_reply.html" %}
+  {% include "components/post_reply.html" %}
 
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    // Get modal elements
-    var modal = document.getElementById("deleteModal");
-    var deleteIcon = document.getElementById("deletePost");
-    var closeBtn = document.getElementsByClassName("close-btn")[0];
-    var confirmDelete = document.getElementById("confirmDelete");
-    var cancelDelete = document.getElementById("cancelDelete");
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Get modal elements
+      var modal = document.getElementById("deleteModal");
+      var deleteIcon = document.getElementById("deletePost");
+      var closeBtn = document.getElementsByClassName("close-btn")[0];
+      var confirmDelete = document.getElementById("confirmDelete");
+      var cancelDelete = document.getElementById("cancelDelete");
 
-    // Show modal on delete icon click
-    deleteIcon.onclick = function () {
-      modal.style.display = "block";
-    };
+      // Show modal on delete icon click
+      deleteIcon.onclick = function () {
+        modal.style.display = "block";
+      };
 
-    // Hide modal on close button click
-    closeBtn.onclick = function () {
-      modal.style.display = "none";
-    };
-
-    // Hide modal on cancel button click
-    cancelDelete.onclick = function () {
-      modal.style.display = "none";
-    };
-
-    // Handle confirm delete button click
-    confirmDelete.onclick = function () {
-      // Placeholder for AJAX request to delete post
-      alert("Post deleted successfully."); // Replace with actual AJAX request
-      modal.style.display = "none";
-      // Redirect to home page or remove the post element from DOM
-      window.location.href = "{{ url_for('home') }}";
-    };
-
-    // Hide modal when clicking outside the modal content
-    window.onclick = function (event) {
-      if (event.target == modal) {
+      // Hide modal on close button click
+      closeBtn.onclick = function () {
         modal.style.display = "none";
-      }
-    };
-  });
-</script>
+      };
+
+      // Hide modal on cancel button click
+      cancelDelete.onclick = function () {
+        modal.style.display = "none";
+      };
+
+      // Handle confirm delete button click
+      confirmDelete.onclick = function () {
+        // Placeholder for AJAX request to delete post
+        alert("Post deleted successfully."); // Replace with actual AJAX request
+        modal.style.display = "none";
+        // Redirect to home page or remove the post element from DOM
+        window.location.href = "{{ url_for('home') }}";
+      };
+
+      // Hide modal when clicking outside the modal content
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      };
+    });
+  </script>
+</div>
 {% endblock %}

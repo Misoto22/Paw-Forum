@@ -761,7 +761,7 @@ button {
 
 .user-list-container {
   position: absolute;
-  top: -250px;
+  top: -230px;
   right: -245px;
   border: 1px solid #ccc;
   border-radius: 10px;
