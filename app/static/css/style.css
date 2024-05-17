@@ -764,6 +764,7 @@ button {
   top: -230px;
   right: -245px;
   border: 1px solid #ccc;
+  background-color: #fff;
   border-radius: 10px;
   padding: 10px;
   z-index: 1000;
