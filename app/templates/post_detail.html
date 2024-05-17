@@ -19,10 +19,12 @@
   <p class="forum-description">{{ post.content }}</p>
   <div class="forum-image-detail">
     {% if post.image_path %}
-      {% for image in post.image_path %}
-        <img src="{{ url_for('static', filename=image) }}" alt="Post Image" />
-      {% endfor %}
-    {% endif %}
+    {% set image_dir = 'static/image/uploads/' ~ post.id %}
+    {% for filename in os.listdir('app/' ~ image_dir) %}
+        <img src="{{ url_for('static', filename='image/uploads/' ~ post.id ~ '/' ~ filename) }}" alt="Post Image" />
+      {% endfor %} 
+      {% endif %}
+    </div>
     <div class="forum-footer">
       <span class="likes">
         <img
@@ -42,7 +44,6 @@
         56
       </span>
     </div>
-  </div>
 
     <!-- Reply section, need to build connection with reply function!!!-->
     <!-- Reply section, need to build connection with reply function!!!-->

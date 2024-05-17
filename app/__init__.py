@@ -11,6 +11,7 @@ import os
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
+    app.jinja_env.globals['os'] = os
 
     # Initialize database
     db.init_app(app)
