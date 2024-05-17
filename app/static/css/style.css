@@ -364,10 +364,6 @@ button {
   flex-wrap: wrap;
 }
 
-.tags input[type="radio"] {
-  display: none;
-}
-
 .tags label.tag {
   background-color: #e0e0e0;
   color: #333;
