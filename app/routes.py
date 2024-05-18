@@ -527,3 +527,18 @@ def init_app_routes(app):
             (Activity.user_id == current_user.id) | (Activity.target_user_id == current_user.id)
         ).order_by(Activity.timestamp.desc()).all()
         return render_template('activity.html', page_name='Activity', nav=nav, activities=activities)
+
+    @app.route('/get_user_info/<username>')
+    def get_user_info(username):
+        user = User.query.filter_by(username=username).first()
+        if user:
+            user_data = {
+                'username': user.username,
+                'email': user.email,
+                'phone': user.phone,
+                'gender': user.gender,
+                'postcode': user.postcode
+            }
+            return jsonify(user_data)
+        else:
+            return jsonify({'error': 'User not found'})
