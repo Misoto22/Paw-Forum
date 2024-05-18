@@ -2,12 +2,11 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-import re
 
 db = SQLAlchemy()
 
 
-# Defining Database Models
+# Defining User model
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -47,12 +46,7 @@ class User(db.Model, UserMixin):
     def is_anonymous(self):
         return False
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        # Basic email validation
-        if not re.match(r"[^@]+@[^@]+\.[^@]+", self.email):
-            raise ValueError("Invalid email address")
-
+# Defining Post model
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
@@ -62,9 +56,11 @@ class Post(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     content = db.Column(db.Text, nullable=False)
     like_count = db.Column(db.Integer, default=0)
-    image_path = db.Column(db.String(255), nullable=True)
+    image_name = db.Column(db.String(100), nullable=True)
 
+    # Relationships with other tables (User)
     user = db.relationship('User', backref=db.backref('posts', lazy=True))
+    replies = db.relationship('Reply', backref='post', cascade='all, delete-orphan', lazy=True)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -74,6 +70,7 @@ class Post(db.Model):
             raise ValueError("Content cannot be null")
 
 
+# Defining Reply model
 class Reply(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
@@ -83,35 +80,19 @@ class Reply(db.Model):
     post_at = db.Column(db.DateTime, default=datetime.utcnow)
     like_count = db.Column(db.Integer, default=0)
 
-    post = db.relationship('Post', backref=db.backref('replies', lazy=True))
-    author = db.relationship('User', backref=db.backref('replies', lazy=True))
-    parent_reply = db.relationship('Reply', remote_side=[id], backref=db.backref('child_replies', lazy=True))
+    # Relationships with other tables (User, Post, and self)
+    user = db.relationship('User', backref=db.backref('replies', lazy=True))
+    parent_reply = db.relationship('Reply', remote_side=[id], backref=db.backref('child_replies', cascade='all, delete-orphan', lazy=True))
 
-
+# Defining Task model, add record when user post.is_task is True
 class Task(db.Model):
     id = db.Column(db.Integer, db.ForeignKey('post.id'), primary_key=True)
-    status = db.Column(db.String(20), nullable=False)
+    status = db.Column(db.Boolean, nullable=False, default=True) # True: open, False: closed
     assigned_to = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    post = db.relationship('Post', backref=db.backref('task', uselist=False))
-    assigned_user = db.relationship('User', backref=db.backref('tasks', lazy=True))
-
-
-class Activity(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    activity = db.Column(db.String(50), nullable=False)
-    ip_address = db.Column(db.String(100), nullable=True)
-    update_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-    user = db.relationship('User', backref=db.backref('activities', lazy=True))
-
-
+# Defining WaitingList model, add record when user apply for a task
 class WaitingList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     task_id = db.Column(db.Integer, db.ForeignKey('task.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     applied_at = db.Column(db.DateTime, default=datetime.utcnow)
-
-    task = db.relationship('Task', backref=db.backref('waiting_list', lazy=True))
-    user = db.relationship('User', backref=db.backref('waiting_list_entries', lazy=True))
