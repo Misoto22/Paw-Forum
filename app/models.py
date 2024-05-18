@@ -5,8 +5,7 @@ from flask_login import UserMixin
 
 db = SQLAlchemy()
 
-
-# Defining User model
+# User Model
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
@@ -30,23 +29,7 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    # Flask-Login required methods
-    def get_id(self):
-        return self.id
-
-    @property
-    def is_authenticated(self):
-        return True
-
-    @property
-    def is_active(self):
-        return True
-
-    @property
-    def is_anonymous(self):
-        return False
-
-# Defining Post model
+# Post Model
 class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
@@ -58,19 +41,15 @@ class Post(db.Model):
     like_count = db.Column(db.Integer, default=0)
     image_name = db.Column(db.String(100), nullable=True)
 
-    # Relationships with other tables (User)
     user = db.relationship('User', backref=db.backref('posts', lazy=True))
     replies = db.relationship('Reply', backref='post', cascade='all, delete-orphan', lazy=True)
+    likes = db.relationship('PostLike', backref='post', cascade='all, delete-orphan', lazy=True)
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        if not self.title or len(self.title) > 200:
-            raise ValueError("Title must be between 1 and 200 characters")
-        if not self.content:
-            raise ValueError("Content cannot be null")
+    @property
+    def comment_count(self):
+        return len(self.replies)
 
-
-# Defining Reply model
+# Reply Model
 class Reply(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
@@ -80,19 +59,47 @@ class Reply(db.Model):
     post_at = db.Column(db.DateTime, default=datetime.utcnow)
     like_count = db.Column(db.Integer, default=0)
 
-    # Relationships with other tables (User, Post, and self)
     user = db.relationship('User', backref=db.backref('replies', lazy=True))
     parent_reply = db.relationship('Reply', remote_side=[id], backref=db.backref('child_replies', cascade='all, delete-orphan', lazy=True))
+    likes = db.relationship('ReplyLike', backref='reply', cascade='all, delete-orphan', lazy=True)
 
-# Defining Task model, add record when user post.is_task is True
+    @property
+    def comment_count(self):
+        return len(self.child_replies)
+
+# Task Model
 class Task(db.Model):
     id = db.Column(db.Integer, db.ForeignKey('post.id'), primary_key=True)
-    status = db.Column(db.Boolean, nullable=False, default=True) # True: open, False: closed
+    status = db.Column(db.Boolean, nullable=False, default=True)  # True: open, False: closed
     assigned_to = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-# Defining WaitingList model, add record when user apply for a task
+# WaitingList Model
 class WaitingList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     task_id = db.Column(db.Integer, db.ForeignKey('task.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     applied_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+# PostLike Model
+class PostLike(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+# ReplyLike Model
+class ReplyLike(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    reply_id = db.Column(db.Integer, db.ForeignKey('reply.id'), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+# Activity Model
+class Activity(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    action = db.Column(db.String(255), nullable=False)
+    target_user_id = db.Column(db.Integer, nullable=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship('User', backref=db.backref('activities', lazy=True))
