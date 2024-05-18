@@ -1,33 +1,20 @@
 {% block content %}
 <div class="forum-container">
-  <!-- Forum header -->
   <div class="forum-header">
-    <!-- Header content -->
   </div>
 
   <!-- User list container inside forum detail -->
   <div class="user-list-container">
     <div class="user-list">
       <button id="action-button" class="action-button">Apply</button>
-      <!-- Add the action button here -->
 
-      <div
-        class="user"
-        data-username="john_doe"
-        data-name="John Doe"
-        data-gender="Male"
-        data-postcode="12345"
-        data-email="john@example.com"
-        data-phone="123-456-7890"
-        data-pettype="Dog"
-      >
-        <img
-          src="{{ url_for('static', filename='image/avatars/avatar1.png') }}"
-          alt="User Avatar"
-          class="user-avatar"
-        />
-        <span class="user-username">john_doe</span>
+      {% for waiting_user in post.waiting_list %}
+      <div class="user" 
+          username="{{ waiting_user.user.username }}">
+          <img src="{{ url_for('static', filename='image/avatars/' ~ waiting_user.user.user_image) }}" alt="User Avatar" class="user-avatar" />
+          <span class="user-username">{{ waiting_user.user.username }}</span>
       </div>
+      {% endfor %}
 
       <div
         class="user"
@@ -47,60 +34,6 @@
         <span class="user-username">jane_smith</span>
       </div>
 
-      <div
-        class="user"
-        data-username="mike_jones"
-        data-name="Mike Jones"
-        data-gender="Male"
-        data-postcode="11223"
-        data-email="mike@example.com"
-        data-phone="555-666-7777"
-        data-pettype="Bird"
-      >
-        <img
-          src="{{ url_for('static', filename='image/avatars/avatar3.png') }}"
-          alt="User Avatar"
-          class="user-avatar"
-        />
-        <span class="user-username">mike_jones</span>
-      </div>
-
-      <div
-        class="user"
-        data-username="sarah_lee"
-        data-name="Sarah Lee"
-        data-gender="Female"
-        data-postcode="44556"
-        data-email="sarah@example.com"
-        data-phone="444-555-6666"
-        data-pettype="Fish"
-      >
-        <img
-          src="{{ url_for('static', filename='image/avatars/avatar24.png') }}"
-          alt="User Avatar"
-          class="user-avatar"
-        />
-        <span class="user-username">sarah_lee</span>
-      </div>
-
-      <div
-        class="user"
-        data-username="david_wang"
-        data-name="David Wang"
-        data-gender="Male"
-        data-postcode="77889"
-        data-email="david@example.com"
-        data-phone="333-222-1111"
-        data-pettype="Rabbit"
-      >
-        <img
-          src="{{ url_for('static', filename='image/avatars/avatar5.png') }}"
-          alt="User Avatar"
-          class="user-avatar"
-        />
-        <span class="user-username">david_wang</span>
-      </div>
-      <!-- Add more users as needed -->
     </div>
   </div>
 
@@ -169,16 +102,47 @@
 
 {% block scripts %}
 <script>
+  //Add username and avatar to task list
   document.addEventListener("DOMContentLoaded", function () {
-    // Example of handling the apply button
     const actionButton = document.getElementById("action-button");
+    const userListContainer = document.querySelector(".user-list");
     actionButton.addEventListener("click", function () {
-      actionButton.disabled = true;
-      actionButton.style.backgroundColor = "grey";
-      actionButton.innerText = "Applied";
-      // Here you can add the logic for applying or closing the task
+      if (!actionButton.disabled) {
+        const currentUserUsername = "{{ current_user.username }}";
+        const currentUserAvatar = "{{ current_user.user_image }}";
+
+        // Create a new user element
+        const newUserElement = document.createElement("div");
+        newUserElement.className = "user";
+        newUserElement.setAttribute("username", currentUserUsername);
+
+        // Create avatar image element
+        const avatarElement = document.createElement("img");
+        avatarElement.src = currentUserAvatar;
+        avatarElement.alt = "User Avatar";
+        avatarElement.className = "user-avatar";
+
+        // Create username element
+        const usernameElement = document.createElement("span");
+        usernameElement.className = "user-username";
+        usernameElement.textContent = currentUserUsername;
+
+        // Append avatar and username to the new user element
+        newUserElement.appendChild(avatarElement);
+        newUserElement.appendChild(usernameElement);
+
+        // Append the new user element to the user list container
+        userListContainer.appendChild(newUserElement);
+
+        // Disable the action button and change its appearance
+        actionButton.disabled = true;
+        actionButton.style.backgroundColor = "grey";
+        actionButton.innerText = "Applied";
+      }
     });
   });
+
+  //Delete function
   document.addEventListener("DOMContentLoaded", function () {
     // Get modal elements
     var modal = document.getElementById("deleteModal");
