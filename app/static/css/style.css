@@ -791,17 +791,16 @@ button {
 
 .user-info-popup {
   display: none;
-  position: absolute;
+  position: fixed; /* Fixed positioning to stay relative to the viewport */
   border: 1px solid #ccc;
   background-color: #fff;
   border-radius: 10px;
-  z-index: 1000;
   padding: 20px;
   white-space: nowrap;
-
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%);
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Translate by 50% of its own width and height to center */
+  z-index: 1000; /* Ensure it appears on top of other elements */
 }
 
 .action-button {

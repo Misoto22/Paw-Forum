@@ -1,38 +1,25 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const userElements = document.querySelectorAll(".user");
+  const userListContainer = document.querySelector(".user-list");
   const popup = document.getElementById("user-info-popup");
   const closePopup = document.querySelector(".close-popup");
 
-  userElements.forEach((user) => {
-    user.addEventListener("click", function () {
-      const name = user.getAttribute("data-name");
-      const gender = user.getAttribute("data-gender");
-      const postcode = user.getAttribute("data-postcode");
-      const email = user.getAttribute("data-email");
-      const phone = user.getAttribute("data-phone");
-      const pettype = user.getAttribute("data-pettype");
+  userListContainer.addEventListener("click", function (event) {
+    const userElement = event.target.closest(".user");
+    if (userElement) {
+      const username = userElement.getAttribute("username");
 
-      document.getElementById("popup-name").innerText = name;
-      document.getElementById("popup-gender").innerText = gender;
-      document.getElementById("popup-postcode").innerText = postcode;
-      document.getElementById("popup-email").innerText = email;
-      document.getElementById("popup-phone").innerText = phone;
-      document.getElementById("popup-pettype").innerText = pettype;
+      fetch(`/get_user_info/${username}`)
+        .then((response) => response.json())
+        .then((userData) => {
+          document.getElementById("popup-username").innerText = userData.username;
+          document.getElementById("popup-email").innerText = userData.email;
+          document.getElementById("popup-phone").innerText = userData.phone;
+          document.getElementById("popup-gender").innerText = userData.gender;
+          document.getElementById("popup-postcode").innerText = userData.postcode;
 
-      // Ensure the popup is fully rendered before calculating its dimensions
-      popup.style.display = "block";
-
-      const popupHeight = popup.offsetHeight;
-      const popupWidth = popup.offsetWidth;
-      const windowHeight = window.innerHeight;
-      const windowWidth = window.innerWidth;
-
-      const topPosition = (windowHeight - popupHeight) / 2;
-      const leftPosition = (windowWidth - popupWidth) / 2;
-
-      popup.style.top = `${topPosition}px`;
-      popup.style.left = `${leftPosition}px`;
-    });
+          popup.style.display = "block";
+        });
+    }
   });
 
   closePopup.addEventListener("click", function () {

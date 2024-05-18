@@ -322,3 +322,18 @@ def init_app_routes(app):
         post.like_count += 1
         db.session.commit()
         return jsonify({'like_count': post.like_count})
+
+    @app.route('/get_user_info/<username>')
+    def get_user_info(username):
+        user = User.query.filter_by(username=username).first()
+        if user:
+            user_data = {
+                'username': user.username,
+                'email': user.email,
+                'phone': user.phone,
+                'gender': user.gender,
+                'postcode': user.postcode
+            }
+            return jsonify(user_data)
+        else:
+            return jsonify({'error': 'User not found'})
