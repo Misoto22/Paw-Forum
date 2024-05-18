@@ -7,7 +7,9 @@
 <!-- User list container inside forum detail -->
 <div class="user-list-container">
   <div class="user-list">
-    <button id="action-button" class="action-button">Apply</button>
+    <button type="button" id="action-button" class="action-button" {% if user_has_applied %}disabled{% endif %}>
+      {% if user_has_applied %}Applied{% else %}Apply{% endif %}
+    </button>
     
     {% for waiting_user in post.waiting_list %}
     <div class="user" 
@@ -32,15 +34,21 @@
   </div>
 </div>
 
-   <!-- Reply Section-->
+<div id="flash-container">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+          {% for category, message in messages %}
+              <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+      {% endif %}
+  {% endwith %}
+</div>
+
+<!-- Reply Section-->
 <div class="reply-section">
   <div class="reply-form">
     <p>Add a comment</p>
-    <form
-      id="replyForm"
-      method="POST"
-      action="{{ url_for('post_reply', post_id=post.id) }}"
-    >
+    <form id="replyForm" method="POST" action="{{ url_for('post_reply', post_id=post.id) }}">
       <textarea name="content" placeholder="Write your reply here"></textarea>
       <button type="submit" id="submitReplyBtn">Submit</button>
       <input type="hidden" name="parent_reply_id" id="parentReplyId" />
@@ -51,41 +59,21 @@
     {% for reply in post.replies %}
     <div class="reply" id="reply-{{ reply.id }}">
       <div class="reply-header">
-        <img
-          src="{{ url_for('static', filename='image/avatars/' + reply.user.user_image) }}"
-          alt="User Avatar"
-          class="reply-avatar"
-        />
+        <img src="{{ url_for('static', filename='image/avatars/' + reply.user.user_image) }}" alt="User Avatar" class="reply-avatar" />
         <span class="reply-username">{{ reply.user.username }}</span>
-        <span class="reply-time"
-          >{{ reply.post_at.strftime('%Y-%m-%d %H:%M') }}</span
-        >
+        <span class="reply-time">{{ reply.post_at.strftime('%Y-%m-%d %H:%M') }}</span>
       </div>
       <div class="reply-content">{{ reply.content }}</div>
       <div class="reply-footer">
-        <button class="reply-button" data-reply-id="{{ reply.id }}">
-          Reply
-        </button>
+        <button class="reply-button" data-reply-id="{{ reply.id }}">Reply</button>
         {% if current_user.id == reply.reply_by %}
         <span class="delete">
-          <img
-            src="{{ url_for('static', filename='image/bin.png') }}"
-            alt="Delete"
-            class="delete-icon delete-reply"
-            data-reply-id="{{ reply.id }}"
-          />
+          <img src="{{ url_for('static', filename='image/bin.png') }}" alt="Delete" class="delete-icon delete-reply" data-reply-id="{{ reply.id }}" />
         </span>
         {% endif %}
       </div>
-      <div
-        class="nested-reply-form"
-        style="display: none"
-        data-reply-id="{{ reply.id }}"
-      >
-        <form
-          method="POST"
-          action="{{ url_for('post_reply', post_id=post.id) }}"
-        >
+      <div class="nested-reply-form" style="display: none" data-reply-id="{{ reply.id }}">
+        <form method="POST" action="{{ url_for('post_reply', post_id=post.id) }}">
           <textarea name="content" placeholder="Write your reply..."></textarea>
           <button type="submit">Reply</button>
           <input type="hidden" name="parent_reply_id" value="{{ reply.id }}" />
@@ -95,53 +83,24 @@
         {% for nested_reply in reply.nested_replies %}
         <div class="nested-reply" id="reply-{{ nested_reply.id }}">
           <div class="reply-header">
-            <img
-              src="{{ url_for('static', filename='image/avatars/' + nested_reply.user.user_image) }}"
-              alt="User Avatar"
-              class="reply-avatar"
-            />
+            <img src="{{ url_for('static', filename='image/avatars/' + nested_reply.user.user_image) }}" alt="User Avatar" class="reply-avatar" />
             <span class="reply-username">{{ nested_reply.user.username }}</span>
-            <span class="reply-time"
-              >{{ nested_reply.post_at.strftime('%Y-%m-%d %H:%M') }}</span
-            >
+            <span class="reply-time">{{ nested_reply.post_at.strftime('%Y-%m-%d %H:%M') }}</span>
           </div>
           <div class="reply-content">{{ nested_reply.content }}</div>
           <div class="reply-footer">
-            <button class="reply-button" data-reply-id="{{ nested_reply.id }}">
-              Reply
-            </button>
-
-            <!-- Add delete icon for reply -->
+            <button class="reply-button" data-reply-id="{{ nested_reply.id }}">Reply</button>
             {% if current_user.id == nested_reply.reply_by %}
             <span class="delete">
-              <img
-                src="{{ url_for('static', filename='image/bin.png') }}"
-                alt="Delete"
-                class="delete-icon delete-reply"
-                data-reply-id="{{ nested_reply.id }}"
-              />
+              <img src="{{ url_for('static', filename='image/bin.png') }}" alt="Delete" class="delete-icon delete-reply" data-reply-id="{{ nested_reply.id }}" />
             </span>
             {% endif %}
           </div>
-          <div
-            class="nested-reply-form"
-            style="display: none"
-            data-reply-id="{{ nested_reply.id }}"
-          >
-            <form
-              method="POST"
-              action="{{ url_for('post_reply', post_id=post.id) }}"
-            >
-              <textarea
-                name="content"
-                placeholder="Write your reply..."
-              ></textarea>
+          <div class="nested-reply-form" style="display: none" data-reply-id="{{ nested_reply.id }}">
+            <form method="POST" action="{{ url_for('post_reply', post_id=post.id) }}">
+              <textarea name="content" placeholder="Write your reply..."></textarea>
               <button type="submit">Reply</button>
-              <input
-                type="hidden"
-                name="parent_reply_id"
-                value="{{ nested_reply.id }}"
-              />
+              <input type="hidden" name="parent_reply_id" value="{{ nested_reply.id }}" />
             </form>
           </div>
         </div>
@@ -277,6 +236,36 @@
       });
     });
   });
+
+  document.addEventListener('DOMContentLoaded', (event) => {
+    document.getElementById('action-button').addEventListener('click', function() {
+        const postId = {{ post.id }};
+        
+        fetch(`/apply_task/${postId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ post_id: postId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload(); // Reload the page to show flashed messages
+            } else {
+                const flashContainer = document.getElementById('flash-container');
+                const errorMessage = document.createElement('div');
+                errorMessage.classList.add('flash', 'flash-error');
+                errorMessage.innerText = data.error;
+                flashContainer.appendChild(errorMessage);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+});
+
 </script>
 <script src="{{ url_for('static', filename='js/user_info_popup.js') }}"></script>
 {% endblock %}
