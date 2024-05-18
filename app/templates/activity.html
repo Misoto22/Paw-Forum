@@ -7,7 +7,7 @@
         {% for activity in activities %}
         <li>
             {% if activity.user_id == current_user.id and activity.target_user_id %}
-                You {{ activity.action }} on {{ activity.target_user.username }}
+                You {{ activity.action }} on {{ activity.user.username }}
             {% elif activity.target_user_id == current_user.id %}
                 {{ activity.user.username }} {{ activity.action }} on you
             {% elif activity.user_id == current_user.id and not activity.target_user_id %}
