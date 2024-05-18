@@ -3,6 +3,7 @@
   <div class="forum-header">
   </div>
 
+  {% if post.is_task %}
   <!-- User list container inside forum detail -->
   <div class="user-list-container">
     <div class="user-list">
@@ -15,6 +16,7 @@
           <span class="user-username">{{ waiting_user.user.username }}</span>
       </div>
       {% endfor %}
+      {% endif %}
 <!--
       <div
         class="user"
@@ -70,6 +72,7 @@
           <button class="reply-button">Reply</button>
           
           <!-- Add delete icon for reply -->
+          {% if current_user.id == reply.reply_by %}
           <span class="delete">
             <img
               src="{{ url_for('static', filename='image/bin.png') }}"
@@ -77,6 +80,8 @@
               class="delete-icon delete-reply"
             />
           </span>
+          {% endif %}
+
         </div>
         <div class="nested-reply-form">
           <textarea placeholder="Write your reply..."></textarea>
