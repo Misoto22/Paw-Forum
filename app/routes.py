@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, flash, current_app, jsonify
 from datetime import datetime
-from .models import db, User, Post, Task, Reply, WaitingList
+from .models import db, User, Post, Task, Reply, WaitingList, PostLike, ReplyLike, Activity
 from flask_login import login_user, logout_user, login_required, current_user
 import os
 from werkzeug.utils import secure_filename
@@ -10,15 +10,18 @@ from werkzeug.security import generate_password_hash
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
 
+
 def validate_email(email):
     import re
     email_regex = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
     if not re.match(email_regex, email):
         raise ValueError("Invalid email format")
 
+
 def validate_postcode(postcode):
     if not postcode.isdigit() or len(postcode) != 4:
         raise ValueError("Invalid postcode")
+
 
 def init_app_routes(app):
     @app.route('/')
@@ -84,12 +87,23 @@ def init_app_routes(app):
             db.session.add(new_user)
             db.session.commit()
 
+            # log the activity
+            new_activity = Activity(
+                user_id=new_user.id,
+                action='has signed up!',
+                target_user_id=None
+            )
+
+            db.session.add(new_activity)
+            db.session.commit()
+
             # Log the user in
             login_user(new_user)
             flash('Registration successful!', 'success')
             return redirect(url_for('home'))
         else:
             return render_template('signup.html', page_name='Signup', nav=nav)
+
 
     # Define the login route， and check if the user is authenticated
     @app.route('/login', methods=['GET', 'POST'])
@@ -136,6 +150,17 @@ def init_app_routes(app):
                 current_user.user_image = new_image
             db.session.commit()
             flash('Profile updated successfully!', 'success')
+
+            # log the activity
+            new_activity = Activity(
+                user_id=current_user.id,
+                action='has updated profile!',
+                target_user_id=None
+            )
+
+            db.session.add(new_activity)
+            db.session.commit()
+
             return redirect(url_for('profile'))
         return render_template('profile.html', page_name='Profile', nav=nav)
 
@@ -189,6 +214,23 @@ def init_app_routes(app):
 
                 db.session.commit()
                 flash('Post created successfully!', 'success')
+
+                # Log the activity
+                new_activity = Activity(
+                    user_id=current_user.id,
+                    action='created post ' + str(new_post.id)
+                )
+                db.session.add(new_activity)
+
+                if is_task:
+                    new_activity = Activity(
+                        user_id=current_user.id,
+                        action='created task ' + str(new_post.id)
+                    )
+                    db.session.add(new_activity)
+
+                db.session.commit()
+
                 return redirect(url_for('home'))
             except Exception as e:
                 db.session.rollback()
@@ -216,6 +258,15 @@ def init_app_routes(app):
                 db.session.add(new_reply)
                 db.session.commit()
                 flash('Replied successfully!', 'success')
+
+                # Log the activity
+                new_activity = Activity(
+                    user_id=current_user.id,
+                    action='replied to post ' + str(post_id),
+                    target_user_id=Post.query.get(post_id).created_by
+                )
+                db.session.add(new_activity)
+                db.session.commit()
                 
             except Exception as e:
                 db.session.rollback()
@@ -244,6 +295,15 @@ def init_app_routes(app):
             # Deleting the post should cascade and delete all associated replies
             db.session.delete(post)
             db.session.commit()
+
+            # Log the activity
+            new_activity = Activity(
+                user_id=current_user.id,
+                action='deleted post ' + str(post_id)
+            )
+            db.session.add(new_activity)
+            db.session.commit()
+
             return jsonify({'success': 'Post and all associated replies deleted successfully!'}), 200
         except Exception as e:
             db.session.rollback()
@@ -261,10 +321,147 @@ def init_app_routes(app):
             db.session.delete(reply)  # Deleting the reply should cascade and delete all child replies
             db.session.commit()
             flash('Reply and all child replies deleted successfully!', 'success')
+
+            # Log the activity
+            new_activity = Activity(
+                user_id=current_user.id,
+                action='deleted reply ' + str(reply_id),
+            )
+            db.session.add(new_activity)
+            db.session.commit()
+
         except Exception as e:
             db.session.rollback()
             flash('Error deleting reply: ' + str(e), 'error')
         return redirect(url_for('post_detail', post_id=reply.post_id))
+    
+    # Define the like post route
+    @app.route('/like_post/<int:post_id>', methods=['POST'])
+    @login_required
+    def like_post(post_id):
+        post = Post.query.get_or_404(post_id)
+        like = PostLike.query.filter_by(user_id=current_user.id, post_id=post_id).first()
+
+        try:
+            if like:
+                db.session.delete(like)
+                post.like_count -= 1
+                action = 'unliked'
+            else:
+                new_like = PostLike(user_id=current_user.id, post_id=post_id)
+                db.session.add(new_like)
+                post.like_count += 1
+                action = 'liked'
+            
+            db.session.commit()
+
+            # Log the activity
+            new_activity = Activity(
+                user_id=current_user.id,
+                action=f'{action} post {post_id}',
+                target_user_id=post.user.id
+            )
+            db.session.add(new_activity)
+            db.session.commit()
+
+            return jsonify({'like_count': post.like_count, 'liked': not bool(like)})
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'error': str(e)}), 500
+
+    @app.route('/like_reply/<int:reply_id>', methods=['POST'])
+    @login_required
+    def like_reply(reply_id):
+        reply = Reply.query.get_or_404(reply_id)
+        like = ReplyLike.query.filter_by(user_id=current_user.id, reply_id=reply_id).first()
+
+        try:
+            if like:
+                db.session.delete(like)
+                reply.like_count -= 1
+                action = 'unliked'
+            else:
+                new_like = ReplyLike(user_id=current_user.id, reply_id=reply_id)
+                db.session.add(new_like)
+                reply.like_count += 1
+                action = 'liked'
+            
+            db.session.commit()
+
+            # Log the activity
+            new_activity = Activity(
+                user_id=current_user.id,
+                action=f'{action} reply {reply_id}',
+                target_user_id=reply.user.id
+            )
+            db.session.add(new_activity)
+            db.session.commit()
+
+            return jsonify({'like_count': reply.like_count, 'liked': not bool(like)})
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({'error': str(e)}), 500
+
+
+
+    # Define the apply task route
+    @app.route('/apply_task/<int:task_id>', methods=['POST'])
+    @login_required
+    def apply_task(task_id):
+        try:
+            new_application = WaitingList(
+                task_id=task_id,
+                user_id=current_user.id,
+                applied_at=datetime.utcnow()
+            )
+            db.session.add(new_application)
+            db.session.commit()
+            flash('Applied to task successfully!', 'success')
+
+            # Log the activity
+            new_activity = Activity(
+                user_id=current_user.id,
+                action=f'applied to task {task_id}'
+            )
+            db.session.add(new_activity)
+            db.session.commit()
+
+        except Exception as e:
+            db.session.rollback()
+            flash('Failed to apply to task: ' + str(e), 'error')
+
+        return redirect(url_for('task_detail', task_id=task_id))
+
+
+    # Define the close task route
+    @app.route('/close_task/<int:task_id>', methods=['POST'])
+    @login_required
+    def close_task(task_id):
+        task = Task.query.get_or_404(task_id)
+        post = Post.query.get_or_404(task.id)
+        if current_user.id != post.created_by:
+            flash('You are not authorized to close this task.', 'error')
+            return redirect(url_for('task_detail', task_id=task_id))
+
+        try:
+            task.status = False
+            db.session.commit()
+            flash('Task closed successfully!', 'success')
+
+            # Log the activity
+            new_activity = Activity(
+                user_id=current_user.id,
+                action=f'closed task {task_id}'
+            )
+            db.session.add(new_activity)
+            db.session.commit()
+
+        except Exception as e:
+            db.session.rollback()
+            flash('Failed to close task: ' + str(e), 'error')
+
+        return redirect(url_for('task_detail', task_id=task_id))
+
 
     # Define the search route
     @app.route('/search')
@@ -294,17 +491,21 @@ def init_app_routes(app):
             nav = render_template('components/nav_logged_out.html')
         return render_template('search_results.html', query=query, posts=posts, nav=nav)
 
+
     @app.errorhandler(404)
     def page_not_found(e):
         return render_template('error_pages/404.html'), 404
+
 
     @app.errorhandler(500)
     def internal_server_error(e):
         return render_template('error_pages/500.html'), 500
 
+
     @app.route('/cause_500')
     def cause_500():
         raise Exception("Intentional Error")
+
 
     @app.route('/post/<int:post_id>')
     def post_detail(post_id):
@@ -315,25 +516,13 @@ def init_app_routes(app):
         'components/nav_logged_out.html')
         return render_template('post_detail.html', post=post, nav=nav)
     
-    @app.route('/like_post/<int:post_id>', methods=['POST'])
-    @login_required
-    def like_post(post_id):
-        post = Post.query.get_or_404(post_id)
-        post.like_count += 1
-        db.session.commit()
-        return jsonify({'like_count': post.like_count})
 
-    @app.route('/get_user_info/<username>')
-    def get_user_info(username):
-        user = User.query.filter_by(username=username).first()
-        if user:
-            user_data = {
-                'username': user.username,
-                'email': user.email,
-                'phone': user.phone,
-                'gender': user.gender,
-                'postcode': user.postcode
-            }
-            return jsonify(user_data)
-        else:
-            return jsonify({'error': 'User not found'})
+    @app.route('/activity')
+    @login_required
+    def activity():
+        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template('components/nav_logged_out.html')
+        # Query activities where the current user is either the actor or the target
+        activities = Activity.query.filter(
+            (Activity.user_id == current_user.id) | (Activity.target_user_id == current_user.id)
+        ).order_by(Activity.timestamp.desc()).all()
+        return render_template('activity.html', page_name='Activity', nav=nav, activities=activities)

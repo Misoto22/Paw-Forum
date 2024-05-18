@@ -6,7 +6,7 @@ from datetime import datetime
 # Adjust the Python path to include the project root directory
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from app.models import db, User, Post, Task, Reply
+from app.models import db, User, Post, Task, Reply, PostLike, ReplyLike, Activity
 from app import create_app
 
 # Initialize the app and database
@@ -78,7 +78,7 @@ def generate_tasks(posts):
         if post.is_task:
             task = Task(
                 id=post.id,
-                status=faker.boolean(chance_of_getting_true=100),  # 50% chance of being True (open) or False (closed)
+                status=faker.boolean(chance_of_getting_true=50),  # 50% chance of being True (open) or False (closed)
                 assigned_to=None  # Initially, no user is assigned
             )
             db.session.add(task)
@@ -124,15 +124,81 @@ def generate_replies(users, posts, n=50):
             post_at=post_at,
             like_count=like_count
         )
+        replies.append(child_reply)
         db.session.add(child_reply)
 
     db.session.commit()
+    return replies
 
+def generate_post_likes(users, posts):
+    for post in posts:
+        for _ in range(faker.random_int(min=0, max=10)):
+            user = faker.random_element(elements=users)
+            if not PostLike.query.filter_by(user_id=user.id, post_id=post.id).first():
+                post_like = PostLike(
+                    user_id=user.id,
+                    post_id=post.id,
+                    timestamp=datetime.utcnow()
+                )
+                db.session.add(post_like)
+    db.session.commit()
+
+def generate_reply_likes(users, replies):
+    for reply in replies:
+        for _ in range(faker.random_int(min=0, max=10)):
+            user = faker.random_element(elements=users)
+            if not ReplyLike.query.filter_by(user_id=user.id, reply_id=reply.id).first():
+                reply_like = ReplyLike(
+                    user_id=user.id,
+                    reply_id=reply.id,
+                    timestamp=datetime.utcnow()
+                )
+                db.session.add(reply_like)
+    db.session.commit()
+
+def generate_activities_for_user():
+    user_id = 1
+    target_user_id = faker.random_element([user.id for user in User.query.all() if user.id != user_id])
+    actions = [
+        "posted a new topic",
+        "replied to a post",
+        "liked a post",
+        "liked a reply",
+        "applied for a task",
+        "posted a new topic",
+        "replied to a post",
+        "liked a post",
+        "liked a reply",
+        "applied for a task",
+        "closed a task"
+    ]
+    for _ in range(10):
+        action = faker.random_element(actions)
+        activity = Activity(
+            user_id=user_id,
+            action=action,
+            target_user_id=target_user_id if "liked" in action else None,
+            timestamp=datetime.utcnow()
+        )
+        db.session.add(activity)
+    db.session.commit()
+
+def delete_all_activities():
+    try:
+        num_rows_deleted = db.session.query(Activity).delete()
+        db.session.commit()
+        print(f"Deleted {num_rows_deleted} rows from the Activity table.")
+    except Exception as e:
+        db.session.rollback()
+        print(f"An error occurred: {e}")
 
 if __name__ == '__main__':
     # Generate data
-    # users = generate_users()
-    # posts = generate_posts(users)
-    # generate_tasks(posts)
-    # generate_replies(users, posts, n=50)
+    users = generate_users()
+    posts = generate_posts(users)
+    generate_tasks(posts)
+    replies = generate_replies(users, posts, n=50)
+    generate_post_likes(users, posts)
+    generate_reply_likes(users, replies)
+    generate_activities_for_user()
     print('Test data generated successfully!')
