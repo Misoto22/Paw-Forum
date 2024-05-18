@@ -15,4 +15,4 @@ __pycache__/
 .DS_Store
 
 # ignore app.db
-app.db
+app/app.db
