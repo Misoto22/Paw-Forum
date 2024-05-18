@@ -410,6 +410,10 @@ def init_app_routes(app):
     @login_required
     def apply_task(task_id):
         try:
+            # Check if user has already applied
+            if WaitingList.query.filter_by(task_id=task_id, user_id=current_user.id).first():
+                return jsonify({'error': 'You have already applied to this task.'}), 400
+            
             new_application = WaitingList(
                 task_id=task_id,
                 user_id=current_user.id,
@@ -427,11 +431,10 @@ def init_app_routes(app):
             db.session.add(new_activity)
             db.session.commit()
 
+            return jsonify({'success': 'Applied to task successfully!'}), 200
         except Exception as e:
             db.session.rollback()
-            flash('Failed to apply to task: ' + str(e), 'error')
-
-        return redirect(url_for('task_detail', task_id=task_id))
+            return jsonify({'error': str(e)}), 500
 
 
     # Define the close task route
@@ -513,9 +516,10 @@ def init_app_routes(app):
         if not current_user.is_authenticated:
             return redirect(url_for('login'))
         post = Post.query.get_or_404(post_id)
+        user_has_applied = WaitingList.query.filter_by(task_id=post_id, user_id=current_user.id).first() is not None
         nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
         'components/nav_logged_out.html')
-        return render_template('post_detail.html', post=post, nav=nav)
+        return render_template('post_detail.html', post=post, nav=nav, user_has_applied=user_has_applied)
     
 
     @app.route('/activity')
