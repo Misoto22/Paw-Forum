@@ -10,7 +10,8 @@ class Config:
     MAX_CONTENT_LENGTH = 10 * 1024 * 1024  # 10 MB limit
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
-class TestConfig(Config):
+class TestConfig:
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(baseurl, 'test.db')
-    WTF_CSRF_ENABLED = False
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), '..', 'tests')
