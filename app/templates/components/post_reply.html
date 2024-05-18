@@ -239,7 +239,7 @@
 
   document.addEventListener('DOMContentLoaded', (event) => {
     document.getElementById('action-button').addEventListener('click', function() {
-        const postId = {{ post.id }};
+        const postId = "{{ post.id }}"; // Use double quotes to correctly parse the variable
         
         fetch(`/apply_task/${postId}`, {
             method: 'POST',
