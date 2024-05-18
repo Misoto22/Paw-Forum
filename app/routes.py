@@ -516,4 +516,3 @@ def init_app_routes(app):
         'components/nav_logged_out.html')
         return render_template('post_detail.html', post=post, nav=nav)
     
-
