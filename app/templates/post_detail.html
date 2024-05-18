@@ -8,10 +8,10 @@
     />
     <div class="user-info">
       <span class="username">{{ post.user.username }}</span>
-      <span class="post-time">
-        {% if post.created_at %} {{ post.created_at.strftime('%Y-%m-%d
-        %H:%M:%S') }} {% else %} N/A {% endif %}
-      </span>
+      <span class="post-time"
+        >{{ post.created_at.strftime('%Y-%m-%d %H:%M:%S') if post.created_at
+        else 'N/A' }}</span
+      >
     </div>
   </div>
 
@@ -66,6 +66,25 @@
     </div>
   </div>
 
+  <div class="reply-section">
+    <div class="reply-form">
+      <p>Add a comment</p>
+      <form
+        id="replyForm"
+        method="POST"
+        action="{{ url_for('post_reply', post_id=post.id) }}"
+      >
+        <textarea name="content" placeholder="HELLO"></textarea>
+        <button type="submit" id="submitReplyBtn">Submit</button>
+        <input type="hidden" name="parent_reply_id" id="parentReplyId" />
+      </form>
+    </div>
+
+    <div class="replies">
+      {% for reply in replies %} {% set reply_context = reply %} {% include
+      'components/reply.html' with context %} {% endfor %}
+    </div>
+  </div>
   {% include "components/post_reply.html" %}
 </div>
 

@@ -6,6 +6,7 @@ import os
 from werkzeug.utils import secure_filename
 from .config import Config
 from werkzeug.security import generate_password_hash
+from collections import defaultdict
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
@@ -517,10 +518,55 @@ def init_app_routes(app):
             return redirect(url_for('login'))
         post = Post.query.get_or_404(post_id)
         user_has_applied = WaitingList.query.filter_by(task_id=post_id, user_id=current_user.id).first() is not None
+
+        # Query all replies
+        replies = Reply.query.filter_by(post_id=post_id).all()
+
+        # Organize replies by parent_reply_id
+        reply_dict = defaultdict(list)
+        for reply in replies:
+            reply_dict[reply.parent_reply_id].append(reply)
+
+        def nest_replies(parent_id=None):
+            nested = []
+            for reply in reply_dict[parent_id]:
+                reply.nested_replies = nest_replies(reply.id)
+                nested.append(reply)
+            return nested
+        
+        nested_replies = nest_replies()  # Top-level replies
+
         nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
         'components/nav_logged_out.html')
-        return render_template('post_detail.html', post=post, nav=nav, user_has_applied=user_has_applied)
-    
+        return render_template('post_detail.html', post=post, nav=nav, user_has_applied=user_has_applied, replies = nested_replies)
+
+    # @app.route('/post/<int:post_id>')
+    # def post_detail(post_id):
+    #     post = Post.query.get_or_404(post_id)
+    #     user_has_applied = WaitingList.query.filter_by(task_id=post_id, user_id=current_user.id).first() is not None
+
+    #     # Query all replies related to the post
+    #     replies = Reply.query.filter_by(post_id=post_id).all()
+
+    #     # Organize replies by parent_reply_id
+    #     reply_dict = defaultdict(list)
+    #     for reply in replies:
+    #         reply_dict[reply.parent_reply_id].append(reply)
+
+    #     # Function to nest replies
+    #     def nest_replies(parent_id=None):
+    #         nested = []
+    #         for reply in reply_dict[parent_id]:
+    #             reply.nested_replies = nest_replies(reply.id)
+    #             nested.append(reply)
+    #         return nested
+
+    #     nested_replies = nest_replies()  # Top-level replies
+
+    #     nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template('components/nav_logged_out.html')
+
+    #     return render_template('post_detail.html', post=post, nav=nav, user_has_applied=user_has_applied, replies=nested_replies)
+
 
     @app.route('/activity')
     @login_required

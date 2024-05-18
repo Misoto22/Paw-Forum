@@ -757,7 +757,7 @@ button {
 
 .user-list-container {
   position: absolute;
-  top: -190px;
+  top: -500px;
   right: -245px;
   border: 1px solid #ccc;
   background-color: #fff;
@@ -799,7 +799,10 @@ button {
   white-space: nowrap;
   top: 50%; /* Center vertically */
   left: 50%; /* Center horizontally */
-  transform: translate(-50%, -50%); /* Translate by 50% of its own width and height to center */
+  transform: translate(
+    -50%,
+    -50%
+  ); /* Translate by 50% of its own width and height to center */
   z-index: 1000; /* Ensure it appears on top of other elements */
 }
 
@@ -951,6 +954,6 @@ button {
   width: 20px; /* Set the desired width */
   height: 20px; /* Set the desired height */
   cursor: pointer; /* Add a pointer cursor to indicate it's clickable */
-  transition: transform 0.2s;  
+  transition: transform 0.2s;
   float: right;
 }
