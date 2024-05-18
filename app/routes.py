@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, url_for, flash, current_app, jsonify
 from datetime import datetime
-from .models import db, User, Post, Task, Reply, WaitingList, PostLike, ReplyLike, Activity
+from .models import db, User, Post, Task, Reply, WaitingList, PostLike, ReplyLike, Activity, Notification
 from flask_login import login_user, logout_user, login_required, current_user
 import os
 from werkzeug.utils import secure_filename
@@ -133,12 +133,10 @@ def init_app_routes(app):
         return redirect(url_for('home'))
     
     
-    # Define the profile route
     @app.route('/profile', methods=['GET', 'POST'])
     @login_required
     def profile():
-        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
-            'components/nav_logged_out.html')
+        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template('components/nav_logged_out.html')
         if request.method == 'POST':
             current_user.username = request.form.get('username', current_user.username)
             current_user.email = request.form.get('email', current_user.email)
@@ -566,6 +564,14 @@ def init_app_routes(app):
     #     nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template('components/nav_logged_out.html')
 
     #     return render_template('post_detail.html', post=post, nav=nav, user_has_applied=user_has_applied, replies=nested_replies)
+
+    @app.route('/notification')
+    @login_required
+    def notification():
+        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template('components/nav_logged_out.html')
+        # Query notifications for the current user
+        notifications = Notification.query.filter_by(user_id=current_user.id).order_by(Notification.timestamp.desc()).all()
+        return render_template('notification.html', page_name='Notification', nav=nav, notifications=notifications)
 
 
     @app.route('/activity')

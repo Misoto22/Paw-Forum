@@ -22,18 +22,41 @@
           <span>PawForum</span>
         </div>
         <div class="nav-links">
-          <a href="{{ url_for('home', category='Daily') }}" class="link-daily">Daily</a>
-          <a href="{{ url_for('home', category='PetSitting') }}" class="link-petsitting">PetSitting</a>
-          <a href="{{ url_for('home', category='Adoption') }}" class="link-adoption">Adoption</a>
-          {% if category %}
-          {% for category in category %}
-            <a href="{{ url_for('home', category=category) }}" class="link-{{ category.lower() }}">{{ category }}</a>
-          {% endfor %}
-        {% endif %}
+          <a href="{{ url_for('home', category='Daily') }}" class="link-daily"
+            >Daily</a
+          >
+          <a
+            href="{{ url_for('home', category='PetSitting') }}"
+            class="link-petsitting"
+            >PetSitting</a
+          >
+          <a
+            href="{{ url_for('home', category='Adoption') }}"
+            class="link-adoption"
+            >Adoption</a
+          >
+          {% if category %} {% for category in category %}
+          <a
+            href="{{ url_for('home', category=category) }}"
+            class="link-{{ category.lower() }}"
+            >{{ category }}</a
+          >
+          {% endfor %} {% endif %}
         </div>
         <div class="nav-right">
-          <a href="{{ url_for('post_create') }}"><button class="nav-create">+Create</button></a>
-          <a href="{{ url_for('profile') }}" class="nav-img"><img src="{{ url_for('static', filename='image/user_icon.png') }}"></a>
+          <a href="{{ url_for('post_create') }}"
+            ><button class="nav-create">+Create</button></a
+          >
+          <a href="{{ url_for('profile') }}" class="nav-img"
+            ><img src="{{ url_for('static', filename='image/user_icon.png') }}"
+          /></a>
+          <a href="{{ url_for('activity') }}" class="nav-img"
+            ><img src="{{ url_for('static', filename='image/activity.png') }}"
+          /></a>
+          <a href="{{ url_for('notification') }}" class="nav-img"
+            ><img
+              src="{{ url_for('static', filename='image/notification.png') }}"
+          /></a>
         </div>
       </div>
       <div class="nav-main">
@@ -41,13 +64,13 @@
         <div class="searchbar">
           <form action="{{ url_for('search')}}" method="GET">
             <input
-            type="text"
-            name="query"
-            placeholder="Search your forum or topic here"
-            class="search-input"
-            maxlength="100"
-          />
-          <button type="submit" class="search-btn">SEARCH</button>
+              type="text"
+              name="query"
+              placeholder="Search your forum or topic here"
+              class="search-input"
+              maxlength="100"
+            />
+            <button type="submit" class="search-btn">SEARCH</button>
           </form>
         </div>
       </div>
