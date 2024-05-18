@@ -74,7 +74,7 @@
         method="POST"
         action="{{ url_for('post_reply', post_id=post.id) }}"
       >
-        <textarea name="content" placeholder="HELLO"></textarea>
+        <textarea name="content" placeholder="Write your reply here"></textarea>
         <button type="submit" id="submitReplyBtn">Submit</button>
         <input type="hidden" name="parent_reply_id" id="parentReplyId" />
       </form>
