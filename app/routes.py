@@ -90,7 +90,7 @@ def init_app_routes(app):
             # log the activity
             new_activity = Activity(
                 user_id=new_user.id,
-                action='has signed up!',
+                action='signed up!',
                 target_user_id=None
             )
 
@@ -154,7 +154,7 @@ def init_app_routes(app):
             # log the activity
             new_activity = Activity(
                 user_id=current_user.id,
-                action='has updated profile!',
+                action='updated profile!',
                 target_user_id=None
             )
 
@@ -218,7 +218,7 @@ def init_app_routes(app):
                 # Log the activity
                 new_activity = Activity(
                     user_id=current_user.id,
-                    action='created post ' + str(new_post.id)
+                    action='created a post.'
                 )
                 db.session.add(new_activity)
                 db.session.commit()
@@ -226,7 +226,7 @@ def init_app_routes(app):
                 if is_task:
                     new_activity = Activity(
                         user_id=current_user.id,
-                        action='created task ' + str(new_post.id)
+                        action='created task.'
                     )
                     db.session.add(new_activity)
                     db.session.commit()
@@ -263,7 +263,7 @@ def init_app_routes(app):
                 # Log the activity
                 new_activity = Activity(
                     user_id=current_user.id,
-                    action='replied to post ' + str(post_id),
+                    action='replied to a post of ',
                     target_user_id=Post.query.get(post_id).created_by
                 )
                 db.session.add(new_activity)
@@ -300,7 +300,7 @@ def init_app_routes(app):
             # Log the activity
             new_activity = Activity(
                 user_id=current_user.id,
-                action='deleted post ' + str(post_id)
+                action='deleted a post.'
             )
             db.session.add(new_activity)
             db.session.commit()
@@ -326,7 +326,7 @@ def init_app_routes(app):
             # Log the activity
             new_activity = Activity(
                 user_id=current_user.id,
-                action='deleted reply ' + str(reply_id),
+                action='deleted a reply to ',
             )
             db.session.add(new_activity)
             db.session.commit()
@@ -359,7 +359,7 @@ def init_app_routes(app):
             # Log the activity
             new_activity = Activity(
                 user_id=current_user.id,
-                action=f'{action} post {post_id}',
+                action=f'{action} a post from ',
                 target_user_id=post.user.id
             )
             db.session.add(new_activity)
@@ -392,7 +392,7 @@ def init_app_routes(app):
             # Log the activity
             new_activity = Activity(
                 user_id=current_user.id,
-                action=f'{action} reply {reply_id}',
+                action=f'{action} a reply from ',
                 target_user_id=reply.user.id
             )
             db.session.add(new_activity)
@@ -422,7 +422,7 @@ def init_app_routes(app):
             # Log the activity
             new_activity = Activity(
                 user_id=current_user.id,
-                action=f'applied to task {task_id}'
+                action=f'applied a task from '
             )
             db.session.add(new_activity)
             db.session.commit()
@@ -452,7 +452,7 @@ def init_app_routes(app):
             # Log the activity
             new_activity = Activity(
                 user_id=current_user.id,
-                action=f'closed task {task_id}'
+                action=f'closed your task.'
             )
             db.session.add(new_activity)
             db.session.commit()

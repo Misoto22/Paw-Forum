@@ -2,22 +2,40 @@
 
 {% block content %}
 <div class="Activity">
-    <h2>Notification</h2>
-    <ul>
-        {% for activity in activities %}
-        <li>
-            {% if activity.user_id == current_user.id and activity.target_user_id %}
-                You {{ activity.action }} on {{ activity.user.username }}
-            {% elif activity.target_user_id == current_user.id %}
-                {{ activity.user.username }} {{ activity.action }} on you
-            {% elif activity.user_id == current_user.id and not activity.target_user_id %}
-                You {{ activity.action }}
-            {% else %}
-                {{ activity.user.username }} {{ activity.action }}
-            {% endif %}
-            - {{ activity.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}
-        </li>
-        {% endfor %}
-    </ul>
+    <div style="display: flex;">
+        <!-- Left part: activities initiated by the current user -->
+        <div style="flex: 1;">
+            <h2>Your Activities</h2>
+            <ul>
+                {% for activity in activities %}
+                    {% if activity.user_id == current_user.id %}
+                    <li>
+                        {{ activity.timestamp.strftime('%Y-%m-%d %H:%M:%S') }} - 
+                        {% if activity.target_user_id %}
+                            You {{ activity.action }} {{ activity.user.username }}.
+                        {% else %}
+                            You {{ activity.action }}
+                        {% endif %}
+                    </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Right part: notifications to the current user -->
+        <div style="flex: 1;">
+            <h2>Notifications</h2>
+            <ul>
+                {% for activity in activities %}
+                    {% if activity.target_user_id == current_user.id %}
+                    <li>
+                        {{ activity.timestamp.strftime('%Y-%m-%d %H:%M:%S') }} - 
+                        {{ activity.user.username }} {{ activity.action }} you.
+                    </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 </div>
 {% endblock %}
