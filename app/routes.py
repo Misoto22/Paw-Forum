@@ -517,3 +517,12 @@ def init_app_routes(app):
         return render_template('post_detail.html', post=post, nav=nav)
     
 
+    @app.route('/activity')
+    @login_required
+    def activity():
+        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template('components/nav_logged_out.html')
+        # Query activities where the current user is either the actor or the target
+        activities = Activity.query.filter(
+            (Activity.user_id == current_user.id) | (Activity.target_user_id == current_user.id)
+        ).order_by(Activity.timestamp.desc()).all()
+        return render_template('activity.html', page_name='Activity', nav=nav, activities=activities)

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="activity-log">
+<div class="Activity">
     <h2>Your Activities</h2>
     <ul>
         {% for activity in activities %}
@@ -10,7 +10,7 @@
                 You {{ activity.action }} on {{ activity.target_user.username }}
             {% elif activity.target_user_id == current_user.id %}
                 {{ activity.user.username }} {{ activity.action }} on you
-            {% elif activity.user_id == current_user.id and activity.target_user_id is none %}
+            {% elif activity.user_id == current_user.id and not activity.target_user_id %}
                 You {{ activity.action }}
             {% else %}
                 {{ activity.user.username }} {{ activity.action }}
