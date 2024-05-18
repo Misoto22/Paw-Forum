@@ -271,10 +271,11 @@ def init_app_routes(app):
     def search():
         query = request.args.get('query')
         if query:
+            query = query[:100]  # Limit the query to a maximum of 100 characters
             posts = Post.query.join(User).filter(
-            Post.title.contains(query) | 
-            Post.content.contains(query) |
-            User.username.contains(query)
+            Post.title.ilike(f'%{query}%') |
+            Post.content.ilike(f'%{query}%') |
+            User.username.ilike(f'%{query}%')
         ).all()
             #Only demonstrate part of the matching content
             for post in posts:
