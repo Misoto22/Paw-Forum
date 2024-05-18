@@ -129,7 +129,7 @@
       {% for reply in post.replies %}
       <div class="reply">
         <div class="reply-header">
-          <img src="{{ reply.user.user_image }}" alt="User Avatar" class="reply-avatar" />
+          <img src="{{ url_for('static', filename='image/avatars/' + reply.user.user_image) }}" alt="User Avatar" class="avatar">
           <span class="reply-username">{{ reply.user.username }}</span>
           <span class="reply-time">{{ reply.post_at.strftime('%Y-%m-%d %H:%M') }}</span>
         </div>
