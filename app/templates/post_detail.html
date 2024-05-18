@@ -1,7 +1,9 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %}
+
+{% block content %}
 <div class="forum-detail">
   <div class="forum-header">
-    <img src="{{ post.user.user_image }}" alt="User Avatar" class="avatar" />
+    <img src="{{ url_for('static', filename='image/avatars/' + post.user.user_image) }}" alt="User Avatar" class="avatar">
     <div class="user-info">
       <span class="username">{{ post.user.username }}</span>
       <span class="post-time">
