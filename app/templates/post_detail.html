@@ -7,8 +7,7 @@
     <div class="user-info">
       <span class="username">{{ post.user.username }}</span>
       <span class="post-time">
-        {% if post.created_at %} {{ post.created_at.strftime('%Y-%m-%d
-        %H:%M:%S') }} {% else %} N/A {% endif %}
+        {% if post.created_at %} {{ post.created_at.strftime('%Y-%m-%d %H:%M:%S') }} {% else %} N/A {% endif %}
       </span>
     </div>
   </div>
@@ -16,34 +15,20 @@
   <h2 class="forum-title">{{ post.title }}</h2>
   <p class="forum-description">{{ post.content }}</p>
   <div class="forum-image-detail">
-    {% if post.image_path %} {% set image_dir = 'static/image/uploads/' ~
-    post.id %} {% if os.path.exists('app/' ~ image_dir) %} {% for filename in
-    os.listdir('app/' ~ image_dir) %} {% if os.path.exists('app/' ~ image_dir ~
-    '/' ~ filename) %}
-    <img
-      src="{{ url_for('static', filename='image/uploads/' ~ post.id ~ '/' ~ filename) }}"
-      alt="Post Image"
-    />
-    {% endif %} {% endfor %} {% endif %} {% endif %}
+    {% if post.image_name %}
+      <img src="{{ url_for('static', filename='image/uploads/' + post.image_name) }}" alt="Post Image">
+    {% endif %}
   </div>
 
   <div class="forum-footer">
     <span class="likes">
-      <img
-        src="{{ url_for('static', filename='image/like.png') }}"
-        alt="Like"
-        class="like-icon"
-        id="likeToggleDetail"
-      />
+      <img src="{{ url_for('static', filename='image/like.png') }}" alt="Like" class="like-icon" id="likeToggleDetail" />
       <span id="likeCount">{{ post.like_count }}</span>
     </span>
     <span class="comments">
-      <img
-        src="{{ url_for('static', filename='image/comment.png') }}"
-        alt="Comment"
-        class="comment-icon"
-      />
+      <img src="{{ url_for('static', filename='image/comment.png') }}" alt="Comment" class="comment-icon" />
     </span>
+
 
       <!-- Add delete icon for reply -->
     <!-- 
@@ -65,7 +50,6 @@
     />
   </span>
   {% endif %}
-
 
   <!-- Delete confirmation modal -->
   <div id="deleteModal" class="modal">
@@ -159,5 +143,4 @@
     });
   </script>
 </div>
-
 {% endblock %}

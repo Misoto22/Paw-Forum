@@ -221,6 +221,7 @@ def init_app_routes(app):
                     action='created post ' + str(new_post.id)
                 )
                 db.session.add(new_activity)
+                db.session.commit()
 
                 if is_task:
                     new_activity = Activity(
@@ -228,8 +229,8 @@ def init_app_routes(app):
                         action='created task ' + str(new_post.id)
                     )
                     db.session.add(new_activity)
-
-                db.session.commit()
+                    db.session.commit()
+                    flash('Task created successfully!', 'success')
 
                 return redirect(url_for('home'))
             except Exception as e:
