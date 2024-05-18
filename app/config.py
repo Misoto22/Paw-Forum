@@ -9,3 +9,8 @@ class Config:
     UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'static', 'image', 'uploads')
     MAX_CONTENT_LENGTH = 10 * 1024 * 1024  # 10 MB limit
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+class TestConfig(Config):
+    TESTING = True
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(baseurl, 'test.db')
+    WTF_CSRF_ENABLED = False

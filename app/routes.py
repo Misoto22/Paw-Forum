@@ -265,6 +265,46 @@ def init_app_routes(app):
             db.session.rollback()
             flash('Error deleting reply: ' + str(e), 'error')
         return redirect(url_for('post_detail', post_id=reply.post_id))
+    
+    # Define the apply task route
+    @app.route('/apply_task/<int:task_id>', methods=['POST'])
+    @login_required
+    def apply_task(task_id):
+        try:
+            new_application = WaitingList(
+                task_id=task_id,
+                user_id=current_user.id,
+                applied_at=datetime.utcnow()
+            )
+            db.session.add(new_application)
+            db.session.commit()
+            flash('Applied to task successfully!', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash('Failed to apply to task: ' + str(e), 'error')
+
+        return redirect(url_for('task_detail', task_id=task_id))
+
+
+    # Define the close task route
+    @app.route('/close_task/<int:task_id>', methods=['POST'])
+    @login_required
+    def close_task(task_id):
+        task = Task.query.get_or_404(task_id)
+        post = Post.query.get_or_404(task.id)
+        if current_user.id != post.created_by:
+            flash('You are not authorized to close this task.', 'error')
+            return redirect(url_for('task_detail', task_id=task_id))
+
+        try:
+            task.status = False
+            db.session.commit()
+            flash('Task closed successfully!', 'success')
+        except Exception as e:
+            db.session.rollback()
+            flash('Failed to close task: ' + str(e), 'error')
+
+        return redirect(url_for('task_detail', task_id=task_id))
 
     # Define the search route
     @app.route('/search')
