@@ -81,7 +81,7 @@ def init_app_routes(app):
                 gender=gender,
                 postcode=postcode,
                 join_at=datetime.utcnow(),
-                user_image=f'/static/image/avatars/{user_image}' if user_image else None
+                user_image=f'{user_image}' if user_image else None
             )
 
             db.session.add(new_user)
