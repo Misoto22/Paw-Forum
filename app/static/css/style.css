@@ -55,12 +55,12 @@ nav {
 }
 .nav-links {
   display: flex;
+  margin-left: 100px;
 }
 
 .nav-links a {
   color: black;
   text-decoration: none;
-  margin: 0 20px;
 }
 .nav-log {
   background-color: #fd6c45;
@@ -757,7 +757,7 @@ button {
 
 .user-list-container {
   position: absolute;
-  top: -500px;
+  top: -190px;
   right: -245px;
   border: 1px solid #ccc;
   background-color: #fff;
