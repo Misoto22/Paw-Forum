@@ -1,271 +1,201 @@
 {% block content %}
 <div class="forum-container">
-  <div class="forum-header">
-  </div>
+  {% if post.is_task %}
+  <!-- User list container inside forum detail -->
+  <div class="user-list-container">
+    <div class="user-list">
+      <button
+        type="button"
+        id="action-button"
+        class="action-button"
+        {%
+        if
+        user_has_applied
+        %}disabled{%
+        endif
+        %}
+      >
+        {% if user_has_applied %}Applied{% else %}Apply{% endif %}
+      </button>
 
-{% if post.is_task %}
-<!-- User list container inside forum detail -->
-<div class="user-list-container">
-  <div class="user-list">
-    <button type="button" id="action-button" class="action-button" {% if user_has_applied %}disabled{% endif %}>
-      {% if user_has_applied %}Applied{% else %}Apply{% endif %}
-    </button>
-    
-    {% for waiting_user in post.waiting_list %}
-    <div class="user" 
-        username="{{ waiting_user.user.username }}">
-        <img src="{{ url_for('static', filename='image/avatars/' ~ waiting_user.user.user_image) }}" alt="User Avatar" class="user-avatar" />
+      {% for waiting_user in post.waiting_list %}
+      <div class="user" username="{{ waiting_user.user.username }}">
+        <img
+          src="{{ url_for('static', filename='image/avatars/' ~ waiting_user.user.user_image) }}"
+          alt="User Avatar"
+          class="user-avatar"
+        />
         <span class="user-username">{{ waiting_user.user.username }}</span>
+      </div>
+      {% endfor %} {% endif %}
     </div>
-    {% endfor %}
-    {% endif %}
-  </div>
-</div>
-
-<!-- User info popup -->
-<div id="user-info-popup" class="user-info-popup">
-  <div class="popup-content">
-    <span class="close-popup">&times;</span>
-    <p><strong>Username:</strong> <span id="popup-username"></span></p>
-    <p><strong>Email:</strong> <span id="popup-email"></span></p>
-    <p><strong>Phone:</strong> <span id="popup-phone"></span></p>
-    <p><strong>Gender:</strong> <span id="popup-gender"></span></p>
-    <p><strong>Postcode:</strong> <span id="popup-postcode"></span></p>
-  </div>
-</div>
-
-<div id="flash-container">
-  {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-          {% for category, message in messages %}
-              <div class="flash flash-{{ category }}">{{ message }}</div>
-          {% endfor %}
-      {% endif %}
-  {% endwith %}
-</div>
-
-<!-- Reply Section-->
-<div class="reply-section">
-  <div class="reply-form">
-    <p>Add a comment</p>
-    <form id="replyForm" method="POST" action="{{ url_for('post_reply', post_id=post.id) }}">
-      <textarea name="content" placeholder="Write your reply here"></textarea>
-      <button type="submit" id="submitReplyBtn">Submit</button>
-      <input type="hidden" name="parent_reply_id" id="parentReplyId" />
-    </form>
   </div>
 
-  <div class="replies">
-    {% for reply in post.replies %}
-    <div class="reply" id="reply-{{ reply.id }}">
-      <div class="reply-header">
-        <img src="{{ url_for('static', filename='image/avatars/' + reply.user.user_image) }}" alt="User Avatar" class="reply-avatar" />
-        <span class="reply-username">{{ reply.user.username }}</span>
-        <span class="reply-time">{{ reply.post_at.strftime('%Y-%m-%d %H:%M') }}</span>
-      </div>
-      <div class="reply-content">{{ reply.content }}</div>
-      <div class="reply-footer">
-        <button class="reply-button" data-reply-id="{{ reply.id }}">Reply</button>
-        {% if current_user.id == reply.reply_by %}
-        <span class="delete">
-          <img src="{{ url_for('static', filename='image/bin.png') }}" alt="Delete" class="delete-icon delete-reply" data-reply-id="{{ reply.id }}" />
-        </span>
-        {% endif %}
-      </div>
-      <div class="nested-reply-form" style="display: none" data-reply-id="{{ reply.id }}">
-        <form method="POST" action="{{ url_for('post_reply', post_id=post.id) }}">
-          <textarea name="content" placeholder="Write your reply..."></textarea>
-          <button type="submit">Reply</button>
-          <input type="hidden" name="parent_reply_id" value="{{ reply.id }}" />
-        </form>
-      </div>
-      <div class="nested-replies">
-        {% for nested_reply in reply.nested_replies %}
-        <div class="nested-reply" id="reply-{{ nested_reply.id }}">
-          <div class="reply-header">
-            <img src="{{ url_for('static', filename='image/avatars/' + nested_reply.user.user_image) }}" alt="User Avatar" class="reply-avatar" />
-            <span class="reply-username">{{ nested_reply.user.username }}</span>
-            <span class="reply-time">{{ nested_reply.post_at.strftime('%Y-%m-%d %H:%M') }}</span>
-          </div>
-          <div class="reply-content">{{ nested_reply.content }}</div>
-          <div class="reply-footer">
-            <button class="reply-button" data-reply-id="{{ nested_reply.id }}">Reply</button>
-            {% if current_user.id == nested_reply.reply_by %}
-            <span class="delete">
-              <img src="{{ url_for('static', filename='image/bin.png') }}" alt="Delete" class="delete-icon delete-reply" data-reply-id="{{ nested_reply.id }}" />
-            </span>
-            {% endif %}
-          </div>
-          <div class="nested-reply-form" style="display: none" data-reply-id="{{ nested_reply.id }}">
-            <form method="POST" action="{{ url_for('post_reply', post_id=post.id) }}">
-              <textarea name="content" placeholder="Write your reply..."></textarea>
-              <button type="submit">Reply</button>
-              <input type="hidden" name="parent_reply_id" value="{{ nested_reply.id }}" />
-            </form>
-          </div>
-        </div>
-        {% endfor %}
-      </div>
+  <!-- User info popup -->
+  <div id="user-info-popup" class="user-info-popup">
+    <div class="popup-content">
+      <span class="close-popup">&times;</span>
+      <p><strong>Username:</strong> <span id="popup-username"></span></p>
+      <p><strong>Email:</strong> <span id="popup-email"></span></p>
+      <p><strong>Phone:</strong> <span id="popup-phone"></span></p>
+      <p><strong>Gender:</strong> <span id="popup-gender"></span></p>
+      <p><strong>Postcode:</strong> <span id="popup-postcode"></span></p>
     </div>
-    {% endfor %}
   </div>
-</div>
 
-<!-- Delete confirmation modal -->
-<div id="deleteReplyModal" class="modal">
-  <div class="modal-content">
-    <span class="close-btn">&times;</span>
-    <p>Are you sure you want to delete this reply?</p>
-    <button id="confirmDeleteReply" class="btn-confirm">Yes</button>
-    <button id="cancelDeleteReply" class="btn-cancel">No</button>
+  <div id="flash-container">
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %} {% for category, message in messages %}
+    <div class="flash flash-{{ category }}">{{ message }}</div>
+    {% endfor %} {% endif %} {% endwith %}
   </div>
-</div>
-</div>
-{% endblock %} 
 
-{% block scripts %}
-<script>
-  //Add username and avatar to task list
-  document.addEventListener("DOMContentLoaded", function () {
-    const actionButton = document.getElementById("action-button");
-    const userListContainer = document.querySelector(".user-list");
-    actionButton.addEventListener("click", function () {
-      if (!actionButton.disabled) {
-        const currentUserUsername = "{{ current_user.username }}";
-        const currentUserAvatar = "{{ current_user.user_image }}";
+  {% endblock %} {% block scripts %}
+  <script>
+    //Add username and avatar to task list
+    document.addEventListener("DOMContentLoaded", function () {
+      const actionButton = document.getElementById("action-button");
+      const userListContainer = document.querySelector(".user-list");
+      actionButton.addEventListener("click", function () {
+        if (!actionButton.disabled) {
+          const currentUserUsername = "{{ current_user.username }}";
+          const currentUserAvatar = "{{ current_user.user_image }}";
 
-        // Create a new user element
-        const newUserElement = document.createElement("div");
-        newUserElement.className = "user";
-        newUserElement.setAttribute("username", currentUserUsername);
+          // Create a new user element
+          const newUserElement = document.createElement("div");
+          newUserElement.className = "user";
+          newUserElement.setAttribute("username", currentUserUsername);
 
-        // Create avatar image element
-        const avatarElement = document.createElement("img");
-        avatarElement.src = currentUserAvatar;
-        avatarElement.alt = "User Avatar";
-        avatarElement.className = "user-avatar";
+          // Create avatar image element
+          const avatarElement = document.createElement("img");
+          avatarElement.src = currentUserAvatar;
+          avatarElement.alt = "User Avatar";
+          avatarElement.className = "user-avatar";
 
-        // Create username element
-        const usernameElement = document.createElement("span");
-        usernameElement.className = "user-username";
-        usernameElement.textContent = currentUserUsername;
+          // Create username element
+          const usernameElement = document.createElement("span");
+          usernameElement.className = "user-username";
+          usernameElement.textContent = currentUserUsername;
 
-        // Append avatar and username to the new user element
-        newUserElement.appendChild(avatarElement);
-        newUserElement.appendChild(usernameElement);
+          // Append avatar and username to the new user element
+          newUserElement.appendChild(avatarElement);
+          newUserElement.appendChild(usernameElement);
 
-        // Append the new user element to the user list container
-        userListContainer.appendChild(newUserElement);
+          // Append the new user element to the user list container
+          userListContainer.appendChild(newUserElement);
 
-        // Disable the action button and change its appearance
-        actionButton.disabled = true;
-        actionButton.style.backgroundColor = "grey";
-        actionButton.innerText = "Applied";
-      }
-    });
-  });
-
-  document.addEventListener("DOMContentLoaded", function () {
-    var deleteReplyModal = document.getElementById("deleteReplyModal");
-    var deleteReplyIcons = document.querySelectorAll(".delete-reply");
-    var closeReplyModalBtn =
-      deleteReplyModal.getElementsByClassName("close-btn")[0];
-    var confirmDeleteReply = document.getElementById("confirmDeleteReply");
-    var cancelDeleteReply = document.getElementById("cancelDeleteReply");
-    var replyToDeleteId = null;
-
-    deleteReplyIcons.forEach(function (icon) {
-      icon.addEventListener("click", function () {
-        replyToDeleteId = this.getAttribute("data-reply-id");
-        deleteReplyModal.style.display = "block";
-      });
-    });
-
-    if (closeReplyModalBtn) {
-      closeReplyModalBtn.onclick = function () {
-        deleteReplyModal.style.display = "none";
-      };
-    }
-
-    cancelDeleteReply.onclick = function () {
-      deleteReplyModal.style.display = "none";
-    };
-
-    confirmDeleteReply.onclick = function () {
-      fetch(`/delete_reply/${replyToDeleteId}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => {
-          if (response.ok) {
-            alert("Reply deleted successfully.");
-            window.location.reload();
-          } else {
-            return response.json().then((data) => {
-              alert("Error: " + data.error);
-              deleteReplyModal.style.display = "none";
-            });
-          }
-        })
-        .catch((error) => {
-          console.error("Error:", error);
-          alert("Error deleting reply.");
-          deleteReplyModal.style.display = "none";
-        });
-    };
-
-    window.onclick = function (event) {
-      if (event.target == deleteReplyModal) {
-        deleteReplyModal.style.display = "none";
-      }
-    };
-
-    // Show nested reply form
-    var replyButtons = document.querySelectorAll(".reply-button");
-    replyButtons.forEach(function (button) {
-      button.addEventListener("click", function () {
-        var replyId = this.getAttribute("data-reply-id");
-        var nestedReplyForm = document.querySelector(
-          `.nested-reply-form[data-reply-id='${replyId}']`
-        );
-        if (nestedReplyForm) {
-          nestedReplyForm.style.display = "block";
+          // Disable the action button and change its appearance
+          actionButton.disabled = true;
+          actionButton.style.backgroundColor = "grey";
+          actionButton.innerText = "Applied";
         }
       });
     });
-  });
 
-  document.addEventListener('DOMContentLoaded', (event) => {
-    document.getElementById('action-button').addEventListener('click', function() {
-        const postId = {{ post.id }};
-        
-        fetch(`/apply_task/${postId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ post_id: postId })
+    document.addEventListener("DOMContentLoaded", function () {
+      var deleteReplyModal = document.getElementById("deleteReplyModal");
+      var deleteReplyIcons = document.querySelectorAll(".delete-reply");
+      var closeReplyModalBtn =
+        deleteReplyModal.getElementsByClassName("close-btn")[0];
+      var confirmDeleteReply = document.getElementById("confirmDeleteReply");
+      var cancelDeleteReply = document.getElementById("cancelDeleteReply");
+      var replyToDeleteId = null;
+
+      deleteReplyIcons.forEach(function (icon) {
+        icon.addEventListener("click", function () {
+          replyToDeleteId = this.getAttribute("data-reply-id");
+          deleteReplyModal.style.display = "block";
+        });
+      });
+
+      if (closeReplyModalBtn) {
+        closeReplyModalBtn.onclick = function () {
+          deleteReplyModal.style.display = "none";
+        };
+      }
+
+      cancelDeleteReply.onclick = function () {
+        deleteReplyModal.style.display = "none";
+      };
+
+      confirmDeleteReply.onclick = function () {
+        fetch(`/delete_reply/${replyToDeleteId}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
         })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload(); // Reload the page to show flashed messages
+          .then((response) => {
+            if (response.ok) {
+              alert("Reply deleted successfully.");
+              window.location.reload();
             } else {
-                const flashContainer = document.getElementById('flash-container');
-                const errorMessage = document.createElement('div');
-                errorMessage.classList.add('flash', 'flash-error');
+              return response.json().then((data) => {
+                alert("Error: " + data.error);
+                deleteReplyModal.style.display = "none";
+              });
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            alert("Error deleting reply.");
+            deleteReplyModal.style.display = "none";
+          });
+      };
+
+      window.onclick = function (event) {
+        if (event.target == deleteReplyModal) {
+          deleteReplyModal.style.display = "none";
+        }
+      };
+
+      // Show nested reply form
+      var replyButtons = document.querySelectorAll(".reply-button");
+      replyButtons.forEach(function (button) {
+        button.addEventListener("click", function () {
+          var replyId = this.getAttribute("data-reply-id");
+          var nestedReplyForm = document.querySelector(
+            `.nested-reply-form[data-reply-id='${replyId}']`
+          );
+          if (nestedReplyForm) {
+            nestedReplyForm.style.display = "block";
+          }
+        });
+      });
+    });
+
+    document.addEventListener("DOMContentLoaded", (event) => {
+      document
+        .getElementById("action-button")
+        .addEventListener("click", function () {
+          const postId = "{{ post.id }}"; // Use double quotes to correctly parse the variable
+
+          fetch(`/apply_task/${postId}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ post_id: postId }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.success) {
+                location.reload(); // Reload the page to show flashed messages
+              } else {
+                const flashContainer =
+                  document.getElementById("flash-container");
+                const errorMessage = document.createElement("div");
+                errorMessage.classList.add("flash", "flash-error");
                 errorMessage.innerText = data.error;
                 flashContainer.appendChild(errorMessage);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
+              }
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
         });
     });
-});
-
-</script>
-<script src="{{ url_for('static', filename='js/user_info_popup.js') }}"></script>
-{% endblock %}
+  </script>
+  <script src="{{ url_for('static', filename='js/user_info_popup.js') }}"></script>
+  {% endblock %}
+</div>

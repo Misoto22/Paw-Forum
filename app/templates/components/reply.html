@@ -1,0 +1,129 @@
+<!-- components/reply.html -->
+{% block content %}
+<div class="reply" id="reply-{{ reply.id }}">
+  <div class="reply-header">
+    <img
+      src="{{ url_for('static', filename='image/avatars/' + reply.user.user_image) }}"
+      alt="User Avatar"
+      class="reply-avatar"
+    />
+    <span class="reply-username">{{ reply.user.username }}</span>
+    <span class="reply-time"
+      >{{ reply.post_at.strftime('%Y-%m-%d %H:%M') }}</span
+    >
+  </div>
+  <div class="reply-content">{{ reply.content }}</div>
+  <div class="reply-footer">
+    <button class="reply-button" data-reply-id="{{ reply.id }}">Reply</button>
+    {% if current_user.is_authenticated and current_user.id == reply.reply_by %}
+    <span class="delete">
+      <img
+        src="{{ url_for('static', filename='image/bin.png') }}"
+        alt="Delete"
+        class="delete-icon delete-reply"
+        data-reply-id="{{ reply.id }}"
+      />
+    </span>
+    {% endif %}
+  </div>
+  <div
+    class="nested-reply-form"
+    style="display: none"
+    data-reply-id="{{ reply.id }}"
+  >
+    <form method="POST" action="{{ url_for('post_reply', post_id=post.id) }}">
+      <textarea name="content" placeholder="Write your reply..."></textarea>
+      <button type="submit">Reply</button>
+      <input type="hidden" name="parent_reply_id" value="{{ reply.id }}" />
+    </form>
+  </div>
+  <div class="nested-replies">
+    {% for nested_reply in reply.nested_replies %} {% set reply = nested_reply
+    %} {% include 'components/reply.html' with context %} {% endfor %}
+  </div>
+</div>
+
+<!-- Delete confirmation modal -->
+<div id="deleteReplyModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <p>Are you sure you want to delete this reply?</p>
+    <button id="confirmDeleteReply" class="btn-confirm">Yes</button>
+    <button id="cancelDeleteReply" class="btn-cancel">No</button>
+  </div>
+</div>
+{% endblock %} {% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var deleteReplyModal = document.getElementById("deleteReplyModal");
+    var deleteReplyIcons = document.querySelectorAll(".delete-reply");
+    var closeReplyModalBtn =
+      deleteReplyModal.getElementsByClassName("close-btn")[0];
+    var confirmDeleteReply = document.getElementById("confirmDeleteReply");
+    var cancelDeleteReply = document.getElementById("cancelDeleteReply");
+    var replyToDeleteId = null;
+
+    deleteReplyIcons.forEach(function (icon) {
+      icon.addEventListener("click", function () {
+        replyToDeleteId = this.getAttribute("data-reply-id");
+        deleteReplyModal.style.display = "block";
+      });
+    });
+
+    if (closeReplyModalBtn) {
+      closeReplyModalBtn.onclick = function () {
+        deleteReplyModal.style.display = "none";
+      };
+    }
+
+    cancelDeleteReply.onclick = function () {
+      deleteReplyModal.style.display = "none";
+    };
+
+    confirmDeleteReply.onclick = function () {
+      fetch(`/delete_reply/${replyToDeleteId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            alert("Reply deleted successfully.");
+            window.location.reload();
+          } else {
+            return response.json().then((data) => {
+              alert("Error: " + data.error);
+              deleteReplyModal.style.display = "none";
+            });
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("Error deleting reply.");
+          deleteReplyModal.style.display = "none";
+        });
+    };
+
+    window.onclick = function (event) {
+      if (event.target == deleteReplyModal) {
+        deleteReplyModal.style.display = "none";
+      }
+    };
+
+    // Show nested reply form
+    var replyButtons = document.querySelectorAll(".reply-button");
+    replyButtons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        var replyId = this.getAttribute("data-reply-id");
+        var nestedReplyForm = document.querySelector(
+          `.nested-reply-form[data-reply-id='${replyId}']`
+        );
+        if (nestedReplyForm) {
+          nestedReplyForm.style.display = "block";
+        }
+      });
+    });
+  });
+</script>
+{% endblock %}
