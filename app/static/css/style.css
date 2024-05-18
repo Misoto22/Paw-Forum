@@ -409,7 +409,7 @@ button {
 
 .forum-post,
 .forum-detail {
-  width: 740px;
+  width: 700px;
   margin: 20px auto;
   border: 1px solid #ccc;
   padding: 20px;
@@ -505,7 +505,7 @@ button {
 }
 
 .forum-detail .forum-footer .delete {
-  margin-left: 380px;
+  margin-left: 580px;
 }
 
 .forum-image-detail img {
@@ -757,7 +757,7 @@ button {
 
 .user-list-container {
   position: absolute;
-  top: -230px;
+  top: -190px;
   right: -245px;
   border: 1px solid #ccc;
   background-color: #fff;
@@ -951,5 +951,6 @@ button {
   width: 20px; /* Set the desired width */
   height: 20px; /* Set the desired height */
   cursor: pointer; /* Add a pointer cursor to indicate it's clickable */
-  transition: transform 0.2s; /* Smooth transition for hover effect */
+  transition: transform 0.2s;  
+  float: right;
 }

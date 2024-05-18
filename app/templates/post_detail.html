@@ -46,7 +46,8 @@
     </span>
 
       <!-- Add delete icon for reply -->
-    <span class="delete" style="position: absolute; left: 820px">
+    <!-- 
+      <span class="delete" style="position: absolute; left: 820px">
       <img
         src="{{ url_for('static', filename='image/bin.png') }}"
         alt="Delete"
@@ -54,7 +55,16 @@
       />
     </span>
   </div>
-
+-->
+  {% if current_user.id == post.created_by %}
+  <span class="delete">
+    <img
+      src="{{ url_for('static', filename='image/bin.png') }}"
+      alt="Delete"
+      class="delete-icon delete-reply"
+    />
+  </span>
+  {% endif %}
 
 
   <!-- Delete confirmation modal -->
@@ -66,20 +76,8 @@
       <button id="cancelDelete" class="btn-cancel">No</button>
     </div>
   </div>
-
+</div>
   {% include "components/post_reply.html" %}
-
-  {% if current_user.id == post.created_by %}
-  <span class="delete">
-    <img
-      src="{{ url_for('static', filename='image/bin.png') }}"
-      alt="Delete"
-      class="delete-icon delete-reply"
-    />
-  </span>
-
-  {% endif %}
-
 
   <script>
     document.addEventListener("DOMContentLoaded", function () {
