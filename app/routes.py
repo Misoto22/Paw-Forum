@@ -203,6 +203,7 @@ def init_app_routes(app):
     def post_reply(post_id):
         content = request.form.get('content')
         parent_reply_id = request.form.get('parent_reply_id')  # Optional, for nested replies
+
         if content:
             try:
                 new_reply = Reply(
@@ -215,10 +216,7 @@ def init_app_routes(app):
                 db.session.add(new_reply)
                 db.session.commit()
                 flash('Replied successfully!', 'success')
-                saved_reply = Reply.query.filter_by(id=new_reply.id).first()
-                if saved_reply:
-                    print("Reply saved:", saved_reply.content)
-
+                
             except Exception as e:
                 db.session.rollback()
                 flash('Failed to post reply: ' + str(e), 'error')
@@ -226,7 +224,7 @@ def init_app_routes(app):
             flash('Reply content cannot be empty!', 'error')
 
         return redirect(url_for('post_detail', post_id=post_id))
-        
+            
     # Define the delete post route
     @app.route('/delete_post/<int:post_id>', methods=['POST'])
     @login_required
