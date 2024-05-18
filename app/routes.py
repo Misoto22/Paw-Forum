@@ -4,6 +4,8 @@ from .models import db, User, Post, Task, Reply, WaitingList
 from flask_login import login_user, logout_user, login_required, current_user
 import os
 from werkzeug.utils import secure_filename
+from .config import Config
+from werkzeug.security import generate_password_hash
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
@@ -32,6 +34,8 @@ def init_app_routes(app):
         #posts = Post.query.order_by(Post.created_at.desc()).all()  
         return render_template('index.html', page_name='Home', nav=nav, posts=posts, category=category)
 
+
+    # Define the signup route
     @app.route('/signup', methods=['GET', 'POST'])
     def signup():
 
@@ -87,6 +91,7 @@ def init_app_routes(app):
         else:
             return render_template('signup.html', page_name='Signup', nav=nav)
 
+    # Define the login route， and check if the user is authenticated
     @app.route('/login', methods=['GET', 'POST'])
     def login():
         error_message = None
@@ -104,12 +109,95 @@ def init_app_routes(app):
                 error_message = 'Invalid username or password'
         return render_template('login.html', page_name='Login', nav=nav, error_message=error_message)
 
+
+    # Define the logout route
     @app.route('/logout')
     def logout():
         logout_user()
         flash('You have been logged out.', 'info')
         return redirect(url_for('home'))
+    
+    
+    # Define the profile route
+    @app.route('/profile', methods=['GET', 'POST'])
+    @login_required
+    def profile():
+        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
+            'components/nav_logged_out.html')
+        if request.method == 'POST':
+            current_user.username = request.form.get('username', current_user.username)
+            current_user.email = request.form.get('email', current_user.email)
+            current_user.phone = request.form.get('phone', current_user.phone)
+            current_user.gender = request.form.get('gender', current_user.gender)
+            current_user.postcode = request.form.get('postcode', current_user.postcode)
+            current_user.pet_type = request.form.get('petType', current_user.pet_type)
+            new_image = request.form.get('user_image')
+            if new_image:
+                current_user.user_image = new_image
+            db.session.commit()
+            flash('Profile updated successfully!', 'success')
+            return redirect(url_for('profile'))
+        return render_template('profile.html', page_name='Profile', nav=nav)
 
+
+    # Define the post_create route
+    @app.route('/post_create', methods=['GET', 'POST'])
+    @login_required
+    def post_create():
+        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
+            'components/nav_logged_out.html')
+
+        if request.method == 'POST':
+            try:
+                title = request.form['title']
+                content = request.form['content']
+                category = request.form.get('category')
+                is_task = 'is_task' in request.form
+                image_file = request.files.get('image')  # Only allow one image
+
+                new_post = Post(
+                    title=title,
+                    content=content,
+                    category=category,
+                    is_task=is_task,
+                    created_by=current_user.id,
+                    created_at=datetime.utcnow()
+                )
+
+                db.session.add(new_post)
+                db.session.flush()  # Flush to assign an ID to new_post
+
+                # Check if an image was uploaded
+                if image_file and allowed_file(image_file.filename):
+
+                    # Rename the image to avoid duplicates
+                    original_filename = secure_filename(image_file.filename)
+                    file_ext = original_filename.rsplit('.', 1)[1].lower()
+                    new_filename = f"{generate_password_hash(original_filename + str(datetime.utcnow()))[:20]}.{file_ext}"
+                    image_path = os.path.join(Config.UPLOAD_FOLDER, new_filename)
+                    image_file.save(image_path)
+
+                    new_post.image_name = new_filename  # Save the new image name to the post
+
+                if is_task:
+                    new_task = Task(
+                        id=new_post.id,  # Same ID as the post
+                        status=True,  # 'open'
+                        assigned_to=None
+                    )
+                    db.session.add(new_task)
+
+                db.session.commit()
+                flash('Post created successfully!', 'success')
+                return redirect(url_for('home'))
+            except Exception as e:
+                db.session.rollback()
+                flash(f'Error creating post: {e}', 'danger')
+                return redirect(url_for('post_create'))
+
+        return render_template('post_create.html', nav=nav)
+
+    # Define the post detail route
     @app.route('/reply/<int:post_id>', methods=['POST'])
     @login_required
     def post_reply(post_id):
@@ -138,109 +226,32 @@ def init_app_routes(app):
             flash('Reply content cannot be empty!', 'error')
 
         return redirect(url_for('post_detail', post_id=post_id))
-
-    @app.route('/profile', methods=['GET', 'POST'])
-    @login_required
-    def profile():
-        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
-            'components/nav_logged_out.html')
-        if request.method == 'POST':
-            current_user.username = request.form.get('username', current_user.username)
-            current_user.email = request.form.get('email', current_user.email)
-            current_user.phone = request.form.get('phone', current_user.phone)
-            current_user.gender = request.form.get('gender', current_user.gender)
-            current_user.postcode = request.form.get('postcode', current_user.postcode)
-            current_user.pet_type = request.form.get('petType', current_user.pet_type)
-            new_image = request.form.get('user_image')
-            if new_image:
-                current_user.user_image = new_image
-            db.session.commit()
-            flash('Profile updated successfully!', 'success')
-            return redirect(url_for('profile'))
-        return render_template('profile.html', page_name='Profile', nav=nav)
-
-    @app.route('/post_create', methods=['GET', 'POST'])
-    @login_required
-    def post_create():
-        nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template(
-            'components/nav_logged_out.html')
-
-        if request.method == 'POST':
-            try:
-                title = request.form['title']
-                content = request.form['content']
-                category = request.form.get('category')
-                is_task = 'is_task' in request.form
-                images = request.files.getlist('images')
-
-                new_post = Post(
-                    title=title,
-                    content=content,
-                    category=category,
-                    is_task=is_task,
-                    created_by=current_user.id,
-                    created_at=datetime.utcnow()
-                )
-
-                db.session.add(new_post)
-                db.session.flush()  # Flush to assign an ID to new_post
-
-                # Check if any images were uploaded
-                if images and any(image_file.filename for image_file in images):
-                    post_images_dir = os.path.join("/static/image/uploads", str(new_post.id))
-                    os.makedirs(post_images_dir, exist_ok=True)
-
-                    for image_file in images:
-                        if image_file and allowed_file(image_file.filename):
-                            filename = secure_filename(image_file.filename)
-                            image_path = os.path.join(post_images_dir, filename)
-                            image_file.save(image_path)
-
-                    new_post.image_path = post_images_dir
-
-                if is_task:
-                    new_task = Task(
-                        id=new_post.id,  # Same ID as the post
-                        status='open',
-                        assigned_to=None
-                    )
-                    db.session.add(new_task)
-
-                    # Add entry to the WaitingList
-                    waiting_list_entry = WaitingList(
-                        task_id=new_post.id,
-                        user_id=current_user.id,
-                        applied_at=datetime.utcnow()
-                    )
-                    db.session.add(waiting_list_entry)
-
-                db.session.commit()
-                flash('Post created successfully!', 'success')
-                return redirect(url_for('home'))
-
-            except Exception as e:
-                db.session.rollback()  # Rollback the session in case of error
-                flash(f'An error occurred: {str(e)}', 'error')
-                return redirect(url_for('post_create'))
-
-        return render_template('post_create.html', page_name='PostCreate', nav=nav)
-
+        
+    # Define the delete post route
     @app.route('/delete_post/<int:post_id>', methods=['POST'])
     @login_required
     def delete_post(post_id):
         post = Post.query.get_or_404(post_id)
+        
         if current_user.id != post.created_by:
-            flash('You are not authorized to delete this post.', 'error')
-            return redirect(url_for('post_detail', post_id=post_id))
+            return jsonify({'error': 'You are not authorized to delete this post.'}), 403
+
         try:
-            db.session.delete(post)  # Deleting the post should cascade and delete all associated replies
+            # Delete associated image from the filesystem
+            if post.image_name:
+                image_path = os.path.join(Config.UPLOAD_FOLDER, post.image_name)
+                if os.path.exists(image_path):
+                    os.remove(image_path)
+
+            # Deleting the post should cascade and delete all associated replies
+            db.session.delete(post)
             db.session.commit()
-            flash('Post and all associated replies deleted successfully!', 'success')
+            return jsonify({'success': 'Post and all associated replies deleted successfully!'}), 200
         except Exception as e:
             db.session.rollback()
-            flash('Error deleting post: ' + str(e), 'error')
-        return redirect(url_for('home'))
+            return jsonify({'error': 'Error deleting post: ' + str(e)}), 500    
 
+    # Define the delete reply route
     @app.route('/delete_reply/<int:reply_id>', methods=['POST'])
     @login_required
     def delete_reply(reply_id):
@@ -257,6 +268,7 @@ def init_app_routes(app):
             flash('Error deleting reply: ' + str(e), 'error')
         return redirect(url_for('post_detail', post_id=reply.post_id))
 
+    # Define the search route
     @app.route('/search')
     def search():
         query = request.args.get('query')

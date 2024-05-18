@@ -129,8 +129,8 @@
       {% for reply in post.replies %}
       <div class="reply">
         <div class="reply-header">
-          <img src="{{ reply.author.user_image }}" alt="User Avatar" class="reply-avatar" />
-          <span class="reply-username">{{ reply.author.username }}</span>
+          <img src="{{ reply.user.user_image }}" alt="User Avatar" class="reply-avatar" />
+          <span class="reply-username">{{ reply.user.username }}</span>
           <span class="reply-time">{{ reply.post_at.strftime('%Y-%m-%d %H:%M') }}</span>
         </div>
         <div class="reply-content">{{ reply.content }}</div>

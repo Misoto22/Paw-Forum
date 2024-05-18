@@ -41,13 +41,14 @@
             </select>
           </label>
         </div>
+        <input type="hidden" name="user_image" id="user_image" value="{{ current_user.user_image }}">
         <button type="submit" class="save-btn">Save</button>
       </form>
       <a href="{{ url_for('logout') }}" class="logout">Logout</a>
     </div>
     <div class="avatar-container">
       <img
-        src="{{ url_for('static', filename='image/avatars/avatar1.png') }}"
+        src="{{ url_for('static', filename='image/avatars/' + current_user.user_image) }}"
         alt="User Avatar"
         class="avatar"
         id="current-avatar"
@@ -108,6 +109,11 @@
       $(".selectable-avatar").click(function () {
         var selectedAvatarSrc = $(this).attr("src");
         $("#current-avatar").attr("src", selectedAvatarSrc);
+
+        // Extract the filename from the selected image source and set it to the hidden input
+        var selectedAvatarFilename = selectedAvatarSrc.split('/').pop();
+        $("#user_image").val(selectedAvatarFilename);
+
         modal.style.display = "none";
       });
     });
