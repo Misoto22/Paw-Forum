@@ -14,6 +14,23 @@
   </div>
   <div class="reply-content">{{ reply.content }}</div>
   <div class="reply-footer">
+    <span class="likes">
+      <img
+        src="{{ url_for('static', filename='image/like.png') }}"
+        alt="Like"
+        class="like-icon"
+        id="likeToggleDetail"
+      />
+      <span id="likeCount">{{ reply.like_count }}</span>
+    </span>
+    <span class="comments">
+      <img
+        src="{{ url_for('static', filename='image/comment.png') }}"
+        alt="Comment"
+        class="comment-icon"
+      />
+      <span id="commentCount">{{ reply.comment_count }}</span>
+    </span>
     <button class="reply-button" data-reply-id="{{ reply.id }}">Reply</button>
     {% if current_user.is_authenticated and current_user.id == reply.reply_by %}
     <span class="delete">

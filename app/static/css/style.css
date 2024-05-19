@@ -949,6 +949,13 @@ button {
 .reply-footer .delete {
   margin-left: auto; /* Push delete icon to the far right */
 }
+.reply-footer .likes {
+  margin-left: 0;
+}
+
+.reply-footer .comments {
+  margin-left: 20px; 
+}
 
 .delete-icon {
   width: 20px; /* Set the desired width */
