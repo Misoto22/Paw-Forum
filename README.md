@@ -97,6 +97,10 @@ Simply run the following command in the terminal:
 ./run.sh
 ```
 
+But in some case, you may need to run the script few more times to get the application running.
+
+<span style="color:red;">**Typically, the first two times failed, but the third time will work.**</span>
+
 ### Flags
 
 - `-p` or `--port`: Define the port number. Example usage: `./run.sh -p 8080`
