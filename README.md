@@ -48,8 +48,8 @@ app
 │   │   │   ├── profile.css         # Profile-specific styles.
 │   │   │   └── style.css           # Main CSS file.
 │   │   ├── image                   # Image files directory.
-│   │   |   ├── avatars             # User avatar library.
-│   │   |   └── uploads             # Post images.
+│   │   │   ├── avatars             # User avatar library.
+│   │   │   └── uploads             # Post images.
 │   │   └── js
 │   │       ├── script.js           # Main JavaScript file.
 │   │       └── topic_reply.js      # Topic reply functionality.
