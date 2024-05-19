@@ -1,6 +1,6 @@
 <div align="center">
 
-<h1 align="center">Paw Forum (Your Neighborhood Pet Community)</h1>
+<h1 align="center">Paw Forum (Your Lively Pet Community)</h1>
 
 </div>
 
