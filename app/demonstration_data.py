@@ -12,7 +12,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from app.models import db, User, Post, Task, Reply, PostLike, ReplyLike, Activity, WaitingList
 from app import create_app
 
-PET_FOLDER = os.path.join(os.path.dirname(__file__), 'static', 'image', 'pet')
+PET_FOLDER = os.path.join(os.path.dirname(__file__), 'static', 'image', 'sample')
 UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'static', 'image', 'uploads')
 
 
