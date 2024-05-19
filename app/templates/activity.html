@@ -5,17 +5,20 @@
     <div style="flex: 1; max-width: 800px">
       <h2>Your Activities</h2>
       <ul style="list-style-type: none; padding: 0">
-        {% for activity in activities %} {% if activity.user_id ==
-        current_user.id %}
-        <li style="border-bottom: 1px solid #ccc; padding: 10px 0">
-          <span style="color: #666; font-size: 0.9em">
-            {{ activity.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}
-          </span>
-          - {% if activity.target_user_id %} You {{ activity.action }} {{
-          activity.user.username }}. {% else %} You {{ activity.action }} {%
-          endif %}
-        </li>
-        {% endif %} {% endfor %}
+        {% for activity in activities %} 
+          {% if activity.user_id == current_user.id %}
+          <li style="border-bottom: 1px solid #ccc; padding: 10px 0">
+            <span style="color: #666; font-size: 0.9em">
+              {{ activity.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}
+            </span>
+            {% if activity.target_user_id %} 
+              - You {{ activity.action }} {{activity.user.username }}. 
+            {% else %} 
+              - You {{ activity.action }} 
+            {% endif %}
+          </li>
+          {% endif %} 
+        {% endfor %}
       </ul>
     </div>
   </div>

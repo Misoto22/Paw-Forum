@@ -4,15 +4,16 @@
     <div style="flex: 1; max-width: 800px">
       <h2>Notifications</h2>
       <ul style="list-style-type: none; padding: 0">
-        {% for activity in activities %} {% if activity.target_user_id ==
-        current_user.id %}
-        <li style="border-bottom: 1px solid #ccc; padding: 10px 0">
-          <span style="color: #666; font-size: 0.9em">
-            {{ activity.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}
-          </span>
-          - {{ activity.user.username }} {{ activity.action }} you.
-        </li>
-        {% endif %} {% endfor %}
+        {% for notification in notifications %} 
+          {% if notification.target_user_id == current_user.id %}
+          <li style="border-bottom: 1px solid #ccc; padding: 10px 0">
+            <span style="color: #666; font-size: 0.9em">
+              {{ notification.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}
+            </span>
+            - {{ notification.user.username }} {{ notification.action }} you.
+          </li>
+          {% endif %} 
+        {% endfor %}
       </ul>
     </div>
   </div>

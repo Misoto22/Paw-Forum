@@ -326,6 +326,7 @@ def init_app_routes(app):
             new_activity = Activity(
                 user_id=current_user.id,
                 action='deleted a reply to ',
+                target_user_id=reply.user.id
             )
             db.session.add(new_activity)
             db.session.commit()
@@ -425,7 +426,9 @@ def init_app_routes(app):
             # Log the activity
             new_activity = Activity(
                 user_id=current_user.id,
-                action=f'applied a task from '
+                action=f'applied a task from ',
+                target_user_id=Post.query.get(task_id).created_by
+                
             )
             db.session.add(new_activity)
             db.session.commit()
@@ -570,7 +573,9 @@ def init_app_routes(app):
     def notification():
         nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template('components/nav_logged_out.html')
         # Query notifications for the current user
-        notifications = Notification.query.filter_by(user_id=current_user.id).order_by(Notification.timestamp.desc()).all()
+        notifications = Activity.query.filter(
+            Activity.target_user_id == current_user.id
+        ).order_by(Activity.timestamp.desc()).all()
         return render_template('notification.html', page_name='Notification', nav=nav, notifications=notifications)
 
 
@@ -580,10 +585,10 @@ def init_app_routes(app):
         nav = render_template('components/nav_logged_in.html') if current_user.is_authenticated else render_template('components/nav_logged_out.html')
         # Query activities where the current user is either the actor or the target
         activities = Activity.query.filter(
-            (Activity.user_id == current_user.id) | (Activity.target_user_id == current_user.id)
+            Activity.user_id == current_user.id
         ).order_by(Activity.timestamp.desc()).all()
         return render_template('activity.html', page_name='Activity', nav=nav, activities=activities)
-
+    
     @app.route('/get_user_info/<username>')
     def get_user_info(username):
         user = User.query.filter_by(username=username).first()
