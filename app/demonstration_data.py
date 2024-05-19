@@ -284,8 +284,7 @@ def generate_activities(users):
             if faker.boolean(chance_of_getting_true=50):
                 action = faker.random_element(actions_with_target)
                 target_user_id = faker.random_element([u.id for u in users if u.id != user.id])
-                target_user = db.session.get(User, target_user_id)
-                action_description = f"{action} {target_user.username}"
+                action_description = action
             else:
                 action = faker.random_element(actions_without_target)
                 target_user_id = None
