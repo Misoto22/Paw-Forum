@@ -107,6 +107,7 @@ But in some case, you may need to run the script few more times to get the appli
 - `-d` or `--development`: Enable development mode. Example usage: `./run.sh -d`
 
 
+### Script Details
 
 The `run.sh` script automates the setup and execution of a Flask web application. Here are the detailed steps it performs:
 
