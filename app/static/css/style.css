@@ -407,11 +407,18 @@ button {
   justify-content: center;
 }
 
-.forum-post,
-.forum-detail {
+.forum-post {
   width: 700px;
   margin: 20px auto;
   border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.forum-detail {
+  width: 700px;
+  margin: 20px auto;
   padding: 20px;
   border-radius: 8px;
   background-color: #fff;
@@ -954,7 +961,7 @@ button {
 }
 
 .reply-footer .comments {
-  margin-left: 20px; 
+  margin-left: 20px;
 }
 
 .delete-icon {
