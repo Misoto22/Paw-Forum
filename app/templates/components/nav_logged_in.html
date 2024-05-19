@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>PawForum</title>
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}"
-    />
+      href="{{ url_for('static', filename='css/style.css') }}">
   </head>
   <body>
     <nav>
@@ -16,47 +15,39 @@
             <img
               src="{{ url_for('static', filename='image/paw.png') }}"
               alt="Paw Logo"
-              class="logo"
-            />
+              class="logo">
           </a>
           <span>PawForum</span>
         </div>
         <div class="nav-links">
-          <a href="{{ url_for('home', category='Daily') }}" class="link-daily"
-            >Daily</a
-          >
+          <a href="{{ url_for('home', category='Daily') }}" class="link-daily">Daily</a>
           <a
             href="{{ url_for('home', category='PetSitting') }}"
-            class="link-petsitting"
-            >PetSitting</a
-          >
+            class="link-petsitting">PetSitting</a>
           <a
             href="{{ url_for('home', category='Adoption') }}"
-            class="link-adoption"
-            >Adoption</a
-          >
-          {% if category %} {% for category in category %}
+            class="link-adoption">Adoption</a>
+          {% if category %}
+          {% for category in category %}
           <a
             href="{{ url_for('home', category=category) }}"
-            class="link-{{ category.lower() }}"
-            >{{ category }}</a
-          >
-          {% endfor %} {% endif %}
+            class="link-{{ category.lower() }}">{{ category }}</a>
+          {% endfor %}
+          {% endif %}
         </div>
         <div class="nav-right">
-          <a href="{{ url_for('post_create') }}"
-            ><button class="nav-create">+Create</button></a
-          >
-          <a href="{{ url_for('profile') }}" class="nav-img"
-            ><img src="{{ url_for('static', filename='image/user_icon.png') }}"
-          /></a>
-          <a href="{{ url_for('activity') }}" class="nav-img"
-            ><img src="{{ url_for('static', filename='image/activity.png') }}"
-          /></a>
-          <a href="{{ url_for('notification') }}" class="nav-img"
-            ><img
-              src="{{ url_for('static', filename='image/notification.png') }}"
-          /></a>
+          <a href="{{ url_for('post_create') }}">
+            <button class="nav-create">+Create</button>
+          </a>
+          <a href="{{ url_for('profile') }}" class="nav-img">
+            <img src="{{ url_for('static', filename='image/user_icon.png') }}" alt="User Icon">
+          </a>
+          <a href="{{ url_for('activity') }}" class="nav-img">
+            <img src="{{ url_for('static', filename='image/activity.png') }}" alt="Activity Icon">
+          </a>
+          <a href="{{ url_for('notification') }}" class="nav-img">
+            <img src="{{ url_for('static', filename='image/notification.png') }}" alt="Notification Icon">
+          </a>
         </div>
       </div>
       <div class="nav-main">
@@ -68,8 +59,7 @@
               name="query"
               placeholder="Search your forum or topic here"
               class="search-input"
-              maxlength="100"
-            />
+              maxlength="100">
             <button type="submit" class="search-btn">SEARCH</button>
           </form>
         </div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>
         {% if page_name %}
             Paw Forum - {{ page_name }}
@@ -12,8 +12,7 @@
     
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}"
-    />
+      href="{{ url_for('static', filename='css/style.css') }}">
 
   </head>
   <body>
@@ -21,7 +20,7 @@
     {% block navbar %}
     {% if nav %}
         {{ nav|safe }}
-      {% else %}
+    {% else %}
         {% include 'components/nav_logged_out.html' %}
     {% endif %}
     {% endblock %}
@@ -39,7 +38,7 @@
 
     <!-- Error message -->
     {% if error_message %}
-    <script type="text/javascript">
+    <script>
         alert("{{ error_message }}");
     </script>
     {% endif %}  

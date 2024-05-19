@@ -1,3 +1,4 @@
+/* GENERAL STYLE */
 a {
   text-decoration: None;
   cursor: pointer;
@@ -8,16 +9,17 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
 }
-/* NAVIFATOR BAR STYLES*/
+
+/* NAVIFATOR BAR STYLE */
 nav {
   background-image: url("../image/navpic.jpg");
   background-size: cover;
   background-position: center;
-  padding: 40px 0; /* Removed horizontal padding, you may adjust if needed */
+  padding: 40px 0;  
   display: flex;
   flex-direction: column;
-  align-items: center; /* This will center the content horizontally */
-  justify-content: center; /* Centers content vertically if needed */
+  align-items: center;  
+  justify-content: center;  
 }
 
 .logo {
@@ -39,7 +41,7 @@ nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px; /* Reduced from 100px */
+  margin-bottom: 20px;  
   margin-top: -20px;
 }
 
@@ -86,12 +88,12 @@ nav {
 .nav-main {
   text-align: center;
   color: black;
-  width: 100%; /* Ensures it takes the full width of nav */
+  width: 100%;  
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center children horizontally */
-  justify-content: center; /* Center children vertically */
-  padding-top: 20px; /* Reduced or adjusted as needed */
+  align-items: center;  
+  justify-content: center;  
+  padding-top: 20px;  
 }
 
 .nav-main h1 {
@@ -102,10 +104,10 @@ nav {
 /* Navigator - Searchbar */
 .searchbar {
   display: flex;
-  align-items: center; /* Ensures vertical alignment */
+  align-items: center;  
   border-radius: 30px;
-  width: 580px; /* Fixed width */
-  height: 60px; /* Fixed height */
+  width: 580px;  
+  height: 60px;  
   position: relative;
   background-color: #fff;
 }
@@ -186,8 +188,8 @@ footer {
 }
 
 .social-icons img {
-  width: auto; /* Set only the width or the height, not both */
-  height: 30px; /* This will maintain the aspect ratio */
+  width: auto;  
+  height: 30px; 
 }
 
 .social-icons span {
@@ -220,14 +222,14 @@ footer {
 
 .nav-links a {
   font-weight: bold;
-  color: #4d499e; /* Set the font color */
+  color: #4d499e;  
   text-decoration: none;
-  display: inline-block; /* Use inline-block for width and centering */
-  width: 120px; /* Fixed width */
-  text-align: center; /* Center text within the button */
-  padding: 6px 0; /* Vertical padding (horizontal is unnecessary due to width) */
+  display: inline-block;  
+  width: 120px;  
+  text-align: center;  
+  padding: 6px 0;  
   border-radius: 10px;
-  margin: 0 10px; /* Optional: Add space between the buttons */
+  margin: 0 10px;  
 }
 
 .signuplink p {
@@ -241,9 +243,9 @@ footer {
   padding: 30px;
   text-align: left;
   display: flex;
-  flex-direction: column; /* Make children stack vertically */
-  justify-content: center; /* Vertically center children */
-  align-items: center; /* Horizontally center children */
+  flex-direction: column; 
+  justify-content: center;  
+  align-items: center; 
   padding-bottom: 100px;
 }
 
@@ -315,7 +317,6 @@ button {
 }
 
 .tags label {
-  display: left;
   margin-bottom: 20px;
   margin-top: 10px;
 }
@@ -406,7 +407,7 @@ button {
   justify-content: center;
 }
 
-/* FORUM POST LIST STYLES*/
+/* FORUM POST LIST STYLES */
 .forum-post {
   width: 700px;
   margin: 20px auto;
@@ -765,7 +766,7 @@ button {
 /* POST TASK SECTION */
 .user-list-container {
   position: absolute;
-  top: -190px;
+  top: -400px;
   right: -300px;
   border: 1px solid #ccc;
   background-color: #fff;
@@ -799,19 +800,19 @@ button {
 
 .user-info-popup {
   display: none;
-  position: fixed; /* Fixed positioning to stay relative to the viewport */
+  position: fixed;  
   border: 1px solid #ccc;
   background-color: #fff;
   border-radius: 10px;
   padding: 20px;
   white-space: nowrap;
-  top: 50%; /* Center vertically */
-  left: 50%; /* Center horizontally */
+  top: 50%;  
+  left: 50%;  
   transform: translate(
     -50%,
     -50%
-  ); /* Translate by 50% of its own width and height to center */
-  z-index: 1000; /* Ensure it appears on top of other elements */
+  ); 
+  z-index: 1000;  
 }
 
 .action-button {
@@ -880,7 +881,7 @@ button {
 
 .btn-confirm,
 .btn-cancel {
-  background-color: #4caf50; /* Green */
+  background-color: #4caf50;  
   border: none;
   color: white;
   padding: 10px 20px;
@@ -913,11 +914,11 @@ button {
 }
 
 .reply-footer .reply-button {
-  margin-right: 20px; /* Adjust as needed */
+  margin-right: 20px; 
 }
 
 .reply-footer .delete {
-  margin-left: auto; /* Push delete icon to the far right */
+  margin-left: auto;  
 }
 .reply-footer .likes {
   margin-left: 0;
@@ -928,9 +929,9 @@ button {
 }
 
 .delete-icon {
-  width: 20px; /* Set the desired width */
-  height: 20px; /* Set the desired height */
-  cursor: pointer; /* Add a pointer cursor to indicate it's clickable */
+  width: 20px;  
+  height: 20px;  
+  cursor: pointer;  
   transition: transform 0.2s;
   float: right;
 }

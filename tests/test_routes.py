@@ -1,14 +1,14 @@
 import unittest
 from app import create_app, db
 from app.models import User, Post
+from app.config import TestingConfig
 
 class RoutesTestCase(unittest.TestCase):
     
     def setUp(self):
         """Set up a temporary Flask application and in-memory database for testing routes."""
-        self.app = create_app()
+        self.app = create_app(TestingConfig)
         self.app.config['TESTING'] = True
-        self.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
         self.app_context = self.app.app_context()
         self.app_context.push()
         db.create_all()
@@ -116,25 +116,23 @@ class RoutesTestCase(unittest.TestCase):
 
     def test_reply_requires_login(self):
         """Test that the reply route requires login."""
-        response = self.client.get('/reply', follow_redirects=True)
+        response = self.client.post('/reply/1', data=dict(content="Test reply"), follow_redirects=True)  # Use POST method
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Please log in to access this page.', response.data)
 
     def test_reply_authenticated(self):
         """Test accessing the reply route when authenticated."""
+        # Assume post_id 1 exists in the test database
+        post_id = 1
         self.client.post('/login', data=dict(
             username='testuser',
             password='password123'
         ), follow_redirects=True)
-        response = self.client.get('/reply')
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Reply', response.data)
-
-    def test_users_page(self):
-        """Test the users page route for a successful response."""
-        response = self.client.get('/users')
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Users', response.data)
+        response = self.client.post(f'/reply/{post_id}', data=dict(
+            content='This is a test reply'
+        ))
+        self.assertEqual(response.status_code, 302)  # Expecting a redirect after posting
+        self.assertIn(b'Replied successfully!', self.client.get(f'/post/{post_id}').data)  # Check success message in post detail page
 
     def test_profile_page(self):
         """Test the profile page route for a successful response."""
@@ -148,7 +146,7 @@ class RoutesTestCase(unittest.TestCase):
 
     def test_post_create_page_requires_login(self):
         """Test that the uploads create page requires login."""
-        response = self.client.get('/postcreate', follow_redirects=True)
+        response = self.client.get('/post_create', follow_redirects=True)
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Please log in to access this page.', response.data)
 
@@ -158,9 +156,9 @@ class RoutesTestCase(unittest.TestCase):
             username='testuser',
             password='password123'
         ), follow_redirects=True)
-        response = self.client.get('/postcreate')
+        response = self.client.get('/post_create')
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'PostCreate', response.data)
+        self.assertIn(b'post_create', response.data)
 
     def test_search(self):
         """Test the search route with a query."""

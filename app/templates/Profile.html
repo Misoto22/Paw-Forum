@@ -1,10 +1,17 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  {% extends "base.html" %}
 
 {% block content %}
 <link
   href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
-  rel="stylesheet"
-/>
+  rel="stylesheet">
 
 <body class="profile-page">
   <div class="profile-container">
@@ -12,7 +19,7 @@
       <h1>My Profile - <span>{{ current_user.username }}</span></h1>
       <form method="POST" action="{{ url_for('profile') }}">
         <div class="form-row">
-          <label>Username <input type="text" name="username" value="{{ current_user.username }}" /></label>
+          <label>Username <input type="text" name="username" value="{{ current_user.username }}"></label>
         </div>
         <div class="form-row">
           <label>Gender
@@ -22,11 +29,13 @@
               <option value="Other" {% if current_user.gender == 'Other' %}selected{% endif %}>Other</option>
             </select>
           </label>
+
           <label>Post Code <input type="text" name="postcode" value="{{ current_user.postcode }}" pattern="\d{4}" title="Postcode must be a 4-digit number" /></label>
         </div>
         <div class="form-row">
           <label>Email Address <input type="email" name="email" value="{{ current_user.email }}" /></label>
           <label>Phone Number <input type="tel" name="phone" value="{{ current_user.phone }}" pattern="04\d{8}" title="Phone number must be in the format 04########" /></label>
+          
         </div>
         <div class="form-row">
           <label>Pet Type
@@ -48,11 +57,10 @@
     </div>
     <div class="avatar-container">
       <img
-        src="{{ url_for('static', filename='image/avatars/' + current_user.user_image) }}"
+        src="{{ url_for('static', filename='image/avatars/' + (current_user.user_image or 'avatar1.png')) }}"
         alt="User Avatar"
         class="avatar"
-        id="current-avatar"
-      />
+        id="current-avatar">
       <div id="avatar-modal" class="modal">
         <div class="modal-content">
           <span class="close-btn">&times;</span>
@@ -65,8 +73,7 @@
                 <img
                   src="{{ url_for('static', filename='image/avatars/avatar' ~ i ~ '.png') }}"
                   alt="Avatar {{ i }}"
-                  class="selectable-avatar"
-                />
+                  class="selectable-avatar">
               </td>
               {% if loop.index0 % 4 == 3 %}
                 </tr>
@@ -118,3 +125,6 @@
   </script>
 </body>
 {% endblock %}
+
+</body>
+</html>

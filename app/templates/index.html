@@ -1,4 +1,12 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  {% extends "base.html" %}
 
 {% block content %}
 {% for post in posts %}
@@ -25,11 +33,11 @@
     </div>
     <div class="forum-footer">
       <span class="likes">
-        <img src="{{ url_for('static', filename='image/like.png') }}" alt="Like" class="like-icon" id="likeToggleDetail" />
+        <img src="{{ url_for('static', filename='image/like.png') }}" alt="Like" class="like-icon" id="likeToggleDetail">
         <span id="likeCount">{{ post.like_count }}</span>
       </span>
       <span class="comments">
-        <img src="{{ url_for('static', filename='image/comment.png') }}" alt="Comment" class="comment-icon" />
+        <img src="{{ url_for('static', filename='image/comment.png') }}" alt="Comment" class="comment-icon">
         <span id="commentCount">{{ post.comment_count }}</span>
       </span>
     </div>
@@ -37,3 +45,6 @@
 </a>
 {% endfor %}
 {% endblock %}
+
+</body>
+</html>

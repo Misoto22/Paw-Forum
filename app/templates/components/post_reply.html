@@ -1,4 +1,12 @@
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  {% block content %}
 <div class="forum-container">
   {% if post.is_task %}
   <div class="user-list-container">
@@ -22,8 +30,7 @@
         <img
           src="{{ url_for('static', filename='image/avatars/' ~ waiting_user.user.user_image) }}"
           alt="User Avatar"
-          class="user-avatar"
-        />
+          class="user-avatar">
         <span class="user-username">{{ waiting_user.user.username }}</span>
       </div>
       {% endfor %} {% endif %}
@@ -34,11 +41,13 @@
   <div id="user-info-popup" class="user-info-popup">
     <div class="popup-content">
       <span class="close-popup">&times;</span>
+      {% if current_user.id == post.created_by %}
       <p><strong>Username:</strong> <span id="popup-username"></span></p>
       <p><strong>Email:</strong> <span id="popup-email"></span></p>
       <p><strong>Phone:</strong> <span id="popup-phone"></span></p>
       <p><strong>Gender:</strong> <span id="popup-gender"></span></p>
       <p><strong>Postcode:</strong> <span id="popup-postcode"></span></p>
+    {% endif %}
     </div>
   </div>
 
@@ -192,3 +201,5 @@
   <script src="{{ url_for('static', filename='js/user_info_popup.js') }}"></script>
   {% endblock %}
 </div>
+</body>
+</html>
