@@ -13,7 +13,10 @@
         </span>
       </div>
     </div>
-    <h2 class="forum-title">{{ post.title }}</h2>
+    <h2 class="forum-title">
+      {% if post.is_task %}<img src="{{ url_for('static', filename='image/task-icon.png') }}" alt="Task Icon" class="task-icon">{% endif %}
+      {{ post.title }}
+    </h2>
     <p class="forum-description">{{ post.content }}</p>
     <div class="forum-images">
       {% if post.image_name %}
