@@ -45,14 +45,12 @@ app
 │   ├── routes.py                   # Application routes.
 │   ├── static                      # Static files.
 │   │   ├── css
-│   │   │   ├── profile.css         # Profile-specific styles.
 │   │   │   └── style.css           # Main CSS file.
 │   │   ├── image                   # Image files directory.
 │   │   │   ├── avatars             # User avatar library.
 │   │   │   └── uploads             # Post images.
 │   │   └── js
 │   │       ├── script.js           # Main JavaScript file.
-│   │       └── topic_reply.js      # Topic reply functionality.
 │   │       └── user_info_popup.js  # Task User Information pop up functionality.
 │   └── templates                   # HTML templates.
 │       ├── Profile.html            # User profile page.
@@ -67,7 +65,6 @@ app
 │       ├── login.html              # Login page.
 │       ├── post_create.html        # Create uploads page.
 │       ├── post_detail.html        # Post content page.
-│       ├── reply.html              # Reply page.
 │       ├── search_results.html     # Search results page.
 │       ├── signup.html             # Signup page.
 │       ├── users.html              # Users list page.
