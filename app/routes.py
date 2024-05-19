@@ -50,9 +50,9 @@ def init_app_routes(app):
             username = request.form.get('username')
             email = request.form.get('email')
             password = request.form.get('password')
-            phone = request.form.get('phone', None)
-            gender = request.form.get('gender', None)
-            postcode = request.form.get('postcode', None)
+            phone = request.form.get('phone') or ''
+            gender = request.form.get('gender') or ''
+            postcode = request.form.get('postcode') or ''
             user_image = request.form.get('user_image', 'avatar1.png')
 
             # Validate required fields
@@ -101,7 +101,7 @@ def init_app_routes(app):
             # Log the user in
             login_user(new_user)
             flash('Registration successful!', 'success')
-            return redirect(url_for('home'))
+            return redirect(url_for('profile'))
         else:
             return render_template('signup.html', page_name='Signup', nav=nav)
 
