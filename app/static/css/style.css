@@ -1,4 +1,4 @@
-/* GENERAL STYLE*/
+/* GENERAL STYLE */
 a {
   text-decoration: None;
   cursor: pointer;
@@ -10,7 +10,7 @@ body {
   margin: 0;
 }
 
-/* NAVIFATOR BAR STYLE*/
+/* NAVIFATOR BAR STYLE */
 nav {
   background-image: url("../image/navpic.jpg");
   background-size: cover;
@@ -408,7 +408,7 @@ button {
   justify-content: center;
 }
 
-/* FORUM POST LIST STYLES*/
+/* FORUM POST LIST STYLES */
 .forum-post {
   width: 700px;
   margin: 20px auto;
