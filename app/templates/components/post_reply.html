@@ -1,7 +1,6 @@
 {% block content %}
 <div class="forum-container">
   {% if post.is_task %}
-  <!-- User list container inside forum detail -->
   <div class="user-list-container">
     <div class="user-list">
       <button
@@ -50,8 +49,10 @@
     {% endfor %} {% endif %} {% endwith %}
   </div>
 
-  {% endblock %} {% block scripts %}
+  {% endblock %}
+   {% block scripts %}
   <script>
+    /* Task function*/
     //Add username and avatar to task list
     document.addEventListener("DOMContentLoaded", function () {
       const actionButton = document.getElementById("action-button");
@@ -61,30 +62,22 @@
           const currentUserUsername = "{{ current_user.username }}";
           const currentUserAvatar = "{{ current_user.user_image }}";
 
-          // Create a new user element
           const newUserElement = document.createElement("div");
           newUserElement.className = "user";
           newUserElement.setAttribute("username", currentUserUsername);
 
-          // Create avatar image element
           const avatarElement = document.createElement("img");
           avatarElement.src = currentUserAvatar;
           avatarElement.alt = "User Avatar";
           avatarElement.className = "user-avatar";
 
-          // Create username element
           const usernameElement = document.createElement("span");
           usernameElement.className = "user-username";
           usernameElement.textContent = currentUserUsername;
-
-          // Append avatar and username to the new user element
           newUserElement.appendChild(avatarElement);
           newUserElement.appendChild(usernameElement);
-
-          // Append the new user element to the user list container
           userListContainer.appendChild(newUserElement);
 
-          // Disable the action button and change its appearance
           actionButton.disabled = true;
           actionButton.style.backgroundColor = "grey";
           actionButton.innerText = "Applied";
@@ -92,6 +85,7 @@
       });
     });
 
+    /* Delete function*/
     document.addEventListener("DOMContentLoaded", function () {
       var deleteReplyModal = document.getElementById("deleteReplyModal");
       var deleteReplyIcons = document.querySelectorAll(".delete-reply");
@@ -148,8 +142,7 @@
           deleteReplyModal.style.display = "none";
         }
       };
-
-      // Show nested reply form
+       
       var replyButtons = document.querySelectorAll(".reply-button");
       replyButtons.forEach(function (button) {
         button.addEventListener("click", function () {
@@ -168,7 +161,7 @@
       document
         .getElementById("action-button")
         .addEventListener("click", function () {
-          const postId = "{{ post.id }}"; // Use double quotes to correctly parse the variable
+          const postId = "{{ post.id }}";  
 
           fetch(`/apply_task/${postId}`, {
             method: "POST",
@@ -180,7 +173,7 @@
             .then((response) => response.json())
             .then((data) => {
               if (data.success) {
-                location.reload(); // Reload the page to show flashed messages
+                location.reload();  
               } else {
                 const flashContainer =
                   document.getElementById("flash-container");

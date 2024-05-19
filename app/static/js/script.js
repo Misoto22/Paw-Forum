@@ -26,9 +26,7 @@ const submitBtn = document.querySelector(".PostSubmitbtn");
 submitBtn.addEventListener("click", () => {
   if (checkbox.checked) {
     console.log("Checkbox is checked");
-    // Add additional functionality here
   } else {
     console.log("Checkbox is not checked");
-    // Add additional functionality here
   }
 });

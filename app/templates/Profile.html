@@ -87,7 +87,6 @@
         allowClear: true,
       });
 
-      // Modal functionality
       var modal = document.getElementById("avatar-modal");
       var avatar = document.getElementById("current-avatar");
       var span = document.getElementsByClassName("close-btn")[0];
@@ -110,7 +109,6 @@
         var selectedAvatarSrc = $(this).attr("src");
         $("#current-avatar").attr("src", selectedAvatarSrc);
 
-        // Extract the filename from the selected image source and set it to the hidden input
         var selectedAvatarFilename = selectedAvatarSrc.split('/').pop();
         $("#user_image").val(selectedAvatarFilename);
 
