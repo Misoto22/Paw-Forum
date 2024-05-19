@@ -16,15 +16,25 @@ app.app_context().push()
 # Initialize Faker
 faker = Faker()
 
+def delete_all_data():
+    try:
+        db.drop_all()
+        db.create_all()
+        print('All tables have been dropped and recreated.')
+    except Exception as e:
+        print(f'An error occurred: {e}')
+
 def generate_users():
     users = []
-    for _ in range(5):
+    for _ in range(50):
         username = faker.unique.user_name()
         email = faker.unique.email()
         password = username  # Password same as username
-        phone = faker.phone_number()
+        # Generate a random phone number with the australian phone number format
+        phone = faker.numerify(text='04########')
         gender = faker.random_element(elements=('Male', 'Female', 'Other'))
-        postcode = faker.bothify(text='####')  # Four digit postcode
+        # Generate a random four digit postcode with the australian postcode format
+        postcode = faker.numerify(text='####')
         pet_type = faker.random_element(elements=('Dog', 'Cat', 'Fish'))
         user_image = f'avatar{faker.random_int(min=1, max=24)}.png'
 
