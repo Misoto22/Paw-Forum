@@ -2,6 +2,8 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from sqlalchemy.orm import validates
+import re
 
 db = SQLAlchemy()
 
@@ -28,6 +30,12 @@ class User(db.Model, UserMixin):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+    @validates('email')
+    def validate_email(self, key, email):
+        if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+            raise ValueError("Invalid email address")
+        return email
 
 # Post Model
 class Post(db.Model):
@@ -45,6 +53,20 @@ class Post(db.Model):
     replies = db.relationship('Reply', backref='post', cascade='all, delete-orphan', lazy=True)
     likes = db.relationship('PostLike', backref='post', cascade='all, delete-orphan', lazy=True)
     waiting_list_entries = db.relationship('WaitingList', backref='task_post', lazy=True, primaryjoin="and_(Post.id == WaitingList.task_id, Post.is_task == True)")
+
+    @validates('content')
+    def validate_content(self, key, content):
+        if content is None:
+            raise ValueError("Content cannot be null")
+        return content
+    
+    @validates('title')
+    def validate_title(self, key, title):
+        if not title:
+            raise ValueError("Title cannot be empty")
+        if len(title) > 200:
+            raise ValueError("Title cannot exceed 200 characters")
+        return title
 
     @property
     def comment_count(self):
