@@ -44,6 +44,7 @@ class Post(db.Model):
     user = db.relationship('User', backref=db.backref('posts', lazy=True))
     replies = db.relationship('Reply', backref='post', cascade='all, delete-orphan', lazy=True)
     likes = db.relationship('PostLike', backref='post', cascade='all, delete-orphan', lazy=True)
+    waiting_list_entries = db.relationship('WaitingList', backref='task_post', lazy=True, primaryjoin="and_(Post.id == WaitingList.task_id, Post.is_task == True)")
 
     @property
     def comment_count(self):
@@ -73,12 +74,17 @@ class Task(db.Model):
     status = db.Column(db.Boolean, nullable=False, default=True)  # True: open, False: closed
     assigned_to = db.Column(db.Integer, db.ForeignKey('user.id'))
 
+    post = db.relationship('Post', backref=db.backref('task', uselist=False))
+
 # WaitingList Model
 class WaitingList(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    task_id = db.Column(db.Integer, db.ForeignKey('task.id'), nullable=False)
+    task_id = db.Column(db.Integer, db.ForeignKey('post.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     applied_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship('User', backref=db.backref('waiting_list_entries', lazy=True))
+    post = db.relationship('Post', primaryjoin="WaitingList.task_id == Post.id")
 
 # PostLike Model
 class PostLike(db.Model):

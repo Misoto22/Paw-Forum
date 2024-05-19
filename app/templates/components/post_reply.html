@@ -18,7 +18,7 @@
         {% if user_has_applied %}Applied{% else %}Apply{% endif %}
       </button>
 
-      {% for waiting_user in post.waiting_list %}
+      {% for waiting_user in post.waiting_list_entries %}
       <div class="user" username="{{ waiting_user.user.username }}">
         <img
           src="{{ url_for('static', filename='image/avatars/' ~ waiting_user.user.user_image) }}"
