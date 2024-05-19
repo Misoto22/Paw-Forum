@@ -59,11 +59,10 @@ app
 │       ├── base.html               # Base template.
 │       ├── components              # UI components.
 │       │   ├── footer.html         # Footer component.
-│       │   ├── forum_detail.html   # Forum detail view.
-│       │   ├── forum_topic.html    # Forum topic view.
 │       │   ├── nav_logged_in.html  # Navigation bar for logged-in users.
 │       │   ├── nav_logged_out.html # Navigation bar for logged-out users.
-│       │   └── post_reply.html     # Post reply form.
+│       │   └── post_reply.html     # Post task form.
+│       │   └── reply.html          # Post reply form.
 │       ├── index.html              # Homepage.
 │       ├── login.html              # Login page.
 │       ├── post_create.html        # Create uploads page.
@@ -78,9 +77,9 @@ app
 │           ├── 404.html            # 404 error page.
 │           └── 500.html            # 500 error page.
 ├── deliverables
-│   └── v1.0.mov                    # Deliverable v1.0 - signup and login demo.
-│   └── v2.0.mov                    # Deliverable v2.0 - post create demo.
-│   └── v3.0.mov                    # Deliverable v3.0.
+│   └── v1.0.mov                    # Deliverable v1.0 - User signup and login demo.
+│   └── v2.0.mov                    # Deliverable v2.0 - Post create demo.
+│   └── v3.0.mov                    # Deliverable v3.0 - Reply, task, search, notification and history demo.
 ├── run.py                          # Script to run the application.
 ├── run.sh                          # Shell script to run the application.
 └── tests                           # Directory for test cases.
