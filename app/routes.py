@@ -1,12 +1,13 @@
 from flask import render_template, request, redirect, url_for, flash, current_app, jsonify
 from datetime import datetime
-from .models import db, User, Post, Task, Reply, WaitingList, PostLike, ReplyLike, Activity, Notification
+from .models import db, User, Post, Task, Reply, WaitingList, PostLike, ReplyLike, Activity
 from flask_login import login_user, logout_user, login_required, current_user
 import os
 from werkzeug.utils import secure_filename
 from .config import Config
 from werkzeug.security import generate_password_hash
 from collections import defaultdict
+import uuid
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
@@ -197,7 +198,7 @@ def init_app_routes(app):
                     # Rename the image to avoid duplicates
                     original_filename = secure_filename(image_file.filename)
                     file_ext = original_filename.rsplit('.', 1)[1].lower()
-                    new_filename = f"{generate_password_hash(original_filename + str(datetime.utcnow()))[:20]}.{file_ext}"
+                    new_filename = f"{uuid.uuid4()}.{file_ext}"
                     image_path = os.path.join(Config.UPLOAD_FOLDER, new_filename)
                     image_file.save(image_path)
 

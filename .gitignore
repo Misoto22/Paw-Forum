@@ -14,5 +14,6 @@ __pycache__/
 # Mac OS X
 .DS_Store
 
-# ignore db files
-*.db
+# ignore app.db
+#*.db
+
