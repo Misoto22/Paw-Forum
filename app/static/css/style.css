@@ -317,7 +317,6 @@ button {
 }
 
 .tags label {
-  display: left;
   margin-bottom: 20px;
   margin-top: 10px;
 }
@@ -767,7 +766,7 @@ button {
 /* POST TASK SECTION */
 .user-list-container {
   position: absolute;
-  top: -190px;
+  top: -400px;
   right: -300px;
   border: 1px solid #ccc;
   background-color: #fff;
