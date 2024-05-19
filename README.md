@@ -87,6 +87,8 @@ app
 
 ### Database Design
 
+![Entity-Relationship Diagram](https://github.com/Misoto22/Paw-Forum/blob/main/.readme_img/ERD.png?raw=true)
+
 ## Instructions for Running the Application
 
 Simply run the following command in the terminal:
