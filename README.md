@@ -4,13 +4,13 @@
 
 </div>
 
-Welcome to the **Paw Forum**, the premier online destination for pet lovers in your neighborhood! This web application is designed to foster a vibrant community where users can share their beloved pets, discuss various pet-related topics, and access a wealth of information on pet adoption. Whether you're looking to show off your furry friend, seek advice, or find a new family member through adoption, Paw Forum is your go-to hub for all things pets.
+Welcome to the **Paw Forum**, the premier online destination for pet lovers and pet onwers! This web application is designed to foster a vibrant community where users can share their beloved pets, discuss various pet-related topics, and access a wealth of information on pet adoption. Whether you're looking to show off your furry friend, seek advice, or find a new family member through adoption, Paw Forum is your go-to hub for all things pets.
 
 ## Features
 
-- **Pet Profiles**: Showcase your pets, their stories, and more.
-- **Community Discussions**: Engage in discussions on a wide range of pet-related topics.
-- **Pet Adoption Information**: Post and browse adoption listings, helping pets find loving homes.
+- **Community Discussions**: Engage in daily discussions on a wide range of pet-related topics.
+- **Pet Sitting Information**: Post and browse Pet sitting informations, helping pets taken good care of when owners away.
+- **Pet Adoption Information**: Post and browse adoption informations, helping pets find loving homes.
 - **Interactive Posts**: Share updates, ask questions, and interact with fellow pet owners.
 
 Paw Forum aims to connect pet enthusiasts, provide valuable information, and help ensure that every pet finds a loving home. Join us today and be a part of our growing community!
@@ -39,8 +39,7 @@ app
 ├── app
 │   ├── __init__.py                 # Initialize the Flask app.
 │   ├── config.py                   # Configuration settings.
-│   ├── database
-│   │   └── app.db                  # SQLite database file.
+│   ├── app.db                      # SQLite database file.
 │   ├── models.py                   # Database models.
 │   ├── requirements.txt            # Dependencies.
 │   ├── routes.py                   # Application routes.
@@ -54,6 +53,7 @@ app
 │   │   └── js
 │   │       ├── script.js           # Main JavaScript file.
 │   │       └── topic_reply.js      # Topic reply functionality.
+│   │       └── user_info_popup.js  # Task User Information pop up functionality.
 │   └── templates                   # HTML templates.
 │       ├── Profile.html            # User profile page.
 │       ├── base.html               # Base template.
@@ -67,19 +67,26 @@ app
 │       ├── index.html              # Homepage.
 │       ├── login.html              # Login page.
 │       ├── post_create.html        # Create uploads page.
+│       ├── post_detail.html        # Post content page.
 │       ├── reply.html              # Reply page.
 │       ├── search_results.html     # Search results page.
 │       ├── signup.html             # Signup page.
-│       └── users.html              # Users list page.
+│       ├── users.html              # Users list page.
+│       ├── notification.html       # Users notification history page.
+│       ├── activity.html           # Users activity history page.
+│       └── error_pages             # Error pages.
+│           ├── 404.html            # 404 error page.
+│           └── 500.html            # 500 error page.
 ├── deliverables
-│   └── v1.0.mov                    # Deliverable v1.0.
-├── instance
-│   └── app.db                      # SQLite database file.
+│   └── v1.0.mov                    # Deliverable v1.0 - signup and login demo.
+│   └── v2.0.mov                    # Deliverable v2.0 - post create demo.
+│   └── v3.0.mov                    # Deliverable v3.0.
 ├── run.py                          # Script to run the application.
 ├── run.sh                          # Shell script to run the application.
 └── tests                           # Directory for test cases.
     ├── __init__.py                 # Initialize the Testing.
-    └── test_app.py                 # Unit Test cases.    
+    ├── test_routes.py              # Unit Test cases.  
+    └── test_models.py              # Unit Test cases.    
 ```
 
 ### Database Design
