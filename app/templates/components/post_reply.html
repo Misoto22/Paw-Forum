@@ -34,11 +34,13 @@
   <div id="user-info-popup" class="user-info-popup">
     <div class="popup-content">
       <span class="close-popup">&times;</span>
+      {% if current_user.id == post.created_by %}
       <p><strong>Username:</strong> <span id="popup-username"></span></p>
       <p><strong>Email:</strong> <span id="popup-email"></span></p>
       <p><strong>Phone:</strong> <span id="popup-phone"></span></p>
       <p><strong>Gender:</strong> <span id="popup-gender"></span></p>
       <p><strong>Postcode:</strong> <span id="popup-postcode"></span></p>
+    {% endif %}
     </div>
   </div>
 
