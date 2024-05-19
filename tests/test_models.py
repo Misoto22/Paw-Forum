@@ -2,14 +2,14 @@ import unittest
 from app import create_app, db
 from app.models import User, Post
 from sqlalchemy.exc import IntegrityError
+from app.config import TestingConfig
 
 class ModelsTestCase(unittest.TestCase):
 
     def setUp(self):
-        """Set up a temporary Flask application and in-memory database for testing."""
-        self.app = create_app()
+        """Set up a blank database before each test."""
+        self.app = create_app(TestingConfig)
         self.app.config['TESTING'] = True
-        self.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
         self.app_context = self.app.app_context()
         self.app_context.push()
         db.create_all()

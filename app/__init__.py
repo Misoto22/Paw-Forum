@@ -2,15 +2,15 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
-from .config import Config
+from .config import Config, TestingConfig
 from .models import db
 import os
 
 
 # Create app
-def create_app():
+def create_app(config_class=Config):
     app = Flask(__name__)
-    app.config.from_object(Config)
+    app.config.from_object(config_class)
     app.jinja_env.globals['os'] = os
 
     # Initialize database
