@@ -1,14 +1,14 @@
 import unittest
 from app import create_app, db
 from app.models import User, Post
+from app.config import TestingConfig
 
 class RoutesTestCase(unittest.TestCase):
     
     def setUp(self):
         """Set up a temporary Flask application and in-memory database for testing routes."""
-        self.app = create_app()
+        self.app = create_app(TestingConfig)
         self.app.config['TESTING'] = True
-        self.app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
         self.app_context = self.app.app_context()
         self.app_context.push()
         db.create_all()
