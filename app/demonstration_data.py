@@ -141,9 +141,11 @@ def generate_waiting_list_entries(users, tasks):
     db.session.commit()
     return waiting_list_entries
 
-def generate_replies(users, posts, n=300):
+def generate_replies(users, posts, n=600):
     replies = []
-    for _ in range(n):
+
+    # Generate base replies without parents
+    for _ in range(int(n * 0.7)):  # 70% base replies
         post_id = faker.random_element(elements=posts).id
         reply_by = faker.random_element(elements=users).id
         content = faker.paragraph(nb_sentences=3)
@@ -162,7 +164,8 @@ def generate_replies(users, posts, n=300):
 
     db.session.commit()
 
-    for _ in range(int(n / 2)):
+    # Generate child replies
+    for _ in range(int(n * 0.3)):  # 30% child replies
         parent_reply = faker.random_element(elements=replies)
         post_id = parent_reply.post_id
         reply_by = faker.random_element(elements=users).id
@@ -182,7 +185,56 @@ def generate_replies(users, posts, n=300):
         db.session.add(child_reply)
 
     db.session.commit()
+
     return replies
+
+def generate_replies(users, posts, n=500):
+    replies = []
+
+    # Generate base replies without parents
+    for _ in range(int(n * 0.7)):  # 70% base replies
+        post_id = faker.random_element(elements=posts).id
+        reply_by = faker.random_element(elements=users).id
+        content = faker.paragraph(nb_sentences=3)
+        post_at = faker.date_time_this_year()
+        like_count = faker.random_int(min=0, max=100)
+
+        reply = Reply(
+            post_id=post_id,
+            reply_by=reply_by,
+            content=content,
+            post_at=post_at,
+            like_count=like_count
+        )
+        replies.append(reply)
+        db.session.add(reply)
+
+    db.session.commit()
+
+    # Generate child replies
+    for _ in range(int(n * 0.3)):  # 30% child replies
+        parent_reply = faker.random_element(elements=replies)
+        post_id = parent_reply.post_id
+        reply_by = faker.random_element(elements=users).id
+        content = faker.paragraph(nb_sentences=3)
+        post_at = faker.date_time_this_year()
+        like_count = faker.random_int(min=0, max=100)
+
+        child_reply = Reply(
+            post_id=post_id,
+            reply_by=reply_by,
+            parent_reply_id=parent_reply.id,
+            content=content,
+            post_at=post_at,
+            like_count=like_count
+        )
+        replies.append(child_reply)
+        db.session.add(child_reply)
+
+    db.session.commit()
+
+    return replies
+
 
 def generate_post_likes(users, posts):
     for post in posts:
@@ -228,7 +280,7 @@ def generate_activities(users):
     ]
 
     for user in users:
-        for _ in range(faker.random_int(min=5, max=30)):
+        for _ in range(faker.random_int(min=5, max=50)):
             if faker.boolean(chance_of_getting_true=50):
                 action = faker.random_element(actions_with_target)
                 target_user_id = faker.random_element([u.id for u in users if u.id != user.id])
@@ -254,7 +306,7 @@ if __name__ == '__main__':
     posts = generate_posts(users, PET_FOLDER, UPLOAD_FOLDER)
     tasks = generate_tasks(posts)
     generate_waiting_list_entries(users, tasks)
-    replies = generate_replies(users, posts, n=50)
+    replies = generate_replies(users, posts, n=500)
     generate_post_likes(users, posts)
     generate_reply_likes(users, replies)
     generate_activities(users)
