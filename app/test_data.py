@@ -35,7 +35,7 @@ def generate_users():
         gender = faker.random_element(elements=('Male', 'Female', 'Other'))
         # Generate a random four digit postcode with the australian postcode format
         postcode = faker.numerify(text='####')
-        pet_type = faker.random_element(elements=('Dog', 'Cat', 'Fish'))
+        pet_type = faker.random_element(elements=('Dog', 'Cat'))
         user_image = f'avatar{faker.random_int(min=1, max=24)}.png'
 
         user = User(
