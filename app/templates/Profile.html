@@ -22,11 +22,11 @@
               <option value="Other" {% if current_user.gender == 'Other' %}selected{% endif %}>Other</option>
             </select>
           </label>
-          <label>Post Code <input type="text" name="postcode" value="{{ current_user.postcode }}" /></label>
+          <label>Post Code <input type="text" name="postcode" value="{{ current_user.postcode }}" pattern="\d{4}" title="Postcode must be a 4-digit number" /></label>
         </div>
         <div class="form-row">
           <label>Email Address <input type="email" name="email" value="{{ current_user.email }}" /></label>
-          <label>Phone Number <input type="tel" name="phone" value="{{ current_user.phone }}" /></label>
+          <label>Phone Number <input type="tel" name="phone" value="{{ current_user.phone }}" pattern="04\d{8}" title="Phone number must be in the format 04########" /></label>
         </div>
         <div class="form-row">
           <label>Pet Type
